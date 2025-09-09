@@ -1,4 +1,4 @@
-window.EVENTS = {
+export const EVENTS = {
   "beedigital-2025": {
     "title": "BeeDigital 2025",
     "description": "25 Aralık 2025'te gerçekleşecek olan en yeni dijital pazarlama zirvemiz. Bu yıl, yapay zeka ve dijital dönüşümün geleceğini şekillendiren liderleri bir araya getiriyoruz. Sektördeki en son trendleri, inovasyonları ve vaka analizlerini öğrenmek için bize katılın.",
@@ -25,7 +25,7 @@ window.EVENTS = {
         "photo": "images/selim.webp"
       },
       {
-        "name": "Zeynep Ozkaya",
+        "name": "Zeynep Özkaya",
         "title": "Sosyal Medya Uzmanı",
         "photo": "images/zeyne.webp"
       },
@@ -112,7 +112,7 @@ window.EVENTS = {
         "photo": "images/berk.jpeg"
       },
       {
-        "name": "Ege Tuna Diken Hatun Unlüsoy Ahmet Duruel Umit Akgün",
+        "name": "Ege Tuna Diken Hatun Ünlüsoy Ahmet Duruel Ümit Akgün",
         "title": "",
         "photo": "images/ege.jpeg"
       },
@@ -128,20 +128,6 @@ window.EVENTS = {
       }
     ]
   },
-    "bee-influencer": {
-    "title": "BeeInfluencer",
-    "description": "Influencer marketing atölyeleri ve stratejileri. Kulübümüzün odak alanlarından biri olarak, dijital girişimcilik ve içerik üretimi eğitimleri sunuyoruz.",
-    "speakers": [],
-    "photo": "images/width_412 (2).webp"
-  },
-  "DigiPanel": {
-    "title": "DigiPanel",
-    "description": "Yılda birkaç kez gerçekleştirdiğimiz bir etkinlik serisi olan DigiPanel'de, sektör profesyonelleriyle paneller düzenleyerek dijital dünyanın en güncel konularını ele alıyoruz.",
-    "speakers": [],
-    "photo": "images/width_412 (3).webp"
-  }
-};
-window.TRAININGS = {
   "Dijital Pazarlama 101 ": {
     "title": "Dijital Pazarlama 101 ",
     "photo": "images/eğtm1.jpeg",
@@ -195,13 +181,13 @@ window.TRAININGS = {
     "description": "19 Aralık 2023 tarihinde Destina Saccılarlı ile birlikte okulumuzda CV hazırlama eğitimi düzenledik. ",
     "photo": "images/width_412.webp",
     "speakers": []
-  },
+  }
   "Emre Erdem ile Meta Dijital Pazrlama Eğitimi": {
     "title": "Emre Erdem ile Meta Dijital Pazrlama Eğitimi",
     "description": "Bee Educated kapsamında 30 Nisan,7 Mayıs,14 Mayıs ve 21 Mayıs 2024 tarihlerinde online olarak sertifikalı bir Meta pazarlama eğitimi gerçekleştirdik. ",
     "photo": "images/width_412 (1).webp",
     "speakers": []
-  },
+  }
 "DigiPanel": {
     "title": "DigiPanel",
     "description": "8 Mart 2024 tarihinde Unilever Marketing Lead Didem Molay Sevin ile birlikte 8 Mart Özel DigiPanel gerçekleştirdik. Hem günün önemi üzerine konuşup aynı zamanda Didem Molay Sevin 'in deneyimlerini dinleme fırsatını bulduk. ",
