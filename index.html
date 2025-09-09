@@ -36,28 +36,27 @@
       padding: 0 16px;
       box-sizing: border-box;
     }
-    /* Hide scrollbar */
     .carousel-container::-webkit-scrollbar {
       display: none;
     }
     .carousel-container {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
     .carousel-item {
       scroll-snap-align: start;
       flex-shrink: 0;
-      width: 33.33%; /* 3 items on desktop */
+      width: 33.33%;
       box-sizing: border-box;
     }
     @media (max-width: 1024px) {
       .carousel-item {
-        width: 50%; /* 2 items on tablet */
+        width: 50%;
       }
     }
     @media (max-width: 768px) {
       .carousel-item {
-        width: 100%; /* 1 item on mobile */
+        width: 100%;
       }
     }
     .carousel-btn {
@@ -82,6 +81,36 @@
         background-color: #ffffff;
       }
     }
+    .parallax-hero {
+      background-image: url('images/width_550.webp');
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+    }
+    .parallax-overlay {
+      background: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    @media only screen and (max-device-width: 1366px) {
+      .parallax-hero {
+        background-attachment: scroll;
+      }
+    }
+    .count-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    .count-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body class="bg-soft-white text-black-soft">
@@ -102,38 +131,62 @@
   </header>
 
   <main>
-    <section id="hero" class="min-h-screen flex items-center justify-center p-8 text-center text-black-soft bg-white-pure hero-animated-bg">
-      <div class="max-w-4xl space-y-8 animate-fade-in-up">
+    <section id="hero" class="min-h-screen flex items-center justify-center p-8 text-center text-white parallax-hero relative">
+      <div class="parallax-overlay"></div>
+      <div class="max-w-4xl space-y-8 animate-fade-in-up relative z-10">
         <h1 class="text-5xl sm:text-6xl font-extrabold leading-tight">
           Dijital Gelecek Başlıyor
         </h1>
         <p class="text-xl sm:text-2xl font-light max-w-2xl mx-auto">
-          İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü olarak, BeeDigital 2025 ile dijital dünyanın dinamiklerini keşfedin. 2022-2024 zirvelerimizde 1800+ ön kayıt, 800+ katılımcı ve 13 konuşmacı ile büyük başarı elde ettik!
+          İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü olarak, BeeDigital 2025 ile dijital dünyanın dinamiklerini keşfedin.
         </p>
+
+        <div class="mt-8 space-y-4 count-up" id="stats-section">
+          <div class="flex justify-center space-x-8 text-3xl font-bold">
+            <div class="flex flex-col items-center">
+              <span id="interactions" data-target="8500">0</span>
+              <span class="text-sm font-light text-gray-300">Etkileşim</span>
+            </div>
+            <div class="flex flex-col items-center">
+              <span id="participants" data-target="800">0</span>
+              <span class="text-sm font-light text-gray-300">Katılımcı</span>
+            </div>
+          </div>
+        </div>
 
         <div class="mt-8 space-y-4">
           <h3 class="text-2xl font-semibold text-gold-accent">25 Aralık 2025 Etkinliğine Kalan Süre</h3>
-          <div id="countdown" class="flex justify-center items-center space-x-4 text-3xl sm:text-4xl font-bold text-black-soft">
+          <div id="countdown" class="flex justify-center items-center space-x-4 text-3xl sm:text-4xl font-bold">
             <div class="flex flex-col items-center animate-pulse-fast">
               <span id="days">00</span>
-              <span class="text-sm font-light text-gray-500">Gün</span>
+              <span class="text-sm font-light text-gray-300">Gün</span>
             </div>
             <span>:</span>
             <div class="flex flex-col items-center animate-pulse-fast" style="animation-delay: 0.2s;">
               <span id="hours">00</span>
-              <span class="text-sm font-light text-gray-500">Saat</span>
+              <span class="text-sm font-light text-gray-300">Saat</span>
             </div>
             <span>:</span>
             <div class="flex flex-col items-center animate-pulse-fast" style="animation-delay: 0.4s;">
               <span id="minutes">00</span>
-              <span class="text-sm font-light text-gray-500">Dakika</span>
+              <span class="text-sm font-light text-gray-300">Dakika</span>
             </div>
             <span>:</span>
             <div class="flex flex-col items-center animate-pulse-fast" style="animation-delay: 0.6s;">
               <span id="seconds">00</span>
-              <span class="text-sm font-light text-gray-500">Saniye</span>
+              <span class="text-sm font-light text-gray-300">Saniye</span>
             </div>
           </div>
+        </div>
+
+        <div class="mt-8 bg-white/90 p-8 rounded-lg shadow-xl max-w-lg mx-auto count-up" id="survey-section">
+          <h3 class="text-2xl font-semibold mb-6 text-gold-accent">Bir Sonraki Etkinlikte Kimi Görmek İstersiniz?</h3>
+          <form action="#" method="POST" class="space-y-6">
+            <div>
+              <input type="text" name="speaker_suggestion" placeholder="Konuşmacı öneriniz" class="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required>
+            </div>
+            <button type="submit" class="w-full btn-gold-accent">Gönder</button>
+          </form>
         </div>
 
         <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
@@ -402,6 +455,49 @@
         }
       }, 1000);
 
+      // Count-up Animation for Statistics
+      function animateCountUp(element, target, duration) {
+        let start = 0;
+        const increment = target / (duration / 16);
+        const startTime = performance.now();
+
+        function update() {
+          const currentTime = performance.now();
+          const elapsed = currentTime - startTime;
+          start += increment;
+          element.textContent = Math.floor(start) + '+';
+          if (elapsed < duration) {
+            requestAnimationFrame(update);
+          } else {
+            element.textContent = target + '+';
+          }
+        }
+        requestAnimationFrame(update);
+      }
+
+      // Intersection Observer for Statistics and Survey
+      const statsSection = document.getElementById('stats-section');
+      const surveySection = document.getElementById('survey-section');
+      const observerOptions = {
+        threshold: 0.5
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            if (entry.target === statsSection) {
+              animateCountUp(document.getElementById('interactions'), 8500, 2000);
+              animateCountUp(document.getElementById('participants'), 800, 2000);
+            }
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      if (statsSection) observer.observe(statsSection);
+      if (surveySection) observer.observe(surveySection);
+
       // Carousel Functionality
       function initializeCarousel(carouselId, prevBtnId, nextBtnId) {
         const carousel = document.getElementById(carouselId);
@@ -421,7 +517,7 @@
           const items = carousel.querySelectorAll('.carousel-item');
           if (items.length === 0) return;
 
-          const itemWidth = items[0].offsetWidth + 16; // Include gap
+          const itemWidth = items[0].offsetWidth + 16;
           const visibleItems = window.innerWidth > 1024 ? 3 : window.innerWidth > 768 ? 2 : 1;
           const scrollAmount = itemWidth * visibleItems * direction;
 
@@ -434,10 +530,9 @@
         carousel.addEventListener('scroll', updateButtons);
         window.addEventListener('resize', updateButtons);
 
-        updateButtons(); // Initial check
+        updateButtons();
       }
 
-      // Initialize carousels
       initializeCarousel('carousel-events', 'prev-btn-events', 'next-btn-events');
       initializeCarousel('carousel-trainings', 'prev-btn-trainings', 'next-btn-trainings');
 
@@ -447,7 +542,6 @@
           let trainingCardsHTML = '';
           
           for (const [key, event] of Object.entries(EVENTS)) {
-              // A training is an event with no speakers and a photo
               if (event.speakers && event.speakers.length === 0 && event.photo) {
                   const encodedKey = encodeURIComponent(key);
                   
