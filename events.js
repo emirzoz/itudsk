@@ -51,28 +51,28 @@ export const EVENTS = {
         "photo": "images/IMG_8180.jpg"
       },
       {
-        "name": "DAMLA ALTUN & BURAK BOZKURT",
+        "name": "Damla Altun & Burak Bozkurt",
         "title": "51 Digital",
         "photo": "images/_DSC0084.jpg"
       },
       {
-        "name": "EFE VOLKAN",
+        "name": "Efe Volkan",
         "title": "Ice Cream Middle East & Turkey Turkey Digital Marketing Country Lead",
         "photo": "images/_DSC0138.jpg"
       },
       {
-        "name": "SİMAY DAL",
+        "name": "Simay Dal",
         "title": "İçerik Üreticisi",
         "photo": "images/_DSC0246.jpg"
       },
       {
-        "name": "BUKET SENA ÖZDEMİR & EDA YAMAN",
+        "name": "Buket Sena Ozdemir & Eda Yaman",
         "title": "İçerik Üreticileri",
         "photo": "images/IMG_8410.jpg"
       },
       {
-        "name": "Simay Dal",
-        "title": "İçerik Üreticisi",
+        "name": "DigiPanel",
+        "title": "Vedat KARABULUT, Yasin KAPLAN, Ziya KIZILTAN, Samet Ensar SARI, Şehnaz ASKEROĞLU",
         "photo": "https://placehold.co/128x128/B2F5EA/FFFFFF?text=SD"
       }
     ]
