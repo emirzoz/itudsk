@@ -30,6 +30,11 @@
       -webkit-overflow-scrolling: touch;
       overflow-x: auto;
       scroll-behavior: smooth;
+      display: flex;
+      width: 100%;
+      gap: 16px;
+      padding: 0 16px;
+      box-sizing: border-box;
     }
     /* Hide scrollbar */
     .carousel-container::-webkit-scrollbar {
@@ -40,18 +45,41 @@
       scrollbar-width: none;  /* Firefox */
     }
     .carousel-item {
-      scroll-snap-align: center;
+      scroll-snap-align: start;
       flex-shrink: 0;
-      width: calc(100% / 3);
+      width: 33.33%; /* 3 items on desktop */
+      box-sizing: border-box;
     }
     @media (max-width: 1024px) {
       .carousel-item {
-        width: calc(100% / 2);
+        width: 50%; /* 2 items on tablet */
       }
     }
     @media (max-width: 768px) {
       .carousel-item {
-        width: 100%;
+        width: 100%; /* 1 item on mobile */
+      }
+    }
+    .carousel-btn {
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .carousel-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        transition: background-color 0.3s;
+      }
+      .carousel-btn:hover {
+        background-color: #ffffff;
       }
     }
   </style>
@@ -130,7 +158,7 @@
           
           <h3 class="text-2xl font-semibold text-gold-accent">Vizyonumuz</h3>
           <p>
-            Türkiye'de üniversite düzeyinde dijital pazarlama alanında referans alınan, yenilikçi projeleri ve nitelikli mezunlarıyla öne çıkan; ekosisteme değer katan araştırma, eğitim ve etkinlikleriyle bölgesel etki yaratan; sürdürübilirlik ve kapsayıcılığı temel alan bir öğrenci kulübü olmaktır.
+            Türkiye'de üniversite düzeyinde dijital pazarlama alanında referans alınan, yenilikçi projeleri ve nitelikli mezunlarıyla öne çıkan; ekosisteme değer katan araştırma, eğitim ve etkinlikleriyle bölgesel etki yaratan; sürdürülebilirlik ve kapsayıcılığı temel alan bir öğrenci kulübü olmaktır.
           </p>
           <p class="mt-8 text-center text-lg font-semibold">
             Dijital dönüşümün kalbinde, geleceğin trendlerini bugün öğrenin!
@@ -143,7 +171,7 @@
       <div class="container mx-auto max-w-6xl">
         <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Etkinliklerimiz</h2>
         <div class="relative">
-          <div id="carousel-events" class="carousel-container flex gap-8 pb-4">
+          <div id="carousel-events" class="carousel-container">
             <a href="event-detail.html?id=beedigital-2025" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2025">
               <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2025</h3>
               <p class="text-gray-600">Yakında! Dijital pazarlama zirvesi ile sektör liderlerini ağırlayacağız. Önceki zirvelerimizde elde ettiğimiz başarıyı devam ettiriyoruz.</p>
@@ -165,10 +193,10 @@
               <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
             </a>
           </div>
-          <button id="prev-btn-events" class="absolute top-1/2 left-0 -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white transition hidden md:block" aria-label="Önceki">
+          <button id="prev-btn-events" class="carousel-btn left-0" aria-label="Önceki">
             <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
           </button>
-          <button id="next-btn-events" class="absolute top-1/2 right-0 -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white transition hidden md:block" aria-label="Sonraki">
+          <button id="next-btn-events" class="carousel-btn right-0" aria-label="Sonraki">
             <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
           </button>
         </div>
@@ -179,12 +207,30 @@
       <div class="container mx-auto max-w-6xl">
         <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Eğitimlerimiz</h2>
         <div class="relative">
-          <div id="carousel-trainings" class="carousel-container flex gap-8 pb-4">
-            </div>
-          <button id="prev-btn-trainings" class="absolute top-1/2 left-0 -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white transition hidden md:block" aria-label="Önceki">
+          <div id="carousel-trainings" class="carousel-container">
+            <a href="event-detail.html?id=digital-marketing-101" class="carousel-item bg-white-pure rounded-lg shadow-xl animate-fade-in-up card-hover-animation overflow-hidden transform hover:scale-105 transition duration-300 flex flex-col">
+              <img src="https://placehold.co/600x400/FFD700/000000?text=Digital+Marketing+101" alt="Digital Marketing 101" class="w-full h-48 object-cover">
+              <div class="p-6 text-center flex-grow flex items-center justify-center">
+                <h3 class="text-xl font-semibold text-gold-accent">Dijital Pazarlama 101</h3>
+              </div>
+            </a>
+            <a href="event-detail.html?id=social-media-strategy" class="carousel-item bg-white-pure rounded-lg shadow-xl animate-fade-in-up card-hover-animation overflow-hidden transform hover:scale-105 transition duration-300 flex flex-col">
+              <img src="https://placehold.co/600x400/FFB600/000000?text=Social+Media+Strategy" alt="Social Media Strategy" class="w-full h-48 object-cover">
+              <div class="p-6 text-center flex-grow flex items-center justify-center">
+                <h3 class="text-xl font-semibold text-gold-accent">Sosyal Medya Stratejileri</h3>
+              </div>
+            </a>
+            <a href="event-detail.html?id=content-creation" class="carousel-item bg-white-pure rounded-lg shadow-xl animate-fade-in-up card-hover-animation overflow-hidden transform hover:scale-105 transition duration-300 flex flex-col">
+              <img src="https://placehold.co/600x400/FFD700/000000?text=Content+Creation" alt="Content Creation" class="w-full h-48 object-cover">
+              <div class="p-6 text-center flex-grow flex items-center justify-center">
+                <h3 class="text-xl font-semibold text-gold-accent">İçerik Üretimi</h3>
+              </div>
+            </a>
+          </div>
+          <button id="prev-btn-trainings" class="carousel-btn left-0" aria-label="Önceki">
             <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
           </button>
-          <button id="next-btn-trainings" class="absolute top-1/2 right-0 -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white transition hidden md:block" aria-label="Sonraki">
+          <button id="next-btn-trainings" class="carousel-btn right-0" aria-label="Sonraki">
             <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
           </button>
         </div>
@@ -339,10 +385,9 @@
     <p class="text-sm">&copy; 2025 İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü. Tüm hakları saklıdır.</p>
   </footer>
 
-  <script src="events.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Countdown Timer
+      // Countdown Timer (unchanged)
       const countdownDate = new Date("Dec 25, 2025 00:00:00").getTime();
       const countdownInterval = setInterval(function() {
         const now = new Date().getTime();
@@ -368,28 +413,7 @@
         }
       }, 1000);
 
-      // --- Populate Trainings Carousel ---
-      const trainingsCarousel = document.getElementById('carousel-trainings');
-      if (trainingsCarousel && typeof EVENTS !== 'undefined') {
-          let trainingCardsHTML = '';
-          for (const [key, event] of Object.entries(EVENTS)) {
-              // A training is an event with no speakers and a photo
-              if (event.speakers && event.speakers.length === 0 && event.photo) {
-                  const encodedKey = encodeURIComponent(key);
-                  trainingCardsHTML += `
-                      <a href="event-detail.html?id=${encodedKey}" class="carousel-item bg-white-pure rounded-lg shadow-xl animate-fade-in-up card-hover-animation overflow-hidden transform hover:scale-105 transition duration-300 flex flex-col">
-                          <img src="${event.photo}" alt="${event.title}" class="w-full h-48 object-cover">
-                          <div class="p-6 text-center flex-grow flex items-center justify-center">
-                              <h3 class="text-xl font-semibold text-gold-accent">${event.title}</h3>
-                          </div>
-                      </a>
-                  `;
-              }
-          }
-          trainingsCarousel.innerHTML = trainingCardsHTML;
-      }
-      
-      // --- Reusable Carousel Initializer ---
+      // Carousel Functionality
       function initializeCarousel(carouselId, prevBtnId, nextBtnId) {
         const carousel = document.getElementById(carouselId);
         const prevBtn = document.getElementById(prevBtnId);
@@ -397,36 +421,34 @@
 
         if (!carousel || !prevBtn || !nextBtn) return;
 
-        const checkButtons = () => {
-          // Wait a tiny moment for the browser to update scroll properties
-          setTimeout(() => {
-            const scrollEnd = Math.abs(carousel.scrollWidth - carousel.clientWidth - carousel.scrollLeft);
-            prevBtn.style.display = carousel.scrollLeft <= 0 ? 'none' : 'block';
-            nextBtn.style.display = scrollEnd < 1 ? 'none' : 'block';
-          }, 100);
-        };
-        
-        const scrollCarousel = (direction) => {
-          const firstItem = carousel.querySelector('.carousel-item');
-          if (!firstItem) return;
-          const itemWidth = firstItem.offsetWidth;
-          carousel.scrollBy({ left: itemWidth * direction, behavior: 'smooth' });
+        const updateButtons = () => {
+          const scrollLeft = carousel.scrollLeft;
+          const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+          prevBtn.style.display = scrollLeft <= 0 ? 'none' : 'block';
+          nextBtn.style.display = scrollLeft >= maxScroll - 1 ? 'none' : 'block';
         };
 
-        prevBtn.onclick = () => scrollCarousel(-1);
-        nextBtn.onclick = () => scrollCarousel(1);
-        
-        carousel.addEventListener('scroll', checkButtons);
-        window.addEventListener('resize', checkButtons);
+        const scrollToItem = (direction) => {
+          const items = carousel.querySelectorAll('.carousel-item');
+          if (items.length === 0) return;
 
-        // If content is dynamic, observe for changes to update buttons
-        const observer = new MutationObserver(() => checkButtons());
-        observer.observe(carousel, { childList: true });
-        
-        checkButtons(); // Initial check
+          const itemWidth = items[0].offsetWidth + 16; // Include gap
+          const visibleItems = window.innerWidth > 1024 ? 3 : window.innerWidth > 768 ? 2 : 1;
+          const scrollAmount = itemWidth * visibleItems * direction;
+
+          carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        };
+
+        prevBtn.addEventListener('click', () => scrollToItem(-1));
+        nextBtn.addEventListener('click', () => scrollToItem(1));
+
+        carousel.addEventListener('scroll', updateButtons);
+        window.addEventListener('resize', updateButtons);
+
+        updateButtons(); // Initial check
       }
 
-      // Initialize both carousels on the page
+      // Initialize carousels
       initializeCarousel('carousel-events', 'prev-btn-events', 'next-btn-events');
       initializeCarousel('carousel-trainings', 'prev-btn-trainings', 'next-btn-trainings');
     });
