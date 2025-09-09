@@ -34,153 +34,340 @@
     .carousel-item {
       scroll-snap-align: center;
       flex-shrink: 0;
-      width: calc(100% / 3 - 2rem);
+      width: calc(100% / 3);
     }
-
-    .training-card {
-      background-size: cover;
-      background-position: center;
-      position: relative;
-      border-radius: 1rem;
-      overflow: hidden;
-      aspect-ratio: 16/9;
-      display: flex;
-      align-items: flex-end;
-      color: white;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    @media (max-width: 1024px) {
+      .carousel-item {
+        width: calc(100% / 2);
+      }
     }
-    .training-card-overlay {
-      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 1.5rem;
+    @media (max-width: 768px) {
+      .carousel-item {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body class="bg-soft-white text-black-soft">
+
   <!-- Navigation -->
-  <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-lg">
-    <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+  <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-lg animate-fade-in-down">
+    <nav class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
       <div class="text-2xl font-bold text-gold-accent">ITODESK</div>
-      <div class="flex space-x-4 md:space-x-6 text-base md:text-lg font-medium">
-        <a href="index.html" class="hover:text-gold-accent transition duration-300">Anasayfa</a>
-        <a href="#events-section" class="hover:text-gold-accent transition duration-300">Etkinlikler</a>
-        <a href="#trainings-section" class="hover:text-gold-accent transition duration-300">Eğitimler</a>
-        <a href="#contact-section" class="hover:text-gold-accent transition duration-300">İletişim</a>
+      <div class="flex flex-wrap justify-center space-x-4 md:space-x-6 text-base md:text-lg font-medium">
+        <a href="#hero" class="hover:text-gold-accent transition duration-300">Anasayfa</a>
+        <a href="#about" class="hover:text-gold-accent transition duration-300">Hakkımızda</a>
+        <a href="#events" class="hover:text-gold-accent transition duration-300">Etkinliklerimiz</a>
+        <a href="#trainings" class="hover:text-gold-accent transition duration-300">Eğitimlerimiz</a>
+        <a href="#sponsorship" class="hover:text-gold-accent transition duration-300">Sponsorluk Paketleri</a>
+        <a href="#team" class="hover:text-gold-accent transition duration-300">Ekibimiz</a>
+        <a href="#contact" class="hover:text-gold-accent transition duration-300">İletişime Geçin</a>
       </div>
     </nav>
   </header>
 
-  <!-- Hero Section -->
-  <section id="hero" class="relative bg-white min-h-screen flex items-center justify-center p-8 text-center overflow-hidden">
-    <!-- Particles, blobs or other visual elements can go here -->
-    <div class="z-10 relative">
-      <h1 class="text-4xl md:text-6xl font-extrabold text-black-soft mb-4 animate-fadeInUp">
-        Dijital Pazarlamanın Kalbi
-      </h1>
-      <p class="text-xl md:text-2xl text-gray-600 mb-8 animate-fadeInUp" style="animation-delay: 0.3s;">
-        İTÜ Dijital Pazarlama Kulübü'ne Hoş Geldiniz
-      </p>
-      <div id="countdown" class="flex justify-center space-x-4 text-black-soft font-bold text-xl md:text-3xl animate-fadeInUp" style="animation-delay: 0.6s;">
-        <div class="flex flex-col items-center">
-          <span id="days" class="text-4xl md:text-6xl text-gold-accent">00</span>
-          <span>Gün</span>
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Section -->
+    <section id="hero" class="min-h-screen flex items-center justify-center p-8 text-center text-black-soft bg-white-pure hero-animated-bg">
+      <div class="max-w-4xl space-y-8 animate-fade-in-up">
+        <h1 class="text-5xl sm:text-6xl font-extrabold leading-tight">
+          Dijital Gelecek Başlıyor
+        </h1>
+        <p class="text-xl sm:text-2xl font-light max-w-2xl mx-auto">
+          İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü olarak, BeeDigital 2025 ile dijital dünyanın dinamiklerini keşfedin. 2022-2024 zirvelerimizde 1800+ ön kayıt, 800+ katılımcı ve 13 konuşmacı ile büyük başarı elde ettik!
+        </p>
+
+        <!-- Countdown Timer -->
+        <div class="mt-8 space-y-4">
+          <h3 class="text-2xl font-semibold text-gold-accent">25 Aralık 2025 Etkinliğine Kalan Süre</h3>
+          <div id="countdown" class="flex justify-center items-center space-x-4 text-3xl sm:text-4xl font-bold text-black-soft">
+            <div class="flex flex-col items-center animate-pulse-fast">
+              <span id="days">00</span>
+              <span class="text-sm font-light text-gray-500">Gün</span>
+            </div>
+            <span>:</span>
+            <div class="flex flex-col items-center animate-pulse-fast" style="animation-delay: 0.2s;">
+              <span id="hours">00</span>
+              <span class="text-sm font-light text-gray-500">Saat</span>
+            </div>
+            <span>:</span>
+            <div class="flex flex-col items-center animate-pulse-fast" style="animation-delay: 0.4s;">
+              <span id="minutes">00</span>
+              <span class="text-sm font-light text-gray-500">Dakika</span>
+            </div>
+            <span>:</span>
+            <div class="flex flex-col items-center animate-pulse-fast" style="animation-delay: 0.6s;">
+              <span id="seconds">00</span>
+              <span class="text-sm font-light text-gray-500">Saniye</span>
+            </div>
+          </div>
         </div>
-        <div class="flex flex-col items-center">
-          <span id="hours" class="text-4xl md:text-6xl text-gold-accent">00</span>
-          <span>Saat</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <span id="minutes" class="text-4xl md:text-6xl text-gold-accent">00</span>
-          <span>Dakika</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <span id="seconds" class="text-4xl md:text-6xl text-gold-accent">00</span>
-          <span>Saniye</span>
+
+        <!-- Call to Action Buttons -->
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
+          <a href="#" class="btn-gold-accent animate-fade-in-up">Etkinliğe Katıl</a>
+          <a href="#" class="btn-outline-gold animate-fade-in-up">Kulübe Katıl</a>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Events Section -->
-  <section id="events-section" class="py-16">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl md:text-4xl font-bold text-center text-black-soft mb-8">Etkinliklerimiz</h2>
-      <div class="relative">
-        <div id="carousel-events" class="flex overflow-x-auto scroll-bar-none space-x-4 p-4 rounded-lg shadow-inner">
-        </div>
-        <!-- Carousel buttons -->
-        <button id="prev-btn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/50 backdrop-blur-md p-2 rounded-full shadow-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-          </svg>
-        </button>
-        <button id="next-btn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/50 backdrop-blur-md p-2 rounded-full shadow-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5 15.75 12l-7.5 7.5" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Trainings Section -->
-  <section id="trainings-section" class="py-16 bg-white-pure">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl md:text-4xl font-bold text-center text-black-soft mb-8">Eğitimlerimiz</h2>
-      <div id="trainings-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact-section" class="py-16 bg-soft-white">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl md:text-4xl font-bold text-center text-black-soft mb-8">Bize Ulaşın</h2>
-      <div class="flex flex-col md:flex-row items-center justify-center gap-8">
-        <!-- Contact Card -->
-        <div class="w-full md:w-1/2 bg-white p-8 md:p-12 rounded-lg shadow-xl">
-          <h3 class="text-2xl font-bold mb-4">Kulübümüze Katılın</h3>
-          <p class="text-gray-600 mb-6">
-            Dijital dünyada iz bırakmak, yeni beceriler öğrenmek ve sektör profesyonelleriyle tanışmak için aramıza katılın.
+    <!-- About Section -->
+    <section id="about" class="py-24 px-8 bg-soft-white border-t-4 border-gold-accent">
+      <div class="container mx-auto max-w-5xl">
+        <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Hakkımızda</h2>
+        <div class="space-y-8 text-lg text-gray-600 animate-fade-in-up">
+          <p>
+            İstanbul Teknik Üniversitesi Dijital Pazarlama ve Sosyal Medya Kulübü, dijital dünyanın dinamiklerini keşfetmek ve bu alanda derinlemesine bilgi sahibi olmak isteyen öğrencilere yönelik kurulmuş yenilikçi bir öğrenci topluluğudur. Kulübümüz; dijital pazarlama, sosyal medya yönetimi, e-ticaret stratejileri, içerik üretimi, influencer marketing ve dijital girişimcilik gibi günümüzün en güncel ve en hızlı gelişen konularına odaklanmaktadır.
           </p>
-          <a href="https://forms.gle/your-form-link" target="_blank" class="btn-gold-accent w-full text-center">Formu Doldur</a>
-        </div>
-        <!-- Contact Form -->
-        <div class="w-full md:w-1/2 bg-white p-8 md:p-12 rounded-lg shadow-xl">
-          <h3 class="text-2xl font-bold mb-4">Mesaj Gönderin</h3>
-          <form action="#" method="POST" class="space-y-4">
-            <div>
-              <input type="text" placeholder="Adınız Soyadınız" class="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required>
-            </div>
-            <div>
-              <input type="email" placeholder="E-posta Adresiniz" class="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required>
-            </div>
-            <div>
-              <textarea placeholder="Mesajınız (Sponsorluk veya Katılım için yazın)" rows="5" class="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required></textarea>
-            </div>
-            <button type="submit" class="w-full btn-gold-accent">Gönder</button>
-          </form>
+          
+          <h3 class="text-2xl font-semibold text-gold-accent">Misyonumuz</h3>
+          <p>
+            Öğrencilerin dijital pazarlama, sosyal medya, e-ticaret ve içerik üretimi alanlarında güncel bilgi ve yetkinlikler kazanmasını sağlamak; sektörel standartlarla uyumlu, uygulamalı öğrenme deneyimleri sunmak; üniversite-sanayi iş birlikleriyle kariyer fırsatlarına erişimi artırmak ve etik, veri odaklı, ölçülebilir pazarlama yaklaşımını yaygınlaştırmaktır.
+          </p>
+          
+          <h3 class="text-2xl font-semibold text-gold-accent">Vizyonumuz</h3>
+          <p>
+            Türkiye'de üniversite düzeyinde dijital pazarlama alanında referans alınan, yenilikçi projeleri ve nitelikli mezunlarıyla öne çıkan; ekosisteme değer katan araştırma, eğitim ve etkinlikleriyle bölgesel etki yaratan; sürdürülebilirlik ve kapsayıcılığı temel alan bir öğrenci kulübü olmaktır.
+          </p>
+          <p class="mt-8 text-center text-lg font-semibold">
+            Dijital dönüşümün kalbinde, geleceğin trendlerini bugün öğrenin!
+          </p>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <!-- Events Section (Carousel) -->
+    <section id="events" class="py-24 px-8 bg-white-pure">
+      <div class="container mx-auto max-w-6xl">
+        <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Etkinliklerimiz</h2>
+        <div class="relative">
+          <div id="carousel-events" class="carousel-container flex gap-8 pb-4">
+            <!-- Event Cards (updated to be links) -->
+            <a href="event-detail.html?id=beedigital-2025" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2025">
+              <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2025</h3>
+              <p class="text-gray-600">Yakında! Dijital pazarlama zirvesi ile sektör liderlerini ağırlayacağız. Önceki zirvelerimizde elde ettiğimiz başarıyı devam ettiriyoruz.</p>
+              <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
+            </a>
+            <a href="event-detail.html?id=beedigital-2024" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2024">
+              <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2024</h3>
+              <p class="text-gray-600">Büyük bir katılımcı kitlesiyle tamamlanan zirvemiz. Katılımcılarımızdan bazıları: Selim Yuhay, Mimar Selim, Zeynep Özkaya, Sabrı Can Onay Yontar (Chess.com), Vedat Karabulut, Barış Korkmaz, Hakan Gerin, Cahide Güney (FLO).</p>
+              <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
+            </a>
+            <a href="event-detail.html?id=beedigital-2023" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2023">
+              <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2023</h3>
+              <p class="text-gray-600">Başarılı bir etkinlik: Katılımcılarımızdan bazıları: Simay Dal, Damla Altun & Burak Bozkurt (51 Digital), Buket Sena Özdemir & Eda Yaman, Efe Volkan (Unilever), Japon Hamza, Destina Saccilarlı.</p>
+              <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
+            </a>
+            <a href="event-detail.html?id=beedigital-2022" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2022">
+              <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2022</h3>
+              <p class="text-gray-600">Kulübümüzün ilk zirvesi: 1800+ ön kayıt, 800+ katılımcı, 8500+ etkileşim, 13 konuşmacı. Katılımcılarımızdan bazıları: Berfu Yenenler, Ceyda Kasabalı & Fırat Albayram (Noluyo Ya? YouTube), Berk Keklik & Oğulcan Aşıkoğlu, Ege Tuna Diken, Harun Ünlüsöy, Ahmet Duruel, Ümit Akgün, Asena Akbal, Selim Kayhan, Kıvanç Ege Aydın & Senem Sarkanak.</p>
+              <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
+            </a>
+            <a href="event-detail.html?id=bee-influencer" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-bee-influencer">
+              <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeInfluencer</h3>
+              <p class="text-gray-600">Influencer marketing atölyeleri ve stratejileri. Kulübümüzün odak alanlarından biri olarak, dijital girişimcilik ve içerik üretimi eğitimleri sunuyoruz.</p>
+              <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
+            </a>
+          </div>
+          <button id="prev-btn" class="absolute top-1/2 left-0 -mt-6 p-2 rounded-full bg-white/50 hover:bg-white transition hidden md:block" aria-label="Önceki">
+            <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+          </button>
+          <button id="next-btn" class="absolute top-1/2 right-0 -mt-6 p-2 rounded-full bg-white/50 hover:bg-white transition hidden md:block" aria-label="Sonraki">
+            <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trainings Section (updated to be links) -->
+    <section id="trainings" class="py-24 px-8 bg-soft-white border-t-4 border-gold-accent">
+      <div class="container mx-auto max-w-5xl">
+        <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Eğitimlerimiz</h2>
+        <div class="grid md:grid-cols-3 gap-8 text-center">
+          <a href="event-detail.html?id=sosyal-medya" class="bg-white-pure p-8 rounded-lg shadow-xl animate-fade-in-up card-hover-animation training-flyer-social-media">
+            <span class="text-4xl">📱</span>
+            <h3 class="text-2xl font-semibold mt-4 text-gold-accent">Sosyal Medya Stratejileri</h3>
+            <p class="text-gray-600 mt-2">Yönetim ve içerik üretimi eğitimleri.</p>
+          </a>
+          <a href="event-detail.html?id=e-ticaret" class="bg-white-pure p-8 rounded-lg shadow-xl animate-fade-in-up card-hover-animation training-flyer-e-commerce">
+            <span class="text-4xl">🛒</span>
+            <h3 class="text-2xl font-semibold mt-4 text-gold-accent">E-Ticaret Temelleri</h3>
+            <p class="text-gray-600 mt-2">Stratejiler ve online satış taktikleri.</p>
+          </a>
+          <a href="event-detail.html?id=influencer-marketing" class="bg-white-pure p-8 rounded-lg shadow-xl animate-fade-in-up card-hover-animation training-flyer-influencer">
+            <span class="text-4xl">📈</span>
+            <h3 class="text-2xl font-semibold mt-4 text-gold-accent">Influencer Marketing</h3>
+            <p class="text-gray-600 mt-2">Dijital girişimcilik ve etik yaklaşımlar.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sponsorship Section -->
+    <section id="sponsorship" class="py-24 px-8 bg-white-pure border-t-4 border-gold-accent">
+      <div class="container mx-auto max-w-5xl">
+        <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Sponsorluk Paketlerimiz</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- Main Sponsorship -->
+          <div class="bg-soft-white p-6 rounded-lg shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation">
+            <h3 class="text-2xl font-semibold text-center mb-2 text-gold-accent">Ana Sponsorluk</h3>
+            <p class="text-center text-4xl font-bold text-gold-accent">35.000+ KDV TL</p>
+            <ul class="list-disc list-inside mt-4 text-gray-600 space-y-2">
+              <li>3 Fuaye Standı</li>
+              <li>Oturum Tahsisi</li>
+              <li>1 Yıl Etkinlik Tanıtımı</li>
+              <li>Sosyal Medya & Web Sitesi</li>
+            </ul>
+          </div>
+          <!-- Gold Sponsorship -->
+          <div class="bg-soft-white p-6 rounded-lg shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation">
+            <h3 class="text-2xl font-semibold text-center mb-2 text-gold-accent">Altın Sponsorluk</h3>
+            <p class="text-center text-4xl font-bold text-gold-accent">20.000+ KDV TL</p>
+            <ul class="list-disc list-inside mt-4 text-gray-600 space-y-2">
+              <li>2 Fuaye Standı</li>
+              <li>Oturum Tahsisi</li>
+              <li>3 Ay Etkinlik Tanıtımı</li>
+              <li>Sosyal Medya & Web Sitesi</li>
+            </ul>
+          </div>
+          <!-- Silver Sponsorship -->
+          <div class="bg-soft-white p-6 rounded-lg shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation">
+            <h3 class="text-2xl font-semibold text-center mb-2 text-gold-accent">Gümüş Sponsorluk</h3>
+            <p class="text-center text-4xl font-bold text-gold-accent">10.000+ KDV TL</p>
+            <ul class="list-disc list-inside mt-4 text-gray-600 space-y-2">
+              <li>2 Fuaye Standı</li>
+              <li>Sosyal Medya & Afişler</li>
+              <li>Web Sitesi</li>
+            </ul>
+          </div>
+        </div>
+        <div class="mt-8 text-center">
+            <a href="#" class="btn-gold-accent animate-fade-in-up">Sponsor Olun</a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Team Section -->
+    <section id="team" class="py-24 px-8 bg-soft-white border-t-4 border-gold-accent">
+      <div class="container mx-auto max-w-5xl">
+        <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Ekibimiz</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+          <div class="bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation">
+            <h3 class="text-xl font-semibold text-gold-accent">Eylül Şimşek</h3>
+            <p class="text-gray-600">Kulüp Başkanı</p>
+          </div>
+          <div class="bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation">
+            <h3 class="text-xl font-semibold text-gold-accent">Yer Tutucu</h3>
+            <p class="text-gray-600">Etkinlik Koordinatörü</p>
+          </div>
+          <div class="bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation">
+            <h3 class="text-xl font-semibold text-gold-accent">Yer Tutucu</h3>
+            <p class="text-gray-600">Sosyal Medya Yöneticisi</p>
+          </div>
+          <div class="bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation">
+            <h3 class="text-xl font-semibold text-gold-accent">Yer Tutucu</h3>
+            <p class="text-gray-600">...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 px-8 bg-white-pure border-t-4 border-gold-accent">
+      <div class="container mx-auto max-w-5xl text-center">
+        <h2 class="text-4xl font-bold mb-12 animate-fade-in-down">İletişime Geçin</h2>
+        <div class="space-y-6">
+          <div class="flex items-center justify-center space-x-4">
+            <span class="text-2xl">📍</span>
+            <p class="text-lg text-gray-600">İTÜ Ayazağa Kampüsü, Maslak, İstanbul</p>
+          </div>
+          <div class="flex items-center justify-center space-x-4">
+            <span class="text-2xl">📧</span>
+            <p class="text-lg text-gray-600">itudijitalpazarlama@gmail.com</p>
+          </div>
+          <div class="flex items-center justify-center space-x-4">
+            <span class="text-2xl">📞</span>
+            <p class="text-lg text-gray-600">0538 769 77 53 (Eylül Şimşek - Kulüp Başkanı)</p>
+          </div>
+        </div>
+        
+        <!-- Contact Form -->
+        <div class="mt-16 bg-soft-white p-8 rounded-lg shadow-xl max-w-lg mx-auto animate-fade-in-up">
+            <h3 class="text-2xl font-semibold mb-6 text-gold-accent">Bize Yazın</h3>
+            <form action="#" method="POST" class="space-y-6">
+              <div>
+                <input type="text" name="name" placeholder="Adınız Soyadınız" class="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required>
+              </div>
+              <div>
+                <input type="email" name="email" placeholder="E-Posta Adresiniz" class="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required>
+              </div>
+              <div>
+                <textarea name="message" placeholder="Mesajınız (Sponsorluk veya Katılım için yazın)" rows="5" class="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required></textarea>
+              </div>
+              <button type="submit" class="w-full btn-gold-accent">Gönder</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Instagram Feed Section -->
+      <section class="py-24 px-8 bg-soft-white border-t-4 border-gold-accent">
+        <div class="container mx-auto max-w-5xl">
+          <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Son Instagram Gönderileri</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <!-- Instagram Post 1 -->
+            <a href="https://www.instagram.com/itodesk_club" target="_blank" class="instagram-post bg-gray-800 rounded-lg shadow-xl border-t-4 border-gold-accent animate-fade-in-up transform hover:scale-105 transition duration-300">
+              <img src="https://placehold.co/600x600/FFD700/000000?text=Instagram+Post+1" alt="Instagram Post 1" class="w-full h-auto rounded-t-lg">
+              <div class="p-6">
+                <p class="text-gray-300">BeeDigital 2025'in hazırlıkları tüm hızıyla devam ediyor! 🎉</p>
+                <div class="flex items-center mt-4 text-sm text-gray-400">
+                  <span class="mr-2">❤️</span>
+                  <span>158 Beğeni</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- Instagram Post 2 -->
+            <a href="https://www.instagram.com/itodesk_club" target="_blank" class="instagram-post bg-gray-800 rounded-lg shadow-xl border-t-4 border-gold-accent animate-fade-in-up transform hover:scale-105 transition duration-300" style="animation-delay: 0.2s;">
+              <img src="https://placehold.co/600x600/FFB600/000000?text=Instagram+Post+2" alt="Instagram Post 2" class="w-full h-auto rounded-t-lg">
+              <div class="p-6">
+                <p class="text-gray-300">Yeni eğitim dönemi için harika planlarımız var! 🚀 Kulübümüze katılın ve dijital pazarlamayı birlikte keşfedin.</p>
+                <div class="flex items-center mt-4 text-sm text-gray-400">
+                  <span class="mr-2">❤️</span>
+                  <span>210 Beğeni</span>
+                </div>
+              </div>
+            </a>
+            
+            <!-- Instagram Post 3 -->
+            <a href="https://www.instagram.com/itodesk_club" target="_blank" class="instagram-post bg-gray-800 rounded-lg shadow-xl border-t-4 border-gold-accent animate-fade-in-up transform hover:scale-105 transition duration-300" style="animation-delay: 0.4s;">
+              <img src="https://placehold.co/600x600/FFD700/000000?text=Instagram+Post+3" alt="Instagram Post 3" class="w-full h-auto rounded-t-lg">
+              <div class="p-6">
+                <p class="text-gray-300">Sponsorluk paketlerimizle markanızı binlerce öğrenciye ulaştırın! Detaylar web sitemizde.</p>
+                <div class="flex items-center mt-4 text-sm text-gray-400">
+                  <span class="mr-2">❤️</span>
+                  <span>95 Beğeni</span>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="mt-8 text-center">
+              <a href="instagram-feed.html" class="btn-gold-accent animate-fade-in-up">Daha Fazlasını Gör</a>
+          </div>
+        </div>
+      </section>
+  </main>
 
   <!-- Footer -->
-  <footer class="bg-white text-black-soft py-8 text-center border-t-4 border-gold-accent">
+  <footer class="bg-white-pure text-black-soft py-8 text-center border-t-4 border-gold-accent">
     <p class="text-sm">&copy; 2025 İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü. Tüm hakları saklıdır.</p>
   </footer>
 
-  <script src="events.js"></script>
   <script>
     // Countdown Timer
     const countdownDate = new Date("Dec 25, 2025 00:00:00").getTime();
+
     const x = setInterval(function() {
       const now = new Date().getTime();
       const distance = countdownDate - now;
@@ -201,83 +388,29 @@
       }
     }, 1000);
 
-    // Dynamic content loading
-    document.addEventListener("DOMContentLoaded", function() {
-      const eventData = window.EVENTS;
-      const trainingData = window.TRAININGS;
-      
-      const eventsContainer = document.getElementById('carousel-events');
-      const trainingsContainer = document.getElementById('trainings-list');
-
-      // Populate Events Section
-      for (const eventId in eventData) {
-        const event = eventData[eventId];
-        const eventCard = document.createElement('div');
-        eventCard.className = 'carousel-item bg-white p-6 rounded-lg shadow-lg flex flex-col justify-between';
-        
-        const eventLink = document.createElement('a');
-        eventLink.href = `event-detail.html?id=${eventId}`;
-        
-        eventLink.innerHTML = `
-          <h3 class="text-xl font-semibold mb-2 text-gold-accent">${event.title}</h3>
-          <p class="text-gray-600 mb-4">${event.description.substring(0, 100)}...</p>
-        `;
-        
-        eventCard.appendChild(eventLink);
-        eventsContainer.appendChild(eventCard);
-      }
-
-      // Populate Trainings Section with background images
-      for (const trainingId in trainingData) {
-        const training = trainingData[trainingId];
-        const trainingCard = document.createElement('a');
-        trainingCard.href = `#`; // Trainings don't have detail pages for now
-        trainingCard.className = `training-card`;
-        trainingCard.style.backgroundImage = `url('${training.photo}')`;
-
-        trainingCard.innerHTML = `
-          <div class="training-card-overlay">
-            <h3 class="text-xl md:text-2xl font-bold text-white mb-2">${training.title}</h3>
-            <p class="text-sm md:text-base text-gray-200">${training.description}</p>
-          </div>
-        `;
-        
-        trainingsContainer.appendChild(trainingCard);
-      }
-    });
-
     // Carousel Logic
     const carousel = document.getElementById('carousel-events');
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
+    const itemWidth = carousel.querySelector('.carousel-item').clientWidth;
     
-    // Fallback to check if carousel items exist before running script
-    const initCarousel = () => {
-      const item = carousel.querySelector('.carousel-item');
-      if (!item) {
-        setTimeout(initCarousel, 100);
-        return;
-      }
-      
-      const itemWidth = item.clientWidth;
-      const checkButtons = () => {
-        prevBtn.style.display = carousel.scrollLeft <= 0 ? 'none' : 'block';
-        nextBtn.style.display = carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth) ? 'none' : 'block';
-      };
-
-      prevBtn.addEventListener('click', () => {
-        carousel.scrollLeft -= itemWidth * 3;
-      });
-
-      nextBtn.addEventListener('click', () => {
-        carousel.scrollLeft += itemWidth * 3;
-      });
-
-      carousel.addEventListener('scroll', checkButtons);
-      checkButtons();
+    // Check if the scroll buttons are needed
+    const checkButtons = () => {
+      prevBtn.style.display = carousel.scrollLeft <= 0 ? 'none' : 'block';
+      nextBtn.style.display = carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth) ? 'none' : 'block';
     };
 
-    window.addEventListener('load', initCarousel);
+    prevBtn.addEventListener('click', () => {
+      carousel.scrollLeft -= itemWidth * 3;
+    });
+
+    nextBtn.addEventListener('click', () => {
+      carousel.scrollLeft += itemWidth * 3;
+    });
+
+    carousel.addEventListener('scroll', checkButtons);
+    window.addEventListener('resize', checkButtons);
+    checkButtons();
   </script>
 </body>
 </html>
