@@ -42,7 +42,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ITODESK - Home</title>
+  <title>ITODESK - Instagram Feed</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -51,13 +51,27 @@
     <a href="index.html" class="mr-4 text-blue-600">Home</a>
     <a href="instagram-feed.html" class="text-blue-600">Instagram Feed</a>
   </nav>
-  <!-- Existing home page content remains the same as before -->
-  <div class="hero-parallax min-h-screen flex items-center justify-center">
-    <h1 class="text-4xl font-bold text-center text-gray-800">Welcome to ITOdesk</h1>
+  <div class="container mx-auto p-4">
+    <h2 class="text-3xl font-bold mb-4 text-gray-800">Instagram Feed</h2>
+    <div id="instagram-feed" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <!-- Placeholder for Instagram posts -->
+      <div class="instagram-post bg-white p-4 rounded-lg shadow-md">
+        <p>Instagram Post Placeholder 1</p>
+      </div>
+      <div class="instagram-post bg-white p-4 rounded-lg shadow-md">
+        <p>Instagram Post Placeholder 2</p>
+      </div>
+      <div class="instagram-post bg-white p-4 rounded-lg shadow-md">
+        <p>Instagram Post Placeholder 3</p>
+      </div>
+    </div>
   </div>
   <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- React and Babel scripts remain as in the original -->
+  <script type="text/babel">
+    // Placeholder JavaScript to fetch Instagram data (replace with API call)
+    console.log("Instagram feed will load here. Add API integration for real data.");
+  </script>
 </body>
 </html>
