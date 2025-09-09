@@ -46,16 +46,37 @@ export const EVENTS = {
         "photo": "https://placehold.co/128x128/B2F5EA/FFFFFF?text=JH"
       },
       {
+        "name": "Destina Saccılarlı",
+        "title": "Holibob'da Dijital Medya Yöneticisi",
+        "photo": "images/IMG_8180.jpg"
+      },
+      {
         "name": "Simay Dal",
         "title": "Influencer",
         "photo": "https://placehold.co/128x128/B2F5EA/FFFFFF?text=SD"
       }
+      
     ]
   },
   "beedigital-2022": {
     "title": "BeeDigital 2022",
     "description": "Kulübümüzün ilk zirvesi, 1800'den fazla ön kayıt ve 800'den fazla katılımcı ile büyük bir başarı elde etti. Berfu Yenenler ve Ceyda Kasabalı gibi sevilen isimlerin katılımıyla unutulmaz bir deneyim yaşattık.",
     "speakers": [
+      {
+        "name": "Kıvanç Ege Aydın & Senem Sarkanak ",
+        "title": "İçerik Üreticileri",
+        "photo": "images/kıvn.jpeg"
+      },
+      {
+        "name": "Asena Akbal Selim Kayhan",
+        "title": "Vodafone Oturumu",
+        "photo": "https://placehold.co/128x128/B2F5EA/FFFFFF?text=BY"
+      },
+      {
+        "name": "Berfu Yenenler",
+        "title": "Oyuncu & Komedyen",
+        "photo": "https://placehold.co/128x128/B2F5EA/FFFFFF?text=BY"
+      },
       {
         "name": "Berfu Yenenler",
         "title": "Oyuncu & Komedyen",
