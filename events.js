@@ -130,7 +130,7 @@ export const EVENTS = {
   },
   "Dijital Pazarlama 101 ": {
     "title": "Dijital Pazarlama 101 ",
-    "photo": "images/vod.png",
+    "photo": "images/eğtm1.jpeg",
     "description": "Bu eğitimimizde Ahmet Duruel üyelerimize dijital pazarlamanın ilk aşamalarını anlattı ve başlangıç seviyesinde dijital pazarlama eğitimi verdi.",
     "speakers": []
   },
