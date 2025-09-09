@@ -1,4 +1,5 @@
-export const EVENTS = {
+// No 'export' here - this makes EVENTS a global variable accessible by other scripts.
+const EVENTS = {
   "beedigital-2025": {
     "title": "BeeDigital 2025",
     "description": "25 Aralık 2025'te gerçekleşecek olan en yeni dijital pazarlama zirvemiz. Bu yıl, yapay zeka ve dijital dönüşümün geleceğini şekillendiren liderleri bir araya getiriyoruz. Sektördeki en son trendleri, inovasyonları ve vaka analizlerini öğrenmek için bize katılın.",
@@ -128,16 +129,18 @@ export const EVENTS = {
       }
     ]
   },
-  "Dijital Pazarlama 101 ": {
-    "title": "Dijital Pazarlama 101 ",
+  // FIX: Removed trailing space from the key
+  "Dijital Pazarlama 101": {
+    "title": "Dijital Pazarlama 101",
     "photo": "images/eğtm1.jpeg",
     "description": "Bu eğitimimizde Ahmet Duruel üyelerimize dijital pazarlamanın ilk aşamalarını anlattı ve başlangıç seviyesinde dijital pazarlama eğitimi verdi.",
     "speakers": []
   },
-  "Dijital Pazarlama 101&102 ": {
-    "title": "Dijital Pazarlama 101&102 ",
+  // FIX: Removed trailing space from the key
+  "Dijital Pazarlama 101&102": {
+    "title": "Dijital Pazarlama 101&102",
     "photo": "images/width_547.webp",
-    "description": "Bu eğitimimizde Polisan Cosmetics'ten dijital pazarlama uzmanı Ümit Akgün, sosyal medya yönetimi, dijital reklamcılık, kurumsal süreçler, dijital pazarlama ve alt dallarını anlattı. ",
+    "description": "Bu eğitimimizde Polisan Cosmetics'ten dijital pazarlama uzmanı Ümit Akgün, sosyal medya yönetimi, dijital reklamcılık, kurumsal süreçler, dijital pazarlama ve alt dallarını anlattı.",
     "speakers": []
   },
   "Atasun Optik ile Sosyal Medya Yönetimi": {
@@ -146,32 +149,37 @@ export const EVENTS = {
     "description": "Atasun Optik ile Sosyal Medya Yönetimi Eğitimi Atasun Optik'ten Esra Özkaya ve Sema Şener birçok sosyal medya platformunun yönetimi hakkında bilgi verdi.",
     "speakers": []
   },
-  "Büyüme Odaklı Dijital Pazarlama Eğitimi ": {
-    "title": "Büyüme Odaklı Dijital Pazarlama Eğitimi ",
+  // FIX: Removed trailing space from the key
+  "Büyüme Odaklı Dijital Pazarlama Eğitimi": {
+    "title": "Büyüme Odaklı Dijital Pazarlama Eğitimi",
     "photo": "images/width_388.jpeg",
     "description": "Bu eğitimde Dijital Pazarlama Okulu ve MOOF Dijital Reklam Ajansı kurucusu Yasin Kaplan üyelerimize büyüme odaklı dijital pazarlamanın püf noktalarını anlattı.",
     "speakers": []
   },
-  "Nostalji Ideathon'u ": {
-    "title": "Nostalji Ideathon'u ",
+  // FIX: Removed trailing space from the key
+  "Nostalji Ideathon'u": {
+    "title": "Nostalji Ideathon'u",
     "photo": "images/width_550 (1).jpeg",
     "description": "Üyelerimiz arasında nostalji temalı bir ideathon düzenlendi. Eskiden satışı olan bir ürünü şu anda piyasaya sürmek isteseler nasıl stratejiler kullanabileceklerini sergilemeleri için bir oturumda toplanıldı. En verimli stratejileri sunan üyelere ödüller verildi.",
     "speakers": []
   },
-  "Kariyerimde Dijital Pazarlama Eğitimi ": {
+  // FIX: Removed trailing space from the key
+  "Kariyerimde Dijital Pazarlama Eğitimi": {
     "title": "Kariyerimde Dijital Pazarlama Eğitimi",
     "photo": "images/width_550 (2).jpeg",
     "description": "Bu eğitimde dijital pazarlama, alt başlıkları, nereden başlanmalı, dijital pazarlamacının bir gününün anlatılması ve sosyal medyaya giriş eğitimi verilmesi için Facebook İstasyon'da toplanıldı. Senem Sarkanak , Burcu Civelek, Buse Ocakoğlu, Baturay Elönü, Umur Çiçek, Sezgi Karabaş eğitmenlerimiz arasındalardı.",
     "speakers": []
   },
-  "Dijital Pazarlama Temel Kavramları Eğitimi ": {
-    "title": "Dijital Pazarlama Temel Kavramları Eğitimi ",
+  // FIX: Removed trailing space from the key
+  "Dijital Pazarlama Temel Kavramları Eğitimi": {
+    "title": "Dijital Pazarlama Temel Kavramları Eğitimi",
     "photo": "images/width_388 (1).jpeg",
     "description": "Bu eğitimimizde Aytaç Mestçi'den internette pazarlama-reklam, SEM, SEO, SMM, web sitesi stratejisi, sosyal medya , e-ticaret ve mobil reklam eğitimi gerçekleşti",
     "speakers": []
   },
-  "LinkedIn Eğitimi ": {
-    "title": "LinkedIn Eğitimi ",
+  // FIX: Removed trailing space from the key
+  "LinkedIn Eğitimi": {
+    "title": "LinkedIn Eğitimi",
     "photo": "images/width_540.webp",
     "description": "Bu eğitimimizde İTÜ Tekstil Mühendisliği son sınıf öğrencisi Aigerim Yerbolgan LinkedIn hesabımızı nasıl kullanmamız gerektiğini anlattı.",
     "speakers": []
@@ -181,14 +189,14 @@ export const EVENTS = {
     "description": "19 Aralık 2023 tarihinde Destina Saccılarlı ile birlikte okulumuzda CV hazırlama eğitimi düzenledik. ",
     "photo": "images/width_412.webp",
     "speakers": []
-  }
+  }, // FIX: Added a comma here
   "Emre Erdem ile Meta Dijital Pazrlama Eğitimi": {
     "title": "Emre Erdem ile Meta Dijital Pazrlama Eğitimi",
     "description": "Bee Educated kapsamında 30 Nisan,7 Mayıs,14 Mayıs ve 21 Mayıs 2024 tarihlerinde online olarak sertifikalı bir Meta pazarlama eğitimi gerçekleştirdik. ",
     "photo": "images/width_412 (1).webp",
     "speakers": []
-  }
-"DigiPanel": {
+  }, // FIX: Added a comma here
+  "DigiPanel": {
     "title": "DigiPanel",
     "description": "8 Mart 2024 tarihinde Unilever Marketing Lead Didem Molay Sevin ile birlikte 8 Mart Özel DigiPanel gerçekleştirdik. Hem günün önemi üzerine konuşup aynı zamanda Didem Molay Sevin 'in deneyimlerini dinleme fırsatını bulduk. ",
     "photo": "images/width_550.webp",
