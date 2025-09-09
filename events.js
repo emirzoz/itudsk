@@ -25,7 +25,7 @@ export const EVENTS = {
         "photo": "images/selim.webp"
       },
       {
-        "name": "Zeynep Özkaya",
+        "name": "Zeynep Ozkaya",
         "title": "Sosyal Medya Uzmanı",
         "photo": "images/zeyne.webp"
       },
@@ -112,7 +112,7 @@ export const EVENTS = {
         "photo": "images/berk.jpeg"
       },
       {
-        "name": "Ege Tuna Diken Hatun Ünlüsoy Ahmet Duruel Ümit Akgün",
+        "name": "Ege Tuna Diken Hatun Unlüsoy Ahmet Duruel Umit Akgün",
         "title": "",
         "photo": "images/ege.jpeg"
       },
