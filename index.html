@@ -1,0 +1,515 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü: BeeDigital 2025 ve BeeFluencer ile dijital dünyada kariyer fırsatları!">
+  <meta name="keywords" content="dijital pazarlama, sosyal medya, İTÜ kulüp, BeeDigital, BeeFluencer">
+  <title>İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts (Inter for modern Apple-like feel) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <!-- React and ReactDOM -->
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <!-- Babel for JSX -->
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.20.15/babel.min.js"></script>
+  <style>
+    /* Custom styles for enhanced Apple-like design with more gold accents */
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .gold-accent { color: #ffb600; }
+    .gold-bg { background-color: #ffb600; }
+    .gold-border { border-color: #ffb600; }
+    .gold-shadow { box-shadow: 0 4px 6px -1px rgba(255, 182, 0, 0.1), 0 2px 4px -1px rgba(255, 182, 0, 0.06); }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+    
+    /* Parallax for hero */
+    .hero-parallax { transition: transform 0.1s ease-out; }
+    
+    /* Smooth scrolling */
+    html { scroll-behavior: smooth; }
+    
+    /* Apple-like shadows */
+    .shadow-apple { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+    
+    /* Gold gradient for counters */
+    .gold-gradient { background: linear-gradient(135deg, #ffb600 0%, #ffda44 100%); }
+  </style>
+</head>
+<body className="bg-white">
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // Countdown Component for 25 Aralık 2025
+    const CountdownTimer = () => {
+      const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+      useEffect(() => {
+        const targetDate = new Date('2025-12-25T00:00:00').getTime();
+        const updateTimer = () => {
+          const now = new Date().getTime();
+          const difference = targetDate - now;
+          setTimeLeft({
+            days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+            hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+            minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+            seconds: Math.floor((difference % (1000 * 60)) / 1000),
+          });
+        };
+        updateTimer();
+        const interval = setInterval(updateTimer, 1000);
+        return () => clearInterval(interval);
+      }, []);
+
+      return (
+        <div className="bg-gold-gradient text-black rounded-2xl p-6 shadow-apple animate-fade-in-up">
+          <h3 className="text-2xl font-bold mb-4 text-center">25 Aralık 2025 Etkinliğine Kalan Süre</h3>
+          <div className="grid grid-cols-4 gap-4 text-center">
+            <div className="bg-white/20 rounded-lg p-3">
+              <div className="text-3xl font-black">{timeLeft.days}</div>
+              <div>Gün</div>
+            </div>
+            <div className="bg-white/20 rounded-lg p-3">
+              <div className="text-3xl font-black">{timeLeft.hours}</div>
+              <div>Saat</div>
+            </div>
+            <div className="bg-white/20 rounded-lg p-3">
+              <div className="text-3xl font-black">{timeLeft.minutes}</div>
+              <div>Dakika</div>
+            </div>
+            <div className="bg-white/20 rounded-lg p-3">
+              <div className="text-3xl font-black">{timeLeft.seconds}</div>
+              <div>Saniye</div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const App = () => {
+      const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+      const [isScrolled, setIsScrolled] = useState(false);
+
+      useEffect(() => {
+        const handleScroll = () => setIsScrolled(window.scrollY > 50);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        alert('Mesajınız gönderildi! Teşekkürler.');
+        setFormData({ name: '', email: '', message: '' });
+      };
+
+      const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+      };
+
+      return (
+        <div className="min-h-screen bg-white font-inter">
+          {/* Header - More gold accents */}
+          <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-apple border-b-2 border-gold-accent' : 'bg-transparent'}`}>
+            <nav className="max-w-6xl mx-auto px-6 lg:px-8 flex justify-between items-center py-4">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-gold-accent rounded-full mr-3 flex items-center justify-center">
+                  <span className="text-black font-bold text-lg">İTÜ</span>
+                </div>
+                <h1 className="text-xl font-bold text-gray-900 border-l-2 border-gold-accent pl-3">İTÜ Dijital Kulüp</h1>
+              </div>
+              <div className={`hidden md:flex space-x-8 ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+                <a href="#home" className="text-lg font-medium hover:text-gold-accent transition duration-300 border-b-2 border-transparent hover:border-gold-accent pb-1">Ana Sayfa</a>
+                <a href="#about" className="text-lg font-medium hover:text-gold-accent transition duration-300 border-b-2 border-transparent hover:border-gold-accent pb-1">Hakkımızda</a>
+                <a href="#events" className="text-lg font-medium hover:text-gold-accent transition duration-300 border-b-2 border-transparent hover:border-gold-accent pb-1">Etkinliklerimiz</a>
+                <a href="#contact" className="text-lg font-medium hover:text-gold-accent transition duration-300 border-b-2 border-transparent hover:border-gold-accent pb-1">İletişim</a>
+              </div>
+              <button className="md:hidden text-gray-900 text-2xl">☰</button>
+            </nav>
+          </header>
+
+          {/* Hero Section - Integrated countdown */}
+          <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden hero-parallax">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+              src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-screens-3240-large.mp4"
+            ></video>
+            <div className="absolute inset-0 bg-black/40"></div>
+            <div className="relative text-center text-white px-6 max-w-4xl mx-auto animate-fade-in-up">
+              <h2 className="text-5xl md:text-7xl font-black mb-6 leading-tight">
+                Dijital Gelecek <br /> <span className="gold-accent">Başlıyor</span>
+              </h2>
+              <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-2xl mx-auto">
+                İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü olarak, BeeDigital 2025 ile dijital dünyanın dinamiklerini keşfedin. 2022-2024 zirvelerimizde 1800+ ön kayıt, 800+ katılımcı ve 13 konuşmacı ile büyük başarı elde ettik!
+              </p>
+              <CountdownTimer />
+              <div className="space-x-6 mt-8">
+                <a href="#events" className="inline-block bg-gold-accent hover:bg-gold-accent/90 text-black px-8 py-4 rounded-full font-semibold text-lg transform hover:scale-105 transition duration-300 shadow-apple">
+                  Etkinliğe Katıl
+                </a>
+                <a href="#contact" className="inline-block border-2 border-white hover:bg-white hover:text-gray-900 text-white px-8 py-4 rounded-full font-semibold text-lg transform hover:scale-105 transition duration-300">
+                  Kulübe Katıl
+                </a>
+              </div>
+            </div>
+          </section>
+
+          {/* About Section - Filled with PDF content */}
+          <section id="about" className="py-24 bg-white">
+            <div className="max-w-6xl mx-auto px-6 lg:px-8">
+              <div className="text-center mb-16 animate-fade-in-up">
+                <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">Hakkımızda</h2>
+                <div className="w-24 h-1 bg-gold-accent mx-auto"></div>
+              </div>
+              <div className="grid md:grid-cols-2 gap-16 items-center">
+                <div className="animate-fade-in-up">
+                  <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+                    İstanbul Teknik Üniversitesi Dijital Pazarlama ve Sosyal Medya Kulübü, dijital dünyanın dinamiklerini keşfetmek ve bu alanda derinlemesine bilgi sahibi olmak isteyen öğrencilere yönelik kurulmuş yenilikçi bir öğrenci topluluğudur. Kulübümüz; dijital pazarlama, sosyal medya yönetimi, e-ticaret stratejileri, içerik üretimi, influencer marketing ve dijital girişimcilik gibi günümüzün en güncel ve en hızlı gelişen konularına odaklanmaktadır.
+                  </p>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4 gold-accent">Misyonumuz</h3>
+                  <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                    Öğrencilerin dijital pazarlama, sosyal medya, e-ticaret ve içerik üretimi alanlarında güncel bilgi ve yetkinlikler kazanmasını sağlamak; sektörel standartlarla uyumlu, uygulamalı öğrenme deneyimleri sunmak; üniversite-sanayi iş birlikleriyle kariyer fırsatlarına erişimi artırmak ve etik, veri odaklı, ölçülebilir pazarlama yaklaşımını yaygınlaştırmaktır.
+                  </p>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4 gold-accent">Vizyonumuz</h3>
+                  <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                    Türkiye'de üniversite düzeyinde dijital pazarlama alanında referans alınan, yenilikçi projeleri ve nitelikli mezunlarıyla öne çıkan; ekosisteme değer katan araştırma, eğitim ve etkinlikleriyle bölgesel etki yaratan; sürdürülebilirlik ve kapsayıcılığı temel alan bir öğrenci kulübü olmaktır.
+                  </p>
+                  <blockquote className="mt-8 italic text-gray-600 border-l-4 border-gold-accent pl-4 py-2">
+                    Dijital dönüşümün kalbinde, geleceğin trendlerini bugün öğrenin!
+                  </blockquote>
+                </div>
+                <div className="animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                  <img 
+                    src="https://source.unsplash.com/random/800x600/?digital,team" 
+                    alt="Kulüp Ekibi" 
+                    className="w-full rounded-2xl shadow-apple object-cover border-4 border-gold-accent"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Expanded Events Section - Filled with PDF content */}
+          <section id="events" className="py-24 bg-gray-50">
+            <div className="max-w-6xl mx-auto px-6 lg:px-8">
+              <div className="text-center mb-16 animate-fade-in-up">
+                <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">Etkinliklerimiz</h2>
+                <div className="w-24 h-1 bg-gold-accent mx-auto"></div>
+                <p className="text-lg text-gray-600 mt-4">Geçmiş ve gelecek etkinliklerimizi keşfedin. BeeDigital zirvelerimizle her yıl büyüyen bir etki yaratıyoruz!</p>
+              </div>
+
+              {/* BeeDigital 2025 */}
+              <div className="mb-16 animate-fade-in-up">
+                <h3 className="text-3xl font-bold text-gray-900 mb-6 text-center">BeeDigital 2025</h3>
+                <div className="bg-white rounded-2xl shadow-apple p-8 border-t-4 border-gold-accent">
+                  <div className="grid md:grid-cols-2 gap-8 items-center">
+                    <img 
+                      src="https://source.unsplash.com/random/600x400/?conference,digital" 
+                      alt="BeeDigital 2025" 
+                      className="w-full rounded-xl object-cover"
+                    />
+                    <div>
+                      <p className="text-gray-700 mb-4">Yakında! Dijital pazarlama zirvesi ile sektör liderlerini ağırlayacağız. Önceki zirvelerimizde elde ettiğimiz başarıyı devam ettiriyoruz.</p>
+                      <a href="#contact" className="inline-block bg-gold-accent hover:bg-gold-accent/90 text-black px-6 py-3 rounded-full font-semibold transition duration-300">
+                        Katılım Bilgisi İçin İletişime Geçin
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* BeeDigital 2024 */}
+              <div className="mb-16 animate-fade-in-up">
+                <h3 className="text-3xl font-bold text-gray-900 mb-6 text-center">BeeDigital 2024</h3>
+                <div className="bg-white rounded-2xl shadow-apple p-8 border-t-4 border-gold-accent">
+                  <p className="text-gray-700 mb-4">Büyük bir katılımcı kitlesiyle tamamlanan zirvemiz. Katılımcılarımızdan bazıları: Selim Yuhay, Mimar Selim, Zeynep Özkaya, Sabrı Can Onay Yontar (Chess.com), Vedat Karabulut, Barış Korkmaz, Hakan Gerin, Cahide Güney (FLO).</p>
+                  <img 
+                    src="https://source.unsplash.com/random/600x300/?event,success" 
+                    alt="BeeDigital 2024" 
+                    className="w-full rounded-xl mt-4 object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* BeeDigital 2023 */}
+              <div className="mb-16 animate-fade-in-up">
+                <h3 className="text-3xl font-bold text-gray-900 mb-6 text-center">BeeDigital 2023</h3>
+                <div className="bg-white rounded-2xl shadow-apple p-8 border-t-4 border-gold-accent">
+                  <p className="text-gray-700 mb-4">Başarılı bir etkinlik: Katılımcılarımızdan bazıları: Simay Dal, Damla Altun & Burak Bozkurt (51 Digital), Buket Sena Özdemir & Eda Yaman, Efe Volkan (Unilever), Japon Hamza, Destina Saccilarlı.</p>
+                  <img 
+                    src="https://source.unsplash.com/random/600x300/?digital,2023" 
+                    alt="BeeDigital 2023" 
+                    className="w-full rounded-xl mt-4 object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* BeeDigital 2022 */}
+              <div className="mb-16 animate-fade-in-up">
+                <h3 className="text-3xl font-bold text-gray-900 mb-6 text-center">BeeDigital 2022</h3>
+                <div className="bg-white rounded-2xl shadow-apple p-8 border-t-4 border-gold-accent">
+                  <p className="text-gray-700 mb-4">Kulübümüzün ilk zirvesi: 1800+ ön kayıt, 800+ katılımcı, 8500+ etkileşim, 13 konuşmacı. Katılımcılarımızdan bazıları: Berfu Yenenler, Ceyda Kasabalı & Fırat Albayram (Noluyo Ya? YouTube), Berk Keklik & Oğulcan Aşıkoğlu, Ege Tuna Diken, Harun Ünlüsöy, Ahmet Duruel, Ümit Akgün, Asena Akbal, Selim Kayhan, Kıvanç Ege Aydın & Senem Sarkanak.</p>
+                  <img 
+                    src="https://source.unsplash.com/random/600x300/?startup,event" 
+                    alt="BeeDigital 2022" 
+                    className="w-full rounded-xl mt-4 object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* BeeInfluencer */}
+              <div className="mb-16 animate-fade-in-up">
+                <h3 className="text-3xl font-bold text-gray-900 mb-6 text-center">BeeInfluencer</h3>
+                <div className="bg-white rounded-2xl shadow-apple p-8 border-t-4 border-gold-accent">
+                  <div className="grid md:grid-cols-2 gap-8 items-center">
+                    <img 
+                      src="https://source.unsplash.com/random/600x400/?influencer,social" 
+                      alt="BeeInfluencer" 
+                      className="w-full rounded-xl object-cover"
+                    />
+                    <div>
+                      <p className="text-gray-700 mb-4">Influencer marketing atölyeleri ve stratejileri. Kulübümüzün odak alanlarından biri olarak, dijital girişimcilik ve içerik üretimi eğitimleri sunuyoruz.</p>
+                      <a href="#contact" className="inline-block bg-gold-accent hover:bg-gold-accent/90 text-black px-6 py-3 rounded-full font-semibold transition duration-300">
+                        Detaylar İçin İletişime Geçin
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Eğitimlerimiz - From PDFs, details sparse; use general */}
+              <div className="mb-16 animate-fade-in-up">
+                <h3 className="text-3xl font-bold text-gray-900 mb-6 text-center">Eğitimlerimiz</h3>
+                <div className="bg-white rounded-2xl shadow-apple p-8 border-t-4 border-gold-accent">
+                  <p className="text-gray-700 mb-4 text-center">Kulübümüz, dijital pazarlama, sosyal medya yönetimi, e-ticaret ve içerik üretimi alanlarında uygulamalı eğitimler sunar. Sektörel standartlarla uyumlu seminerler ve atölyelerle yetkinlik kazanın.</p>
+                  <div className="grid md:grid-cols-3 gap-6 mt-6">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-gold-accent rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <span className="text-black font-bold">📱</span>
+                      </div>
+                      <h4 className="font-semibold mb-2">Sosyal Medya Stratejileri</h4>
+                      <p className="text-gray-600">Yönetim ve içerik üretimi eğitimleri.</p>
+                    </div>
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-gold-accent rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <span className="text-black font-bold">🛒</span>
+                      </div>
+                      <h4 className="font-semibold mb-2">E-Ticaret Temelleri</h4>
+                      <p className="text-gray-600">Stratejiler ve online satış taktikleri.</p>
+                    </div>
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-gold-accent rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <span className="text-black font-bold">📈</span>
+                      </div>
+                      <h4 className="font-semibold mb-2">Influencer Marketing</h4>
+                      <p className="text-gray-600">Dijital girişimcilik ve etik yaklaşımlar.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sponsors Section - From Sponsorship PDF */}
+              <div className="mb-16 animate-fade-in-up">
+                <h3 className="text-3xl font-bold text-gray-900 mb-6 text-center">Sponsorluk Paketlerimiz</h3>
+                <div className="bg-white rounded-2xl shadow-apple p-8 border-t-4 border-gold-accent">
+                  <p className="text-gray-700 mb-4 text-center">BeeDigital ve diğer etkinliklerimiz için sponsorluk fırsatları! Etkinlik tanıtımı, fuaye standı ve sosyal medya paylaşımı ile markanızı öne çıkarın.</p>
+                  <div className="grid md:grid-cols-3 gap-6 mt-6">
+                    <div className="text-center border border-gold-accent rounded-lg p-4">
+                      <h4 className="font-bold text-xl mb-2 gold-accent">Ana Sponsorluk</h4>
+                      <ul className="text-gray-600 space-y-1">
+                        <li>• 3 Fuaye Standı</li>
+                        <li>• Oturum Tahsisi</li>
+                        <li>• 1 Yıl Etkinlik Tanıtımı</li>
+                        <li>• Sosyal Medya & Web Sitesi</li>
+                        <li><strong>35.000+ KDV TL</strong></li>
+                      </ul>
+                    </div>
+                    <div className="text-center border border-gold-accent rounded-lg p-4">
+                      <h4 className="font-bold text-xl mb-2 gold-accent">Altın Sponsorluk</h4>
+                      <ul className="text-gray-600 space-y-1">
+                        <li>• 2 Fuaye Standı</li>
+                        <li>• Oturum Tahsisi</li>
+                        <li>• 3 Ay Etkinlik Tanıtımı</li>
+                        <li>• Sosyal Medya & Web Sitesi</li>
+                        <li><strong>20.000+ KDV TL</strong></li>
+                      </ul>
+                    </div>
+                    <div className="text-center border border-gold-accent rounded-lg p-4">
+                      <h4 className="font-bold text-xl mb-2 gold-accent">Gümüş Sponsorluk</h4>
+                      <ul className="text-gray-600 space-y-1">
+                        <li>• 2 Fuaye Standı</li>
+                        <li>• Sosyal Medya & Afişler</li>
+                        <li>• Web Sitesi</li>
+                        <li><strong>10.000+ KDV TL</strong></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <p className="text-center mt-4"><a href="#contact" className="bg-gold-accent text-black px-4 py-2 rounded-full font-semibold">Sponsor Olun</a></p>
+                </div>
+              </div>
+
+              {/* Ekibimiz - Add President from PDF */}
+              <div className="animate-fade-in-up">
+                <h3 className="text-3xl font-bold text-gray-900 mb-6 text-center">Ekibimiz</h3>
+                <div className="grid md:grid-cols-3 gap-8">
+                  <div className="bg-white rounded-2xl shadow-apple p-6 text-center border border-gold-accent">
+                    <img 
+                      src="https://source.unsplash.com/random/150x150/?person,young" 
+                      alt="Eylül Şimşek" 
+                      className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-gold-accent"
+                    />
+                    <h4 className="font-semibold text-gray-900">Eylül Şimşek</h4>
+                    <p className="text-gray-600">Kulüp Başkanı</p>
+                  </div>
+                  <div className="bg-white rounded-2xl shadow-apple p-6 text-center border border-gold-accent">
+                    <img 
+                      src="https://source.unsplash.com/random/150x150/?person,student" 
+                      alt="Takım Üyesi 2" 
+                      className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-gold-accent"
+                    />
+                    <h4 className="font-semibold text-gray-900">Etkinlik Koordinatörü</h4>
+                    <p className="text-gray-600">Yer Tutucu</p>
+                  </div>
+                  <div className="bg-white rounded-2xl shadow-apple p-6 text-center border border-gold-accent">
+                    <img 
+                      src="https://source.unsplash.com/random/150x150/?person,team" 
+                      alt="Takım Üyesi 3" 
+                      className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-gold-accent"
+                    />
+                    <h4 className="font-semibold text-gray-900">Sosyal Medya Yöneticisi</h4>
+                    <p className="text-gray-600">Yer Tutucu</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Contact Section - Updated with PDF info */}
+          <section id="contact" className="py-24 bg-white">
+            <div className="max-w-6xl mx-auto px-6 lg:px-8">
+              <div className="text-center mb-16 animate-fade-in-up">
+                <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">İletişime Geçin</h2>
+                <div className="w-24 h-1 bg-gold-accent mx-auto"></div>
+              </div>
+              <div className="grid md:grid-cols-2 gap-16">
+                <div className="animate-fade-in-up">
+                  <div className="space-y-4 mb-8">
+                    <p className="text-lg text-gray-700 flex items-center"><span className="text-gold-accent mr-3 text-xl">📍</span> İTÜ Ayazağa Kampüsü, Maslak, İstanbul</p>
+                    <p className="text-lg text-gray-700 flex items-center"><span className="text-gold-accent mr-3 text-xl">📧</span> itudijitalpazarlama@gmail.com</p>
+                    <p className="text-lg text-gray-700 flex items-center"><span className="text-gold-accent mr-3 text-xl">📞</span> 0538 769 77 53 (Eylül Şimşek - Kulüp Başkanı)</p>
+                  </div>
+                  <div className="flex space-x-6">
+                    <a href="https://instagram.com/itodesk" className="text-3xl text-gray-900 hover:text-gold-accent transition duration-300 border-2 border-gold-accent rounded-full p-2">📸</a>
+                    <a href="https://linkedin.com/company/itodesk" className="text-3xl text-gray-900 hover:text-gold-accent transition duration-300 border-2 border-gold-accent rounded-full p-2">💼</a>
+                    <a href="https://twitter.com/itodesk" className="text-3xl text-gray-900 hover:text-gold-accent transition duration-300 border-2 border-gold-accent rounded-full p-2">🐦</a>
+                  </div>
+                </div>
+                <form onSubmit={handleSubmit} className="space-y-6 animate-fade-in-up">
+                  <div>
+                    <input 
+                      type="text" 
+                      name="name" 
+                      placeholder="Adınız" 
+                      value={formData.name} 
+                      onChange={handleChange}
+                      className="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <input 
+                      type="email" 
+                      name="email" 
+                      placeholder="Email" 
+                      value={formData.email} 
+                      onChange={handleChange}
+                      className="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <textarea 
+                      name="message" 
+                      placeholder="Mesajınız (Sponsorluk veya Katılım için yazın)" 
+                      rows="5" 
+                      value={formData.message} 
+                      onChange={handleChange}
+                      className="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300"
+                      required
+                    ></textarea>
+                  </div>
+                  <button 
+                    type="submit" 
+                    className="w-full bg-gold-accent hover:bg-gold-accent/90 text-black py-4 rounded-lg font-semibold text-lg transform hover:scale-105 transition duration-300 shadow-apple border-2 border-gold-accent"
+                  >
+                    Gönder
+                  </button>
+                </form>
+              </div>
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer className="bg-gray-900 text-white py-8 text-center border-t-4 border-gold-accent">
+            <p className="text-sm">&copy; 2025 İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü. Tüm hakları saklıdır.</p>
+          </footer>
+        </div>
+      );
+    };
+
+    // Render the app
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
