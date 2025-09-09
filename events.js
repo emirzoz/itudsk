@@ -22,7 +22,7 @@ export const EVENTS = {
       {
         "name": "Selim Yuhay",
         "title": "Mimar & Youtuber",
-        "photo": "https://placehold.co/128x128/A5B4FC/FFFFFF?text=SY"
+        "photo": "images/selim.webp"
       },
       {
         "name": "Zeynep Özkaya",
@@ -30,9 +30,24 @@ export const EVENTS = {
         "photo": "https://placehold.co/128x128/A5B4FC/FFFFFF?text=ZÖ"
       },
       {
+        "name": "Cahide Güney",
+        "title": "Flo",
+        "photo": "images/cey.jpeg"
+      },
+      {
+        "name": "Toksik İlişkiler",
+        "title": "İçerik Üreticileri",
+        "photo": "images/tok.webp"
+      },
+      {
+        "name": "Panel",
+        "title": "Vedat Karabulut, Barış Korkmaz, Hakan Gerin",
+        "photo": "images/vedart.webp"
+      },
+      {
         "name": "Sabrı Can Onay Yontar",
         "title": "Chess.com",
-        "photo": "https://placehold.co/128x128/A5B4FC/FFFFFF?text=SY"
+        "photo": "images/sabri.webp"
       }
     ]
   },
@@ -43,7 +58,7 @@ export const EVENTS = {
       {
         "name": "Japon Hamza",
         "title": "YouTuber",
-        "photo": "images/_DSC0039.jpg"
+        "photo": "images/japon.jpg"
       },
       {
         "name": "Destina Saccılarlı",
@@ -73,7 +88,7 @@ export const EVENTS = {
       {
         "name": "DigiPanel",
         "title": "Vedat KARABULUT, Yasin KAPLAN, Ziya KIZILTAN, Samet Ensar SARI, Şehnaz ASKEROĞLU",
-        "photo": "https://placehold.co/128x128/B2F5EA/FFFFFF?text=SD"
+        "photo": "images/ff.webp"
       }
     ]
   },
@@ -89,22 +104,27 @@ export const EVENTS = {
       {
         "name": "Asena Akbal Selim Kayhan",
         "title": "Vodafone Oturumu",
-        "photo": "https://placehold.co/128x128/B2F5EA/FFFFFF?text=BY"
+        "photo": "images/vod.png"
+      },
+      {
+        "name": "Berk Keklik & Oğulcan Aşıkoğlu ",
+        "title": "İçerik Üreticileri",
+        "photo": "images/berk.jpeg"
+      },
+      {
+        "name": "Ege Tuna Diken Hatun Ünlüsoy Ahmet Duruel Ümit Akgün",
+        "title": "",
+        "photo": "images/ege.jpeg"
       },
       {
         "name": "Berfu Yenenler",
         "title": "Oyuncu & Komedyen",
-        "photo": "https://placehold.co/128x128/B2F5EA/FFFFFF?text=BY"
-      },
-      {
-        "name": "Berfu Yenenler",
-        "title": "Oyuncu & Komedyen",
-        "photo": "https://placehold.co/128x128/B2F5EA/FFFFFF?text=BY"
+        "photo": "images/ber.jpg"
       },
       {
         "name": "Ceyda Kasabalı & Fırat Albayram",
         "title": "Noluyo Ya? YouTube Kanalı",
-        "photo": "https://placehold.co/128x128/B2F5EA/FFFFFF?text=CK&FA"
+        "photo": "images/cey.jpeg"
       }
     ]
   },
