@@ -43,7 +43,7 @@ export const EVENTS = {
       {
         "name": "Japon Hamza",
         "title": "YouTuber",
-        "photo": "https://placehold.co/128x128/B2F5EA/FFFFFF?text=JH"
+        "photo": "images/_DSC0039.jpg"
       },
       {
         "name": "Destina Saccılarlı",
@@ -51,10 +51,31 @@ export const EVENTS = {
         "photo": "images/IMG_8180.jpg"
       },
       {
+        "name": "DAMLA ALTUN & BURAK BOZKURT",
+        "title": "51 Digital",
+        "photo": "images/_DSC0084.jpg"
+      },
+      {
+        "name": "EFE VOLKAN",
+        "title": "Ice Cream Middle East & Turkey Turkey Digital Marketing Country Lead",
+        "photo": "images/_DSC0138.jpg"
+      },
+      {
+        "name": "SİMAY DAL",
+        "title": "İçerik Üreticisi",
+        "photo": "images/_DSC0246.jpg"
+      },
+      {
+        "name": "BUKET SENA ÖZDEMİR & EDA YAMAN",
+        "title": "İçerik Üreticileri",
+        "photo": "images/IMG_8410.jpg"
+      },
+      {
         "name": "Simay Dal",
-        "title": "Influencer",
+        "title": "İçerik Üreticisi",
         "photo": "https://placehold.co/128x128/B2F5EA/FFFFFF?text=SD"
       }
+      
       
     ]
   },
