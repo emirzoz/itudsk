@@ -40,30 +40,28 @@
 </head>
 <body class="bg-soft-white text-black-soft">
 
-  <!-- Navigation -->
   <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-lg">
     <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
       <div class="text-2xl font-bold text-gold-accent">ITODESK</div>
       <div class="flex space-x-4 md:space-x-6 text-base md:text-lg font-medium">
         <a href="index.html" class="hover:text-gold-accent transition duration-300">Anasayfa</a>
-        <!-- Add other navigation links if needed -->
-      </div>
+        </div>
     </nav>
   </header>
 
-  <!-- Main Content -->
   <main class="py-24 px-8">
     <div class="container mx-auto max-w-4xl bg-white rounded-lg shadow-xl p-8 md:p-12">
+      <img id="event-image" src="" alt="Etkinlik Görseli" class="w-full max-h-96 object-cover rounded-lg mb-8 hidden">
+      
       <div class="text-center mb-12">
         <h1 id="event-title" class="text-4xl md:text-5xl font-extrabold text-black-soft mb-4">Etkinlik Başlığı</h1>
         <p id="event-description" class="text-lg text-gray-600"></p>
       </div>
 
-      <div class="border-t-2 border-b-2 border-gold-accent py-8 my-12">
+      <div id="speakers-section" class="border-t-2 border-b-2 border-gold-accent py-8 my-12">
         <h2 class="text-3xl font-bold text-center text-gold-accent mb-6">Konuşmacılar</h2>
-        <div id="speakers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Speakers will be populated here by JavaScript -->
-        </div>
+        <div id="speakers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          </div>
       </div>
       
       <div class="text-center mt-12">
@@ -72,47 +70,60 @@
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="bg-white text-black-soft py-8 text-center border-t-4 border-gold-accent">
     <p class="text-sm">&copy; 2025 İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü. Tüm hakları saklıdır.</p>
   </footer>
 
-  <!-- events.js ve event-detail.js dosyalarını yükleyin -->
   <script src="events.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      // events.js'ten event verilerini alın
-      const eventData = window.events;
+      // FIX: Changed 'window.events' to 'EVENTS' to correctly reference the data
+      const eventData = EVENTS; 
       const urlParams = new URLSearchParams(window.location.search);
       const eventId = urlParams.get('id');
       
       const event = eventData[eventId];
+      
       if (event) {
-        // Update page title
+        // Update page and event titles/description
         document.getElementById('page-title').textContent = `ITODESK - ${event.title}`;
         document.getElementById('event-title').textContent = event.title;
         document.getElementById('event-description').textContent = event.description;
         
-        const speakersList = document.getElementById('speakers-list');
-        speakersList.innerHTML = ''; // Clear previous speakers
+        // IMPROVEMENT: Display main event photo if it exists (for trainings)
+        const eventImage = document.getElementById('event-image');
+        if (event.photo) {
+          eventImage.src = event.photo;
+          eventImage.classList.remove('hidden');
+        }
         
+        const speakersSection = document.getElementById('speakers-section');
+        const speakersList = document.getElementById('speakers-list');
+        
+        // Check if there are any speakers
         if (event.speakers && event.speakers.length > 0) {
+          speakersList.innerHTML = ''; // Clear previous speakers
           event.speakers.forEach(speaker => {
             const speakerCard = document.createElement('div');
-            speakerCard.className = 'bg-soft-white p-6 rounded-lg shadow-xl text-center';
+            speakerCard.className = 'bg-soft-white p-6 rounded-lg shadow-xl text-center flex flex-col items-center';
+            
+            // IMPROVEMENT: Added speaker photo to the card
             speakerCard.innerHTML = `
+              <img src="${speaker.photo}" alt="${speaker.name}" class="w-24 h-24 rounded-full object-cover mb-4 border-2 border-gold-accent">
               <h3 class="text-xl font-semibold text-gold-accent">${speaker.name}</h3>
               <p class="text-gray-600">${speaker.title}</p>
             `;
             speakersList.appendChild(speakerCard);
           });
         } else {
-          speakersList.innerHTML = '<p class="text-center text-gray-500 col-span-full">Bu etkinlik için henüz konuşmacı bilgisi eklenmemiştir.</p>';
+          // IMPROVEMENT: Hide the entire speakers section if there are no speakers
+          speakersSection.classList.add('hidden');
         }
       } else {
+        // This block runs if the event ID from the URL is not found
         document.getElementById('event-title').textContent = 'Etkinlik Bulunamadı';
         document.getElementById('event-description').textContent = 'Aradığınız etkinlik bulunamadı. Lütfen anasayfaya geri dönün.';
-        document.getElementById('speakers-list').innerHTML = '';
+        document.getElementById('speakers-section').classList.add('hidden');
       }
     });
   </script>
