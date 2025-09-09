@@ -30,8 +30,10 @@
       -webkit-overflow-scrolling: touch;
       overflow-x: auto;
       scroll-behavior: smooth;
+      display: flex;
+      width: 100%;
     }
-    /* Hide scrollbar for a cleaner look */
+    /* Hide scrollbar */
     .carousel-container::-webkit-scrollbar {
       display: none;
     }
@@ -42,16 +44,38 @@
     .carousel-item {
       scroll-snap-align: center;
       flex-shrink: 0;
-      width: calc(100% / 3);
+      width: 33.33%; /* Show 3 items on desktop */
+      box-sizing: border-box;
+      padding: 0 8px; /* Adjust for gap */
     }
     @media (max-width: 1024px) {
       .carousel-item {
-        width: calc(100% / 2);
+        width: 50%; /* Show 2 items on tablet */
       }
     }
     @media (max-width: 768px) {
       .carousel-item {
-        width: 100%;
+        width: 100%; /* Show 1 item on mobile */
+      }
+    }
+    /* Ensure buttons are visible and styled consistently */
+    .carousel-btn {
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .carousel-btn {
+        display: block;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        padding: 12px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        transition: background-color 0.3s;
+      }
+      .carousel-btn:hover {
+        background-color: #ffffff;
       }
     }
   </style>
@@ -122,6 +146,19 @@
           <p>
             İstanbul Teknik Üniversitesi Dijital Pazarlama ve Sosyal Medya Kulübü, dijital dünyanın dinamiklerini keşfetmek ve bu alanda derinlemesine bilgi sahibi olmak isteyen öğrencilere yönelik kurulmuş yenilikçi bir öğrenci topluluğudur. Kulübümüz; dijital pazarlama, sosyal medya yönetimi, e-ticaret stratejileri, içerik üretimi, influencer marketing ve dijital girişimcilik gibi günümüzün en güncel ve en hızlı gelişen konularına odaklanmaktadır.
           </p>
+          
+          <h3 class="text-2xl font-semibold text-gold-accent">Misyonumuz</h3>
+          <p>
+            Öğrencilerin dijital pazarlama, sosyal medya, e-ticaret ve içerik üretimi alanlarında güncel bilgi ve yetkinlikler kazanmasını sağlamak; sektörel standartlarla uyumlu, uygulamalı öğrenme deneyimleri sunmak; üniversite-sanayi iş birlikleriyle kariyer fırsatlarına erişimi artırmak ve etik, veri odaklı, ölçülebilir pazarlama yaklaşımını yaygınlaştırmaktır.
+          </p>
+          
+          <h3 class="text-2xl font-semibold text-gold-accent">Vizyonumuz</h3>
+          <p>
+            Türkiye'de üniversite düzeyinde dijital pazarlama alanında referans alınan, yenilikçi projeleri ve nitelikli mezunlarıyla öne çıkan; ekosisteme değer katan araştırma, eğitim ve etkinlikleriyle bölgesel etki yaratan; sürdürülebilirlik ve kapsayıcılığı temel alan bir öğrenci kulübü olmaktır.
+          </p>
+          <p class="mt-8 text-center text-lg font-semibold">
+            Dijital dönüşümün kalbinde, geleceğin trendlerini bugün öğrenin!
+          </p>
         </div>
       </div>
     </section>
@@ -131,149 +168,15 @@
         <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Etkinliklerimiz</h2>
         <div class="relative">
           <div id="carousel-events" class="carousel-container flex gap-8 pb-4">
-            <a href="event-detail.html?id=beedigital-2025" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300">
+            <a href="event-detail.html?id=beedigital-2025" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2025">
               <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2025</h3>
-              <p class="text-gray-600">Yakında! Dijital pazarlama zirvesi ile sektör liderlerini ağırlayacağız.</p>
+              <p class="text-gray-600">Yakında! Dijital pazarlama zirvesi ile sektör liderlerini ağırlayacağız. Önceki zirvelerimizde elde ettiğimiz başarıyı devam ettiriyoruz.</p>
               <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
             </a>
-            <a href="event-detail.html?id=beedigital-2024" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300">
+            <a href="event-detail.html?id=beedigital-2024" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2024">
               <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2024</h3>
-              <p class="text-gray-600">Selim Yuhay, Zeynep Özkaya ve Chess.com gibi isimlerle harika bir zirve geçirdik.</p>
+              <p class="text-gray-600">Büyük bir katılımcı kitlesiyle tamamlanan zirvemiz. Katılımcılarımızdan bazıları: Selim Yuhay, Mimar Selim, Zeynep Özkaya, Sabrı Can Onay Yontar (Chess.com), Vedat Karabulut, Barış Korkmaz, Hakan Gerin, Cahide Güney (FLO).</p>
               <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
             </a>
-            <a href="event-detail.html?id=beedigital-2023" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300">
-              <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2023</h3>
-              <p class="text-gray-600">Simay Dal, Damla Altun & Burak Bozkurt (51 Digital) gibi isimlerle başarılı bir etkinlik.</p>
-              <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
-            </a>
-            <a href="event-detail.html?id=beedigital-2022" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300">
-              <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2022</h3>
-              <p class="text-gray-600">Berfu Yenenler ve Ceyda Kasabalı & Fırat Albayram (Noluyo Ya?) ile ilk zirvemiz.</p>
-              <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
-            </a>
-          </div>
-          <button id="prev-btn" class="absolute top-1/2 left-0 -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white transition hidden md:block" aria-label="Önceki">
-            <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-          </button>
-          <button id="next-btn" class="absolute top-1/2 right-0 -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white transition hidden md:block" aria-label="Sonraki">
-            <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <section id="trainings" class="py-24 px-8 bg-soft-white border-t-4 border-gold-accent">
-      <div class="container mx-auto max-w-6xl">
-        <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Eğitimlerimiz</h2>
-        <div class="relative">
-          <div id="carousel-trainings" class="carousel-container flex gap-8 pb-4">
-            </div>
-          <button id="prev-btn-trainings" class="absolute top-1/2 left-0 -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white transition hidden md:block" aria-label="Önceki">
-            <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-          </button>
-          <button id="next-btn-trainings" class="absolute top-1/2 right-0 -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white transition hidden md:block" aria-label="Sonraki">
-            <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    </main>
-
-  <footer class="bg-white-pure text-black-soft py-8 text-center border-t-4 border-gold-accent">
-    <p class="text-sm">&copy; 2025 İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü. Tüm hakları saklıdır.</p>
-  </footer>
-
-  <script src="events.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Countdown Timer Logic
-      const countdownDate = new Date("Dec 25, 2025 00:00:00").getTime();
-      const countdownInterval = setInterval(function() {
-        const now = new Date().getTime();
-        const distance = countdownDate - now;
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        const daysEl = document.getElementById("days");
-        if (daysEl) {
-            daysEl.innerHTML = String(days).padStart(2, '0');
-            document.getElementById("hours").innerHTML = String(hours).padStart(2, '0');
-            document.getElementById("minutes").innerHTML = String(minutes).padStart(2, '0');
-            document.getElementById("seconds").innerHTML = String(seconds).padStart(2, '0');
-        }
-        if (distance < 0) {
-          clearInterval(countdownInterval);
-          const countdownEl = document.getElementById("countdown");
-          if(countdownEl) countdownEl.innerHTML = "ETKİNLİK BAŞLADI!";
-        }
-      }, 1000);
-
-      // --- Populate Trainings Carousel ---
-      const trainingsCarousel = document.getElementById('carousel-trainings');
-      if (trainingsCarousel && typeof EVENTS !== 'undefined') {
-          let trainingCardsHTML = '';
-          for (const [key, event] of Object.entries(EVENTS)) {
-              if (event.speakers && event.speakers.length === 0 && event.photo) {
-                  const encodedKey = encodeURIComponent(key);
-                  trainingCardsHTML += `
-                      <a href="event-detail.html?id=${encodedKey}" class="carousel-item bg-white-pure rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 flex flex-col">
-                          <img src="${event.photo}" alt="${event.title}" class="w-full h-48 object-cover">
-                          <div class="p-6 text-center flex-grow flex items-center justify-center">
-                              <h3 class="text-xl font-semibold text-gold-accent">${event.title}</h3>
-                          </div>
-                      </a>
-                  `;
-              }
-          }
-          trainingsCarousel.innerHTML = trainingCardsHTML;
-      }
-      
-      // --- Reusable Carousel Initializer Function ---
-      function initializeCarousel(carouselId, prevBtnId, nextBtnId) {
-        const carousel = document.getElementById(carouselId);
-        const prevBtn = document.getElementById(prevBtnId);
-        const nextBtn = document.getElementById(nextBtnId);
-
-        if (!carousel || !prevBtn || !nextBtn) return;
-
-        const checkButtonsVisibility = () => {
-          requestAnimationFrame(() => {
-            const isAtStart = carousel.scrollLeft < 1;
-            const isAtEnd = Math.ceil(carousel.scrollLeft) >= carousel.scrollWidth - carousel.clientWidth - 1;
-            prevBtn.style.display = isAtStart ? 'none' : 'block';
-            nextBtn.style.display = isAtEnd ? 'none' : 'block';
-          });
-        };
-
-        const scrollCarousel = (direction) => {
-          const firstItem = carousel.querySelector('.carousel-item');
-          if (!firstItem) return;
-          const gap = parseInt(window.getComputedStyle(carousel).gap);
-          const scrollAmount = firstItem.offsetWidth + gap;
-          carousel.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
-        };
-
-        prevBtn.addEventListener('click', () => scrollCarousel(-1));
-        nextBtn.addEventListener('click', () => scrollCarousel(1));
-        carousel.addEventListener('scroll', checkButtonsVisibility);
-        window.addEventListener('resize', checkButtonsVisibility);
-
-        const observer = new MutationObserver((mutations) => {
-          if (mutations.some(m => m.addedNodes.length > 0)) {
-            checkButtonsVisibility();
-          }
-        });
-        observer.observe(carousel, { childList: true });
-
-        checkButtonsVisibility();
-      }
-
-      // Initialize both carousels with their correct, unique IDs
-      initializeCarousel('carousel-events', 'prev-btn', 'next-btn');
-      initializeCarousel('carousel-trainings', 'prev-btn-trainings', 'next-btn-trainings');
-    });
-  </script>
-</body>
-</html>
+            <a href="event-detail.html?id=beedigital-2023" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2023">
+              <h3 class="text-2xl font-semibold mb-2 text-gold-accent
