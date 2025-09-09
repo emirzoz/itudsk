@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="page-title">ITODESK - Etkinlik Detayı</title>
+  <title id="page-title">Etkinlik Detayları</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,101 +19,82 @@
     .bg-soft-white {
       background-color: #f5f5f5;
     }
+    .bg-white-pure {
+      background-color: #ffffff;
+    }
     .text-black-soft {
       color: #1a1a1a;
-    }
-    .btn-gold-accent {
-      background-color: #ffb600;
-      color: #1a1a1a;
-      padding: 1rem 2.5rem;
-      border-radius: 9999px;
-      font-weight: 600;
-      transition: transform 0.3s, background-color 0.3s;
-    }
-    .btn-gold-accent:hover {
-      transform: scale(1.05);
-      background-color: #ff9900;
-    }
-    .shadow-apple {
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
     }
   </style>
 </head>
 <body class="bg-soft-white text-black-soft">
+  <main class="container mx-auto px-4 py-8 max-w-5xl">
+    <a href="index.html" class="back-button mb-8">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Geri Dön
+    </a>
 
-  <!-- Navigation -->
-  <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-lg">
-    <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
-      <div class="text-2xl font-bold text-gold-accent">ITODESK</div>
-      <div class="flex space-x-4 md:space-x-6 text-base md:text-lg font-medium">
-        <a href="index.html" class="hover:text-gold-accent transition duration-300">Anasayfa</a>
-        <!-- Add other navigation links if needed -->
-      </div>
-    </nav>
-  </header>
+    <section id="event-detail-section" class="bg-white-pure p-8 md:p-12 rounded-lg shadow-xl animate-fade-in-up">
+      <h1 id="event-title" class="text-4xl md:text-5xl font-extrabold text-gold-accent mb-6"></h1>
+      <p id="event-description" class="text-lg text-gray-700 leading-relaxed"></p>
 
-  <!-- Main Content -->
-  <main class="py-24 px-8">
-    <div class="container mx-auto max-w-4xl bg-white rounded-lg shadow-xl p-8 md:p-12">
-      <div class="text-center mb-12">
-        <h1 id="event-title" class="text-4xl md:text-5xl font-extrabold text-black-soft mb-4">Etkinlik Başlığı</h1>
-        <p id="event-description" class="text-lg text-gray-600"></p>
-      </div>
-
-      <div class="border-t-2 border-b-2 border-gold-accent py-8 my-12">
-        <h2 class="text-3xl font-bold text-center text-gold-accent mb-6">Konuşmacılar</h2>
-        <div id="speakers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Speakers will be populated here by JavaScript -->
+      <div id="speakers-section" class="mt-16">
+        <h2 class="text-3xl font-bold mb-8">Konuşmacılar</h2>
+        <div id="speakers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Speaker cards will be dynamically added here -->
         </div>
       </div>
-      
-      <div class="text-center mt-12">
-        <a href="index.html" class="btn-gold-accent">Geri Dön</a>
-      </div>
-    </div>
+    </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-white text-black-soft py-8 text-center border-t-4 border-gold-accent">
-    <p class="text-sm">&copy; 2025 İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü. Tüm hakları saklıdır.</p>
-  </footer>
+  <!-- New Script to handle content loading -->
+  <script type="module">
+    import { EVENTS } from './events.js';
 
-  <!-- events.js ve event-detail.js dosyalarını yükleyin -->
-  <script src="events.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // events.js'ten event verilerini alın
-      const eventData = window.events;
+    document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const eventId = urlParams.get('id');
-      
-      const event = eventData[eventId];
-      if (event) {
-        // Update page title
-        document.getElementById('page-title').textContent = `ITODESK - ${event.title}`;
-        document.getElementById('event-title').textContent = event.title;
-        document.getElementById('event-description').textContent = event.description;
-        
-        const speakersList = document.getElementById('speakers-list');
-        speakersList.innerHTML = ''; // Clear previous speakers
-        
-        if (event.speakers && event.speakers.length > 0) {
-          event.speakers.forEach(speaker => {
-            const speakerCard = document.createElement('div');
-            speakerCard.className = 'bg-soft-white p-6 rounded-lg shadow-xl text-center';
-            speakerCard.innerHTML = `
-              <h3 class="text-xl font-semibold text-gold-accent">${speaker.name}</h3>
-              <p class="text-gray-600">${speaker.title}</p>
-            `;
-            speakersList.appendChild(speakerCard);
-          });
-        } else {
-          speakersList.innerHTML = '<p class="text-center text-gray-500 col-span-full">Bu etkinlik için henüz konuşmacı bilgisi eklenmemiştir.</p>';
-        }
+      const eventData = EVENTS[eventId];
+
+      if (!eventData) {
+        document.getElementById('event-title').innerText = 'Etkinlik Bulunamadı';
+        document.getElementById('event-description').innerText = 'Aradığınız etkinliğin detayları bulunmamaktadır.';
+        document.getElementById('speakers-section').style.display = 'none';
+        document.title = 'Hata: Etkinlik Bulunamadı';
+        return;
+      }
+
+      document.getElementById('page-title').innerText = eventData.title;
+      document.getElementById('event-title').innerText = eventData.title;
+      document.getElementById('event-description').innerText = eventData.description;
+
+      const speakersList = document.getElementById('speakers-list');
+      if (eventData.speakers && eventData.speakers.length > 0) {
+        eventData.speakers.forEach(speaker => {
+          const speakerCard = document.createElement('div');
+          speakerCard.className = 'speaker-card bg-soft-white p-6 rounded-lg text-center shadow-lg';
+          
+          const speakerPhoto = document.createElement('img');
+          speakerPhoto.src = speaker.photo;
+          speakerPhoto.alt = speaker.name;
+          speakerPhoto.className = 'w-32 h-32 rounded-full mx-auto mb-4 object-cover';
+          
+          const speakerName = document.createElement('h3');
+          speakerName.className = 'text-xl font-semibold text-gold-accent';
+          speakerName.innerText = speaker.name;
+
+          const speakerTitle = document.createElement('p');
+          speakerTitle.className = 'text-gray-600 mt-1';
+          speakerTitle.innerText = speaker.title;
+          
+          speakerCard.appendChild(speakerPhoto);
+          speakerCard.appendChild(speakerName);
+          speakerCard.appendChild(speakerTitle);
+
+          speakersList.appendChild(speakerCard);
+        });
       } else {
-        document.getElementById('event-title').textContent = 'Etkinlik Bulunamadı';
-        document.getElementById('event-description').textContent = 'Aradığınız etkinlik bulunamadı. Lütfen anasayfaya geri dönün.';
-        document.getElementById('speakers-list').innerHTML = '';
+        speakersList.innerHTML = `<p class="text-gray-500 col-span-full">Bu etkinlik için henüz konuşmacı bilgisi eklenmemiştir.</p>`;
       }
     });
   </script>
