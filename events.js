@@ -53,17 +53,17 @@ export const EVENTS = {
       {
         "name": "Damla Altun & Burak Bozkurt",
         "title": "51 Digital",
-        "photo": "images/_DSC0084.jpg"
+        "photo": "images/danlaaltun.jpg"
       },
       {
         "name": "Efe Volkan",
         "title": "Ice Cream Middle East & Turkey Turkey Digital Marketing Country Lead",
-        "photo": "images/_DSC0138.jpg"
+        "photo": "images/volkan.jpg"
       },
       {
         "name": "Simay Dal",
         "title": "İçerik Üreticisi",
-        "photo": "images/_DSC0246.jpg"
+        "photo": "images/tanmm.jpg"
       },
       {
         "name": "Buket Sena Ozdemir & Eda Yaman",
