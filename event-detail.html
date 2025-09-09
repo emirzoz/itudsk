@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Etkinlik Detayları</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .text-gold-accent {
+      color: #ffb600;
+    }
+    .bg-soft-white {
+      background-color: #f5f5f5;
+    }
+    .bg-white-pure {
+      background-color: #ffffff;
+    }
+    .text-black-soft {
+      color: #1a1a1a;
+    }
+  </style>
+</head>
+<body class="bg-soft-white text-black-soft">
+  <main class="container mx-auto px-4 py-8 max-w-5xl">
+    <a href="index.html" class="back-button mb-8">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Geri Dön
+    </a>
+
+    <section id="event-detail-section" class="bg-white-pure p-8 md:p-12 rounded-lg shadow-xl animate-fade-in-up">
+      <h1 id="event-title" class="text-4xl md:text-5xl font-extrabold text-gold-accent mb-6"></h1>
+      <p id="event-description" class="text-lg text-gray-700 leading-relaxed"></p>
+
+      <div id="speakers-section" class="mt-16">
+        <h2 class="text-3xl font-bold mb-8">Konuşmacılar</h2>
+        <div id="speakers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Speaker cards will be dynamically added here -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- New Script to handle content loading -->
+  <script type="module">
+    import { EVENTS } from './events.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const eventId = urlParams.get('id');
+      const eventData = EVENTS[eventId];
+
+      if (!eventData) {
+        document.getElementById('event-title').innerText = 'Etkinlik Bulunamadı';
+        document.getElementById('event-description').innerText = 'Aradığınız etkinliğin detayları bulunmamaktadır.';
+        document.getElementById('speakers-section').style.display = 'none';
+        document.title = 'Hata: Etkinlik Bulunamadı';
+        return;
+      }
+
+      document.getElementById('page-title').innerText = eventData.title;
+      document.getElementById('event-title').innerText = eventData.title;
+      document.getElementById('event-description').innerText = eventData.description;
+
+      const speakersList = document.getElementById('speakers-list');
+      if (eventData.speakers && eventData.speakers.length > 0) {
+        eventData.speakers.forEach(speaker => {
+          const speakerCard = document.createElement('div');
+          speakerCard.className = 'speaker-card bg-soft-white p-6 rounded-lg text-center shadow-lg';
+          
+          const speakerPhoto = document.createElement('img');
+          speakerPhoto.src = speaker.photo;
+          speakerPhoto.alt = speaker.name;
+          speakerPhoto.className = 'w-32 h-32 rounded-full mx-auto mb-4 object-cover';
+          
+          const speakerName = document.createElement('h3');
+          speakerName.className = 'text-xl font-semibold text-gold-accent';
+          speakerName.innerText = speaker.name;
+
+          const speakerTitle = document.createElement('p');
+          speakerTitle.className = 'text-gray-600 mt-1';
+          speakerTitle.innerText = speaker.title;
+          
+          speakerCard.appendChild(speakerPhoto);
+          speakerCard.appendChild(speakerName);
+          speakerCard.appendChild(speakerTitle);
+
+          speakersList.appendChild(speakerCard);
+        });
+      } else {
+        speakersList.innerHTML = `<p class="text-gray-500 col-span-full">Bu etkinlik için henüz konuşmacı bilgisi eklenmemiştir.</p>`;
+      }
+    });
+  </script>
+</body>
+</html>
