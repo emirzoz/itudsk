@@ -75,8 +75,6 @@ export const EVENTS = {
         "title": "İçerik Üreticisi",
         "photo": "https://placehold.co/128x128/B2F5EA/FFFFFF?text=SD"
       }
-      
-      
     ]
   },
   "beedigital-2022": {
