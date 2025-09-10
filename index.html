@@ -111,6 +111,15 @@
       opacity: 1;
       transform: translateY(0);
     }
+    .survey-input {
+      color: #1a1a1a !important;
+    }
+    .survey-input::placeholder {
+      color: #6b7280 !important;
+    }
+    .btn-gold-accent {
+      color: #ffb600 !important;
+    }
   </style>
 </head>
 <body class="bg-soft-white text-black-soft">
@@ -181,9 +190,9 @@
 
         <div class="mt-8 bg-white/90 p-8 rounded-lg shadow-xl max-w-lg mx-auto count-up" id="survey-section">
           <h3 class="text-2xl font-semibold mb-6 text-gold-accent">Bir Sonraki Etkinlikte Kimi Görmek İstersiniz?</h3>
-          <form action="#" method="POST" class="space-y-6">
+          <form id="speaker-suggestion-form" class="space-y-6">
             <div>
-              <input type="text" name="speaker_suggestion" placeholder="Konuşmacı öneriniz" class="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required>
+              <input type="text" name="speaker_suggestion" placeholder="Konuşmacı öneriniz" class="survey-input w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required>
             </div>
             <button type="submit" class="w-full btn-gold-accent">Gönder</button>
           </form>
@@ -392,7 +401,6 @@
                 </div>
               </div>
             </a>
-
             <a href="https://www.instagram.com/itodesk_club" target="_blank" class="instagram-post bg-gray-800 rounded-lg shadow-xl border-t-4 border-gold-accent animate-fade-in-up transform hover:scale-105 transition duration-300" style="animation-delay: 0.2s;">
               <img src="https://placehold.co/600x600/FFB600/000000?text=Instagram+Post+2" alt="Instagram Post 2" class="w-full h-auto rounded-t-lg">
               <div class="p-6">
@@ -403,7 +411,6 @@
                 </div>
               </div>
             </a>
-            
             <a href="https://www.instagram.com/itodesk_club" target="_blank" class="instagram-post bg-gray-800 rounded-lg shadow-xl border-t-4 border-gold-accent animate-fade-in-up transform hover:scale-105 transition duration-300" style="animation-delay: 0.4s;">
               <img src="https://placehold.co/600x600/FFD700/000000?text=Instagram+Post+3" alt="Instagram Post 3" class="w-full h-auto rounded-t-lg">
               <div class="p-6">
@@ -427,6 +434,7 @@
   </footer>
 
   <script src="events.js"></script>
+  <script src="suggestions.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Countdown Timer
