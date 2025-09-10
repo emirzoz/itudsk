@@ -56,31 +56,24 @@
    Sliding Band / Marquee
    ============================ */
 .event-band {
-  position: relative;
   overflow: hidden;
   white-space: nowrap;
 }
 
 .event-band-track {
   display: flex;
-  width: fit-content; /* makes it only as wide as its contents */
   flex-wrap: nowrap;
-  white-space: nowrap;
-  animation: slideBand 30s linear infinite; /* adjust 30s for speed */
-
-
-
+  animation: slideBand 30s linear infinite;
 }
 
 .event-band-content {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  flex-wrap: nowrap;
   gap: 3rem;
-  flex-shrink: 0; /* keeps each block’s width intact */
+  flex-shrink: 0;   /* keep width intact */
 }
 
-/* Seamless scroll keyframes */
+/* Animation shifts the width of ONE content block (50% of track) */
 @keyframes slideBand {
   from {
     transform: translateX(0);
