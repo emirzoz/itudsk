@@ -47,6 +47,35 @@
   }
 }
 /* ============================
+   Sliding Band / Marquee
+   ============================ */
+.event-band {
+  position: relative;
+  white-space: nowrap;
+}
+
+.event-band-track {
+  display: inline-flex;
+  align-items: center;
+  animation: slideBand 20s linear infinite;
+}
+
+@keyframes slideBand {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Ensure it loops seamlessly */
+.event-band-track::after {
+  content: attr(data-content);
+}
+
+
+/* ============================
    Hamburger Icon Styles
    ============================ */
 .hamburger {
