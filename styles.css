@@ -51,36 +51,32 @@
    ============================ */
 .event-band {
   position: relative;
+  overflow: hidden;
   white-space: nowrap;
 }
 
 .event-band-track {
-  display: inline-flex;
-  align-items: center;
-  animation: slideBand 20s linear infinite;
+  display: flex;
+  flex-wrap: nowrap;   /* keep everything in ONE line */
+  width: max-content;
+  animation: slideBand 25s linear infinite;
 }
 
-@keyframes slideBand {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-/* Ensure it loops seamlessly */
-.event-band-track::after {
-  content: attr(data-content);
-}
 .event-band-content {
   display: flex;
   align-items: center;
-  gap: 3rem; /* horizontal spacing */
-  flex-wrap: nowrap; /* prevent wrapping to top-bottom */
-  white-space: nowrap; /* force text to stay inline */
+  flex-wrap: nowrap;
+  gap: 3rem; /* spacing between items */
 }
 
+@keyframes slideBand {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
 
 
 /* ============================
