@@ -1,560 +1,699 @@
-<!DOCTYPE html>
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITODESK</title>
-    <style>
-        /* Gold accent color */
-        :root {
-            --gold-accent: #ffb600;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse-fast {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        @keyframes hero-gradient-animation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        .animate-fade-in-up {
-            animation: fadeInUp 1s ease-out forwards;
-        }
-
-        .animate-fade-in-down {
-            animation: fadeInDown 1s ease-out forwards;
-        }
-
-        .animate-pulse-fast {
-            animation: pulse-fast 1s infinite ease-in-out;
-        }
-
-        /* Hero animated background */
-        .hero-animated-bg {
-            background: linear-gradient(-45deg, #f5f5f5, #e0e0e0, #ffffff, #e0e0e0);
-            background-size: 400% 400%;
-            animation: hero-gradient-animation 15s ease infinite;
-        }
-
-        /* Custom button styling */
-        .btn-gold-accent {
-            background-color: var(--gold-accent);
-            color: #000;
-            border: 2px solid var(--gold-accent);
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-gold-accent:hover {
-            transform: scale(1.05);
-            background-color: #e6a500;
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-outline-gold {
-            background-color: transparent;
-            color: var(--gold-accent);
-            border: 2px solid var(--gold-accent);
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .btn-outline-gold:hover {
-            transform: scale(1.05);
-            background-color: var(--gold-accent);
-            color: #000;
-        }
-
-        .card-hover-animation:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 15px rgba(255, 182, 0, 0.1);
-        }
-
-        /* New: Styles for the detail page */
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            background-color: #f5f5f5;
-            color: #1a1a1a;
-            border: 2px solid #ddd;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        .back-button:hover {
-            background-color: #e5e5e5;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
-        }
-
-        .speaker-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .speaker-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(255, 182, 0, 0.1);
-        }
-
-        /* New: Flyer background on hover */
-        .carousel-item {
-            position: relative;
-            overflow: hidden;
-            z-index: 10;
-        }
-
-        .carousel-item::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            z-index: -1;
-        }
-
-        .carousel-item:hover::after {
-            opacity: 1;
-        }
-
-        /* ============================
-           Hamburger Menu (Mobile)
-           ============================ */
-        .nav-menu {
-            display: none;
-        }
-
-        .nav-menu.open {
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 75%; /* adjust width as needed */
-            height: 100%;
-            background-color: #ffffff;
-            z-index: 50;
-            padding: 2rem 1.5rem;
-            gap: 1.5rem;
-            transform: translateX(100%);
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .nav-menu.show {  /* Use .show for JS toggle to avoid confusion with .open */
-            transform: translateX(0);
-        }
-
-        .hamburger {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 24px;
-            height: 18px;
-            cursor: pointer;
-            z-index: 60; /* ensure it stays above menu */
-        }
-
-        .hamburger span {
-            display: block;
-            height: 3px;
-            background-color: #1a1a1a;
-            transition: all 0.3s ease;
-        }
-
-        .hamburger.open span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-        .hamburger.open span:nth-child(2) {
-            opacity: 0;
-        }
-        .hamburger.open span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        @media (min-width: 768px) {
-            .nav-menu {
-                display: flex !important;
-                position: static;
-                width: auto;
-                height: auto;
-                background: none;
-                padding: 0;
-                flex-direction: row;
-                transform: none !important;
-            }
-            .nav-menu.show {
-                transform: none !important;  /* Ensure desktop stays unaffected */
-            }
-            .hamburger {
-                display: none;
-            }
-        }
-
-        /* Placeholder for event flyers */
-        .event-flyer-beedigital-2025::after {
-            background-image: url('https://placehold.co/600x400/FFD700/000000?text=BeeDigital+2025+Afişi');
-        }
-        .event-flyer-beedigital-2024::after {
-            background-image: url('https://placehold.co/600x400/FFD700/000000?text=BeeDigital+2024+Afişi');
-        }
-        .event-flyer-beedigital-2023::after {
-            background-image: url('https://placehold.co/600x400/FFD700/000000?text=BeeDigital+2023+Afişi');
-        }
-        .event-flyer-beedigital-2022::after {
-            background-image: url('https://placehold.co/600x400/FFD700/000000?text=BeeDigital+2022+Afişi');
-        }
-        .event-flyer-bee-influencer::after {
-            background-image: url('https://placehold.co/600x400/FFD700/000000?text=BeeInfluencer+Afişi');
-        }
-
-        /* Placeholder for training flyers */
-        .training-flyer-social-media::after {
-            background-image: url('https://placehold.co/600x400/FFD700/000000?text=Sosyal+Medya+Eğitimi');
-        }
-        .training-flyer-e-commerce::after {
-            background-image: url('https://placehold.co/600x400/FFD700/000000?text=E-Ticaret+Eğitimi');
-        }
-        .training-flyer-influencer::after {
-            background-image: url('https://placehold.co/600x400/FFD700/000000?text=Influencer+Eğitimi');
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ITODESK - Dijital Pazarlama Kulübü</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+  
+  
+  <style type="text/css">@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}</style>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .text-gold-accent {
+      color: #ffb600;
+    }
+    .bg-soft-white {
+      background-color: #f5f5f5;
+    }
+    .bg-white-pure {
+      background-color: #ffffff;
+    }
+    .text-black-soft {
+      color: #1a1a1a;
+    }
+    .carousel-container {
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      display: flex;
+      width: 100%;
+      gap: 16px;
+      padding: 0 16px;
+      box-sizing: border-box;
+    }
+    .carousel-container::-webkit-scrollbar {
+      display: none;
+    }
+    .carousel-container {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .carousel-item {
+      scroll-snap-align: start;
+      flex-shrink: 0;
+      width: 33.33%;
+      box-sizing: border-box;
+    }
+    @media (max-width: 1024px) {
+      .carousel-item {
+        width: 50%;
+      }
+    }
+    @media (max-width: 768px) {
+      .carousel-item {
+        width: 100%;
+      }
+    }
+    .carousel-btn {
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .carousel-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        transition: background-color 0.3s;
+      }
+      .carousel-btn:hover {
+        background-color: #ffffff;
+      }
+    }
+    .parallax-hero {
+      background-image: url('images/width_550.webp');
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+    }
+    .parallax-overlay {
+      background: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    @media only screen and (max-device-width: 1366px) {
+      .parallax-hero {
+        background-attachment: scroll;
+      }
+    }
+    .count-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    .count-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .survey-input {
+      color: #1a1a1a !important;
+    }
+    .survey-input::placeholder {
+      color: #6b7280 !important;
+    }
+    .btn-gold-accent {
+      color: #ffffff !important;
+    }
+    /* Hamburger Menu Styles */
+    .nav-menu {
+      display: none;
+    }
+    .nav-menu.open {
+      display: flex;
+      flex-direction: column !important;
+      flex-wrap: nowrap !important;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 75%;
+      height: 100%;
+      background-color: #ffffff;
+      z-index: 50;
+      padding: 4rem 1.5rem;
+      gap: 2rem;
+      overflow-y: auto;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      transform: translateX(0);
+      transition: transform 0.3s ease-in-out;
+    }
+    .nav-menu {
+      transform: translateX(100%);
+    }
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 24px;
+      height: 18px;
+      cursor: pointer;
+      z-index: 60;
+    }
+    .hamburger span {
+      display: block;
+      height: 3px;
+      background-color: #1a1a1a;
+      transition: all 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -7px);
+    }
+    @media (min-width: 768px) {
+      .nav-menu {
+        display: flex !important;
+        position: static;
+        width: auto;
+        height: auto;
+        background: none;
+        padding: 0;
+        flex-direction: row;
+        transform: none !important;
+      }
+      .hamburger {
+        display: none;
+      }
+    }
+  </style>
 </head>
-<body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                ITODESK
-            </div>
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="#anasayfa">Anasayfa</a></li>
-                <li><a href="#hakkimizda">Hakkımızda</a></li>
-                <li><a href="#etkinlikler">Etkinliklerimiz</a></li>
-                <li><a href="#egitimler">Eğitimlerimiz</a></li>
-                <li><a href="#sponsorluk">Sponsorluk Paketleri</a></li>
-                <li><a href="#ekibimiz">Ekibimiz</a></li>
-                <li><a href="#iletisim">İletişime Geçin</a></li>
-            </ul>
-        </div>
+<body class="bg-soft-white text-black-soft">
+
+  <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-lg animate-fade-in-down">
+    <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="text-2xl font-bold text-gold-accent">ITODESK</div>
+      <div class="hamburger md:hidden" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="nav-menu flex flex-wrap justify-center space-x-4 md:space-x-6 text-base font-medium" id="nav-menu">
+        <a href="#hero" class="hover:text-gold-accent transition duration-300">Anasayfa</a>
+        <a href="#about" class="hover:text-gold-accent transition duration-300">Hakkımızda</a>
+        <a href="#events" class="hover:text-gold-accent transition duration-300">Etkinliklerimiz</a>
+        <a href="#trainings" class="hover:text-gold-accent transition duration-300">Eğitimlerimiz</a>
+        <a href="#sponsorship" class="hover:text-gold-accent transition duration-300">Sponsorluk Paketleri</a>
+        <a href="#team" class="hover:text-gold-accent transition duration-300">Ekibimiz</a>
+        <a href="#contact" class="hover:text-gold-accent transition duration-300">İletişime Geçin</a>
+      </div>
     </nav>
+  </header>
 
-    <section id="anasayfa" class="hero-section hero-animated-bg">
-        <div class="hero-content animate-fade-in-up">
-            <h1 class="hero-title">
-                Dijital Gelecek Başlıyor
-            </h1>
-            <p class="hero-description animate-fade-in-down">
-                İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü olarak, BeeDigital 2025 ile dijital dünyanın dinamiklerini keşfedin.
-            </p>
-            <div class="stats animate-pulse-fast">
-                <div class="stat">
-                    <span class="stat-number">8500+</span>
-                    <span class="stat-label">Etkileşim</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">800+</span>
-                    <span class="stat-label">Katılımcı</span>
-                </div>
-            </div>
-            <div class="countdown animate-fade-in-up">
-                <h3>25 Aralık 2025 Etkinliğine Kalan Süre</h3>
-                <div class="countdown-timer">
-                    <span class="time-unit">105</span>
-                    <span class="time-separator">:</span>
-                    <span class="time-unit">10</span>
-                    <span class="time-separator">:</span>
-                    <span class="time-unit">27</span>
-                    <span class="time-separator">:</span>
-                    <span class="time-unit">57</span>
-                </div>
-            </div>
-            <div class="poll animate-fade-in-down">
-                <h4>Bir Sonraki Etkinlikte Kimi Görmek İstersiniz?</h4>
-                <form class="poll-form">
-                    <input type="text" placeholder="İsim girin..." required>
-                    <button type="submit">Gönder</button>
-                </form>
-            </div>
-            <div class="cta-buttons">
-                <a href="#etkinlikler" class="btn btn-gold-accent">Etkinliğe Katıl</a>
-                <a href="#iletisim" class="btn btn-outline-gold">Kulübe Katıl</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="hakkimizda" class="about-section">
-        <h2>Hakkımızda</h2>
-        <p>
-            İstanbul Teknik Üniversitesi Dijital Pazarlama ve Sosyal Medya Kulübü, dijital dünyanın dinamiklerini keşfetmek ve bu alanda derinlemesine bilgi sahibi olmak isteyen öğrencilere yönelik kurulmuş yenilikçi bir öğrenci topluluğudur. Kulübümüz; dijital pazarlama, sosyal medya yönetimi, e-ticaret stratejileri, içerik üretimi, influencer marketing ve dijital girişimcilik gibi günümüzün en güncel ve en hızlı gelişen konularına odaklanmaktadır.
+  <main>
+    <section id="hero" class="min-h-screen flex items-center justify-center p-8 text-center text-white parallax-hero relative">
+      <div class="parallax-overlay"></div>
+      <div class="max-w-4xl space-y-8 animate-fade-in-up relative z-10">
+        <h1 class="text-5xl sm:text-6xl font-extrabold leading-tight">
+          Dijital Gelecek Başlıyor
+        </h1>
+        <p class="text-xl sm:text-2xl font-light max-w-2xl mx-auto">
+          İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü olarak, BeeDigital 2025 ile dijital dünyanın dinamiklerini keşfedin.
         </p>
-        <div class="mission-vision">
-            <div class="mission">
-                <h3>Misyonumuz</h3>
-                <p>Öğrencilerin dijital pazarlama, sosyal medya, e-ticaret ve içerik üretimi alanlarında güncel bilgi ve yetkinlikler kazanmasını sağlamak; sektörel standartlarla uyumlu, uygulamalı öğrenme deneyimleri sunmak; üniversite-sanayi iş birlikleriyle kariyer fırsatlarına erişimi artırmak ve etik, veri odaklı, ölçülebilir pazarlama yaklaşımını yaygınlaştırmaktır.</p>
+
+        <div class="mt-8 space-y-4 count-up" id="stats-section">
+          <div class="flex justify-center space-x-8 text-3xl font-bold">
+            <div class="flex flex-col items-center">
+              <span id="interactions" data-target="8500">0</span>
+              <span class="text-sm font-light text-gray-300">Etkileşim</span>
             </div>
-            <div class="vision">
-                <h3>Vizyonumuz</h3>
-                <p>Türkiye'de üniversite düzeyinde dijital pazarlama alanında referans alınan, yenilikçi projeleri ve nitelikli mezunlarıyla öne çıkan; ekosisteme değer katan araştırma, eğitim ve etkinlikleriyle bölgesel etki yaratan; sürdürülebilirlik ve kapsayıcılığı temel alan bir öğrenci kulübü olmaktır.</p>
+            <div class="flex flex-col items-center">
+              <span id="participants" data-target="800">0</span>
+              <span class="text-sm font-light text-gray-300">Katılımcı</span>
             </div>
+          </div>
         </div>
-        <blockquote>
+
+        <div class="mt-8 space-y-4">
+          <h3 class="text-2xl font-semibold text-gold-accent">25 Aralık 2025 Etkinliğine Kalan Süre</h3>
+          <div id="countdown" class="flex justify-center items-center space-x-4 text-3xl sm:text-4xl font-bold">
+            <div class="flex flex-col items-center animate-pulse-fast">
+              <span id="days">00</span>
+              <span class="text-sm font-light text-gray-300">Gün</span>
+            </div>
+            <span>:</span>
+            <div class="flex flex-col items-center animate-pulse-fast" style="animation-delay: 0.2s;">
+              <span id="hours">00</span>
+              <span class="text-sm font-light text-gray-300">Saat</span>
+            </div>
+            <span>:</span>
+            <div class="flex flex-col items-center animate-pulse-fast" style="animation-delay: 0.4s;">
+              <span id="minutes">00</span>
+              <span class="text-sm font-light text-gray-300">Dakika</span>
+            </div>
+            <span>:</span>
+            <div class="flex flex-col items-center animate-pulse-fast" style="animation-delay: 0.6s;">
+              <span id="seconds">00</span>
+              <span class="text-sm font-light text-gray-300">Saniye</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 bg-white/90 p-8 rounded-lg shadow-xl max-w-lg mx-auto count-up" id="survey-section">
+          <h3 class="text-2xl font-semibold mb-6 text-gold-accent">Bir Sonraki Etkinlikte Kimi Görmek İstersiniz?</h3>
+          <form id="speaker-suggestion-form" class="space-y-6">
+            <div>
+              <input type="text" name="speaker_suggestion" placeholder="Konuşmacı öneriniz" class="survey-input w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required>
+            </div>
+            <button type="submit" class="w-full btn-gold-accent">Gönder</button>
+          </form>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
+          <a href="#" class="btn-gold-accent animate-fade-in-up">Etkinliğe Katıl</a>
+          <a href="#" class="btn-outline-gold animate-fade-in-up">Kulübe Katıl</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="py-24 px-8 bg-soft-white border-t-4 border-gold-accent">
+      <div class="container mx-auto max-w-5xl">
+        <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Hakkımızda</h2>
+        <div class="space-y-8 text-lg text-gray-600 animate-fade-in-up">
+          <p>
+            İstanbul Teknik Üniversitesi Dijital Pazarlama ve Sosyal Medya Kulübü, dijital dünyanın dinamiklerini keşfetmek ve bu alanda derinlemesine bilgi sahibi olmak isteyen öğrencilere yönelik kurulmuş yenilikçi bir öğrenci topluluğudur. Kulübümüz; dijital pazarlama, sosyal medya yönetimi, e-ticaret stratejileri, içerik üretimi, influencer marketing ve dijital girişimcilik gibi günümüzün en güncel ve en hızlı gelişen konularına odaklanmaktadır.
+          </p>
+          
+          <h3 class="text-2xl font-semibold text-gold-accent">Misyonumuz</h3>
+          <p>
+            Öğrencilerin dijital pazarlama, sosyal medya, e-ticaret ve içerik üretimi alanlarında güncel bilgi ve yetkinlikler kazanmasını sağlamak; sektörel standartlarla uyumlu, uygulamalı öğrenme deneyimleri sunmak; üniversite-sanayi iş birlikleriyle kariyer fırsatlarına erişimi artırmak ve etik, veri odaklı, ölçülebilir pazarlama yaklaşımını yaygınlaştırmaktır.
+          </p>
+          
+          <h3 class="text-2xl font-semibold text-gold-accent">Vizyonumuz</h3>
+          <p>
+            Türkiye'de üniversite düzeyinde dijital pazarlama alanında referans alınan, yenilikçi projeleri ve nitelikli mezunlarıyla öne çıkan; ekosisteme değer katan araştırma, eğitim ve etkinlikleriyle bölgesel etki yaratan; sürdürülebilirlik ve kapsayıcılığı temel alan bir öğrenci kulübü olmaktır.
+          </p>
+          <p class="mt-8 text-center text-lg font-semibold">
             Dijital dönüşümün kalbinde, geleceğin trendlerini bugün öğrenin!
-        </blockquote>
-    </section>
-
-    <section id="etkinlikler" class="events-section">
-        <h2>Etkinliklerimiz</h2>
-        <div class="events-grid">
-            <div class="event-card event-flyer-beedigital-2025">
-                <h3>BeeDigital 2025</h3>
-                <p>Yakında! Dijital pazarlama zirvesi ile sektör liderlerini ağırlayacağız. Önceki zirvelerimizde elde ettiğimiz başarıyı devam ettiriyoruz.</p>
-                <a href="#" class="btn btn-gold-accent">Detaylar için tıklayın</a>
-            </div>
-            <div class="event-card event-flyer-beedigital-2024">
-                <h3>BeeDigital 2024</h3>
-                <p>Büyük bir katılımcı kitlesiyle tamamlanan zirvemiz. Katılımcılarımızdan bazıları: Selim Yuhay, Mimar Selim, Zeynep Özkaya, Sabrı Can Onay Yontar (Chess.com), Vedat Karabulut, Barış Korkmaz, Hakan Gerin, Cahide Güney (FLO).</p>
-                <a href="#" class="btn btn-gold-accent">Detaylar için tıklayın</a>
-            </div>
-            <div class="event-card event-flyer-beedigital-2023">
-                <h3>BeeDigital 2023</h3>
-                <p>Başarılı bir etkinlik: Katılımcılarımızdan bazıları: Simay Dal, Damla Altun & Burak Bozkurt (51 Digital), Buket Sena Özdemir & Eda Yaman, Efe Volkan (Unilever), Japon Hamza, Destina Saccilarlı.</p>
-                <a href="#" class="btn btn-gold-accent">Detaylar için tıklayın</a>
-            </div>
-            <div class="event-card event-flyer-beedigital-2022">
-                <h3>BeeDigital 2022</h3>
-                <p>Kulübümüzün ilk zirvesi: 1800+ ön kayıt, 800+ katılımcı, 8500+ etkileşim, 13 konuşmacı. Katılımcılarımızdan bazıları: Berfu Yenenler, Ceyda Kasabalı & Fırat Albayram (Noluyo Ya? YouTube), Berk Keklik & Oğulcan Aşıkoğlu, Ege Tuna Diken, Harun Ünlüsöy, Ahmet Duruel, Ümit Akgün, Asena Akbal, Selim Kayhan, Kıvanç Ege Aydın & Senem Sarkanak.</p>
-                <a href="#" class="btn btn-gold-accent">Detaylar için tıklayın</a>
-            </div>
-            <div class="event-card event-flyer-bee-influencer">
-                <h3>BeeInfluencer</h3>
-                <p>Influencer marketing atölyeleri ve stratejileri. Kulübümüzün odak alanlarından biri olarak, dijital girişimcilik ve içerik üretimi eğitimleri sunuyoruz.</p>
-                <a href="#" class="btn btn-gold-accent">Detaylar için tıklayın</a>
-            </div>
+          </p>
         </div>
+      </div>
     </section>
 
-    <section id="egitimler" class="trainings-section">
-        <h2>Eğitimlerimiz</h2>
-        <div class="trainings-grid">
-            <div class="training-card training-flyer-social-media">
-                <h3>Sosyal Medya Eğitimi</h3>
-                <p>Sosyal medya stratejileri ve yönetimi üzerine uygulamalı eğitim.</p>
-            </div>
-            <div class="training-card training-flyer-e-commerce">
-                <h3>E-Ticaret Eğitimi</h3>
-                <p>Dijital ticaretin temelleri ve ileri seviye stratejiler.</p>
-            </div>
-            <div class="training-card training-flyer-influencer">
-                <h3>Influencer Eğitimi</h3>
-                <p>Influencer marketing ve içerik üretimi teknikleri.</p>
-            </div>
+    <section id="events" class="py-24 px-8 bg-white-pure">
+      <div class="container mx-auto max-w-6xl">
+        <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Etkinliklerimiz</h2>
+        <div class="relative">
+          <div id="carousel-events" class="carousel-container">
+            <a href="event-detail.html?id=beedigital-2025" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2025">
+              <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2025</h3>
+              <p class="text-gray-600">Yakında! Dijital pazarlama zirvesi ile sektör liderlerini ağırlayacağız. Önceki zirvelerimizde elde ettiğimiz başarıyı devam ettiriyoruz.</p>
+              <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
+            </a>
+            <a href="event-detail.html?id=beedigital-2024" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2024">
+              <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2024</h3>
+              <p class="text-gray-600">Büyük bir katılımcı kitlesiyle tamamlanan zirvemiz. Katılımcılarımızdan bazıları: Selim Yuhay, Mimar Selim, Zeynep Özkaya, Sabrı Can Onay Yontar (Chess.com), Vedat Karabulut, Barış Korkmaz, Hakan Gerin, Cahide Güney (FLO).</p>
+              <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
+            </a>
+            <a href="event-detail.html?id=beedigital-2023" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2023">
+              <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2023</h3>
+              <p class="text-gray-600">Başarılı bir etkinlik: Katılımcılarımızdan bazıları: Simay Dal, Damla Altun & Burak Bozkurt (51 Digital), Buket Sena Özdemir & Eda Yaman, Efe Volkan (Unilever), Japon Hamza, Destina Saccilarlı.</p>
+              <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
+            </a>
+            <a href="event-detail.html?id=beedigital-2022" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2022">
+              <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2022</h3>
+              <p class="text-gray-600">Kulübümüzün ilk zirvesi: 1800+ ön kayıt, 800+ katılımcı, 8500+ etkileşim, 13 konuşmacı. Katılımcılarımızdan bazıları: Berfu Yenenler, Ceyda Kasabalı & Fırat Albayram (Noluyo Ya? YouTube), Berk Keklik & Oğulcan Aşıkoğlu, Ege Tuna Diken, Harun Ünlüsöy, Ahmet Duruel, Ümit Akgün, Asena Akbal, Selim Kayhan, Kıvanç Ege Aydın & Senem Sarkanak.</p>
+              <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
+            </a>
+            <a href="event-detail.html?id=bee-influencer" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-bee-influencer">
+              <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeInfluencer</h3>
+              <p class="text-gray-600">Influencer marketing atölyeleri ve stratejileri. Kulübümüzün odak alanlarından biri olarak, dijital girişimcilik ve içerik üretimi eğitimleri sunuyoruz.</p>
+              <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
+            </a>
+          </div>
+          <button id="prev-btn-events" class="carousel-btn left-0" aria-label="Önceki">
+            <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+          </button>
+          <button id="next-btn-events" class="carousel-btn right-0" aria-label="Sonraki">
+            <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </button>
         </div>
+      </div>
     </section>
 
-    <section id="sponsorluk" class="sponsorship-section">
-        <h2>Sponsorluk Paketlerimiz</h2>
-        <div class="sponsorship-packages">
-            <div class="package-card">
-                <h3>Ana Sponsorluk</h3>
-                <p class="price">35.000+ KDV TL</p>
-                <ul>
-                    <li>3 Fuaye Standı</li>
-                    <li>Oturum Tahsisi</li>
-                    <li>1 Yıl Etkinlik Tanıtımı</li>
-                    <li>Sosyal Medya & Web Sitesi</li>
-                </ul>
-            </div>
-            <div class="package-card">
-                <h3>Altın Sponsorluk</h3>
-                <p class="price">20.000+ KDV TL</p>
-                <ul>
-                    <li>2 Fuaye Standı</li>
-                    <li>Oturum Tahsisi</li>
-                    <li>3 Ay Etkinlik Tanıtımı</li>
-                    <li>Sosyal Medya & Web Sitesi</li>
-                </ul>
-            </div>
-            <div class="package-card">
-                <h3>Gümüş Sponsorluk</h3>
-                <p class="price">10.000+ KDV TL</p>
-                <ul>
-                    <li>2 Fuaye Standı</li>
-                    <li>Sosyal Medya & Afişler</li>
-                    <li>Web Sitesi</li>
-                </ul>
-            </div>
+    <section id="trainings" class="py-24 px-8 bg-soft-white border-t-4 border-gold-accent">
+      <div class="container mx-auto max-w-6xl">
+        <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Eğitimlerimiz</h2>
+        <div class="relative">
+          <div id="carousel-trainings" class="carousel-container">
+            <!-- Trainings will be populated dynamically -->
+          </div>
+          <button id="prev-btn-trainings" class="carousel-btn left-0" aria-label="Önceki">
+            <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+          </button>
+          <button id="next-btn-trainings" class="carousel-btn right-0" aria-label="Sonraki">
+            <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </button>
         </div>
-        <a href="#iletisim" class="btn btn-gold-accent">Sponsor Olun</a>
+      </div>
     </section>
 
-    <section id="ekibimiz" class="team-section">
-        <h2>Ekibimiz</h2>
-        <div class="team-grid">
-            <div class="team-member speaker-card">
-                <h3>Eylül Şimşek</h3>
-                <p>Kulüp Başkanı</p>
-            </div>
-            <div class="team-member speaker-card">
-                <h3>Yer Tutucu</h3>
-                <p>Etkinlik Koordinatörü</p>
-            </div>
-            <div class="team-member speaker-card">
-                <h3>Yer Tutucu</h3>
-                <p>Sosyal Medya Yöneticisi</p>
-            </div>
-            <div class="team-member speaker-card">
-                <h3>Yer Tutucu</h3>
-                <p>...</p>
-            </div>
+    <section id="sponsorship" class="py-24 px-8 bg-white-pure border-t-4 border-gold-accent">
+      <div class="container mx-auto max-w-5xl">
+        <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Sponsorluk Paketlerimiz</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-soft-white p-6 rounded-lg shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation">
+            <h3 class="text-2xl font-semibold text-center mb-2 text-gold-accent">Ana Sponsorluk</h3>
+            <p class="text-center text-4xl font-bold text-gold-accent">35.000+ KDV TL</p>
+            <ul class="list-disc list-inside mt-4 text-gray-600 space-y-2">
+              <li>3 Fuaye Standı</li>
+              <li>Oturum Tahsisi</li>
+              <li>1 Yıl Etkinlik Tanıtımı</li>
+              <li>Sosyal Medya & Web Sitesi</li>
+            </ul>
+          </div>
+          <div class="bg-soft-white p-6 rounded-lg shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation">
+            <h3 class="text-2xl font-semibold text-center mb-2 text-gold-accent">Altın Sponsorluk</h3>
+            <p class="text-center text-4xl font-bold text-gold-accent">20.000+ KDV TL</p>
+            <ul class="list-disc list-inside mt-4 text-gray-600 space-y-2">
+              <li>2 Fuaye Standı</li>
+              <li>Oturum Tahsisi</li>
+              <li>3 Ay Etkinlik Tanıtımı</li>
+              <li>Sosyal Medya & Web Sitesi</li>
+            </ul>
+          </div>
+          <div class="bg-soft-white p-6 rounded-lg shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation">
+            <h3 class="text-2xl font-semibold text-center mb-2 text-gold-accent">Gümüş Sponsorluk</h3>
+            <p class="text-center text-4xl font-bold text-gold-accent">10.000+ KDV TL</p>
+            <ul class="list-disc list-inside mt-4 text-gray-600 space-y-2">
+              <li>2 Fuaye Standı</li>
+              <li>Sosyal Medya & Afişler</li>
+              <li>Web Sitesi</li>
+            </ul>
+          </div>
         </div>
-    </section>
-
-    <section id="iletisim" class="contact-section">
-        <h2>İletişime Geçin</h2>
-        <div class="contact-info">
-            <div class="contact-item">
-                <span>📍</span>
-                İTÜ Ayazağa Kampüsü, Maslak, İstanbul
-            </div>
-            <div class="contact-item">
-                <span>📧</span>
-                itudijitalpazarlama@gmail.com
-            </div>
-            <div class="contact-item">
-                <span>📞</span>
-                0538 769 77 53 (Eylül Şimşek - Kulüp Başkanı)
-            </div>
+        <div class="mt-8 text-center">
+            <a href="#" class="btn-gold-accent animate-fade-in-up">Sponsor Olun</a>
         </div>
-        <form class="contact-form">
-            <input type="text" placeholder="Adınız" required>
-            <input type="email" placeholder="E-posta Adresiniz" required>
-            <textarea placeholder="Mesajınız" required></textarea>
-            <button type="submit">Gönder</button>
-        </form>
+      </div>
     </section>
-
-    <section class="instagram-section">
-        <h2>Son Instagram Gönderileri</h2>
-        <div class="instagram-posts">
-            <div class="post">
-                <img src="https://placehold.co/300x300/FFD700/000000?text=Post+1" alt="Post 1">
-                <p>BeeDigital 2025'in hazırlıkları tüm hızıyla devam ediyor! 🎉</p>
-                <span>❤️ 158 Beğeni</span>
-            </div>
-            <div class="post">
-                <img src="https://placehold.co/300x300/FFD700/000000?text=Post+2" alt="Post 2">
-                <p>Yeni eğitim dönemi için harika planlarımız var! 🚀 Kulübümüze katılın ve dijital pazarlamayı birlikte keşfedin.</p>
-                <span>❤️ 210 Beğeni</span>
-            </div>
-            <div class="post">
-                <img src="https://placehold.co/300x300/FFD700/000000?text=Post+3" alt="Post 3">
-                <p>Sponsorluk paketlerimizle markanızı binlerce öğrenciye ulaştırın! Detaylar web sitemizde.</p>
-                <span>❤️ 95 Beğeni</span>
-            </div>
+    
+    <section id="team" class="py-24 px-8 bg-soft-white border-t-4 border-gold-accent">
+      <div class="container mx-auto max-w-5xl">
+        <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Ekibimiz</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+          <div class="bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation">
+            <h3 class="text-xl font-semibold text-gold-accent">Eylül Şimşek</h3>
+            <p class="text-gray-600">Kulüp Başkanı</p>
+          </div>
+          <div class="bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation">
+            <h3 class="text-xl font-semibold text-gold-accent">Yer Tutucu</h3>
+            <p class="text-gray-600">Etkinlik Koordinatörü</p>
+          </div>
+          <div class="bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation">
+            <h3 class="text-xl font-semibold text-gold-accent">Yer Tutucu</h3>
+            <p class="text-gray-600">Sosyal Medya Yöneticisi</p>
+          </div>
+          <div class="bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation">
+            <h3 class="text-xl font-semibold text-gold-accent">Yer Tutucu</h3>
+            <p class="text-gray-600">...</p>
+          </div>
         </div>
-        <a href="#" class="btn btn-outline-gold">Daha Fazlasını Gör</a>
+      </div>
     </section>
 
-    <footer>
-        <p>&copy; 2025 İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü. Tüm hakları saklıdır.</p>
-    </footer>
+    <section id="contact" class="py-24 px-8 bg-white-pure border-t-4 border-gold-accent">
+      <div class="container mx-auto max-w-5xl text-center">
+        <h2 class="text-4xl font-bold mb-12 animate-fade-in-down">İletişime Geçin</h2>
+        <div class="space-y-6">
+          <div class="flex items-center justify-center space-x-4">
+            <span class="text-2xl">📍</span>
+            <p class="text-lg text-gray-600">İTÜ Ayazağa Kampüsü, Maslak, İstanbul</p>
+          </div>
+          <div class="flex items-center justify-center space-x-4">
+            <span class="text-2xl">📧</span>
+            <p class="text-lg text-gray-600"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="365f4243525f5c5f42575a46574c57445a575b5776515b575f5a1855595b">[email&#160;protected]</a></p>
+          </div>
+          <div class="flex items-center justify-center space-x-4">
+            <span class="text-2xl">📞</span>
+            <p class="text-lg text-gray-600">0538 769 77 53 (Eylül Şimşek - Kulüp Başkanı)</p>
+          </div>
+        </div>
+        
+        <div class="mt-16 bg-soft-white p-8 rounded-lg shadow-xl max-w-lg mx-auto animate-fade-in-up">
+            <h3 class="text-2xl font-semibold mb-6 text-gold-accent">Bize Yazın</h3>
+            <form action="#" method="POST" class="space-y-6">
+              <div>
+                <input type="text" name="name" placeholder="Adınız Soyadınız" class="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required>
+              </div>
+              <div>
+                <input type="email" name="email" placeholder="E-Posta Adresiniz" class="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required>
+              </div>
+              <div>
+                <textarea name="message" placeholder="Mesajınız (Sponsorluk veya Katılım için yazın)" rows="5" class="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required></textarea>
+              </div>
+              <button type="submit" class="w-full btn-gold-accent">Gönder</button>
+            </form>
+          </div>
+        </div>
+      </section>
 
-    <script>
-        // Hamburger Menu Toggle
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('nav-menu');
+      <section class="py-24 px-8 bg-soft-white border-t-4 border-gold-accent">
+        <div class="container mx-auto max-w-5xl">
+          <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Son Instagram Gönderileri</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <a href="https://www.instagram.com/itodesk_club" target="_blank" class="instagram-post bg-gray-800 rounded-lg shadow-xl border-t-4 border-gold-accent animate-fade-in-up transform hover:scale-105 transition duration-300">
+              <img src="https://placehold.co/600x600/FFD700/000000?text=Instagram+Post+1" alt="Instagram Post 1" class="w-full h-auto rounded-t-lg">
+              <div class="p-6">
+                <p class="text-gray-300">BeeDigital 2025'in hazırlıkları tüm hızıyla devam ediyor! 🎉</p>
+                <div class="flex items-center mt-4 text-sm text-gray-400">
+                  <span class="mr-2">❤️</span>
+                  <span>158 Beğeni</span>
+                </div>
+              </div>
+            </a>
+            <a href="https://www.instagram.com/itodesk_club" target="_blank" class="instagram-post bg-gray-800 rounded-lg shadow-xl border-t-4 border-gold-accent animate-fade-in-up transform hover:scale-105 transition duration-300" style="animation-delay: 0.2s;">
+              <img src="https://placehold.co/600x600/FFB600/000000?text=Instagram+Post+2" alt="Instagram Post 2" class="w-full h-auto rounded-t-lg">
+              <div class="p-6">
+                <p class="text-gray-300">Yeni eğitim dönemi için harika planlarımız var! 🚀 Kulübümüze katılın ve dijital pazarlamayı birlikte keşfedin.</p>
+                <div class="flex items-center mt-4 text-sm text-gray-400">
+                  <span class="mr-2">❤️</span>
+                  <span>210 Beğeni</span>
+                </div>
+              </div>
+            </a>
+            <a href="https://www.instagram.com/itodesk_club" target="_blank" class="instagram-post bg-gray-800 rounded-lg shadow-xl border-t-4 border-gold-accent animate-fade-in-up transform hover:scale-105 transition duration-300" style="animation-delay: 0.4s;">
+              <img src="https://placehold.co/600x600/FFD700/000000?text=Instagram+Post+3" alt="Instagram Post 3" class="w-full h-auto rounded-t-lg">
+              <div class="p-6">
+                <p class="text-gray-300">Sponsorluk paketlerimizle markanızı binlerce öğrenciye ulaştırın! Detaylar web sitemizde.</p>
+                <div class="flex items-center mt-4 text-sm text-gray-400">
+                  <span class="mr-2">❤️</span>
+                  <span>95 Beğeni</span>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="mt-8 text-center">
+              <a href="instagram-feed.html" class="btn-gold-accent animate-fade-in-up">Daha Fazlasını Gör</a>
+          </div>
+        </div>
+      </section>
+  </main>
 
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('open');
-            navMenu.classList.toggle('show');
-        });
+  <footer class="bg-white-pure text-black-soft py-8 text-center border-t-4 border-gold-accent">
+    <p class="text-sm">&copy; 2025 İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü. Tüm hakları saklıdır.</p>
+  </footer>
 
-        // Close menu when clicking on a link (mobile)
-        const navLinks = navMenu.querySelectorAll('a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('open');
-                navMenu.classList.remove('show');
-            });
-        });
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="events.js"></script>
+  <script src="suggestions.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Countdown Timer
+      const countdownDate = new Date("Dec 25, 2025 00:00:00").getTime();
+      const countdownInterval = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = countdownDate - now;
 
-        // Countdown Timer (example, update with actual logic)
-        function updateCountdown() {
-            const endDate = new Date('2025-12-25T00:00:00+03:00').getTime();
-            const now = new Date().getTime();
-            const distance = endDate - now;
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            const timeUnits = document.querySelectorAll('.time-unit');
-            timeUnits[0].textContent = String(days).padStart(2, '0');
-            timeUnits[1].textContent = String(hours).padStart(2, '0');
-            timeUnits[2].textContent = String(minutes).padStart(2, '0');
-            timeUnits[3].textContent = String(seconds).padStart(2, '0');
-
-            if (distance < 0) {
-                clearInterval(countdownInterval);
-                document.querySelector('.countdown-timer').textContent = 'Etkinlik Başladı!';
-            }
+        const daysEl = document.getElementById("days");
+        if (daysEl) {
+            daysEl.innerHTML = String(days).padStart(2, '0');
+            document.getElementById("hours").innerHTML = String(hours).padStart(2, '0');
+            document.getElementById("minutes").innerHTML = String(minutes).padStart(2, '0');
+            document.getElementById("seconds").innerHTML = String(seconds).padStart(2, '0');
         }
-        const countdownInterval = setInterval(updateCountdown, 1000);
-        updateCountdown(); // Initial call
-    </script>
+
+        if (distance < 0) {
+          clearInterval(countdownInterval);
+          const countdownEl = document.getElementById("countdown");
+          if(countdownEl) countdownEl.innerHTML = "ETKİNLİK BAŞLADI!";
+        }
+      }, 1000);
+
+      // Count-up Animation for Statistics
+      function animateCountUp(element, target, duration) {
+        let start = 0;
+        const increment = target / (duration / 16);
+        const startTime = performance.now();
+
+        function update() {
+          const currentTime = performance.now();
+          const elapsed = currentTime - startTime;
+          start += increment;
+          element.textContent = Math.floor(start) + '+';
+          if (elapsed < duration) {
+            requestAnimationFrame(update);
+          } else {
+            element.textContent = target + '+';
+          }
+        }
+        requestAnimationFrame(update);
+      }
+
+      // Intersection Observer for Statistics and Survey
+      const statsSection = document.getElementById('stats-section');
+      const surveySection = document.getElementById('survey-section');
+      const observerOptions = {
+        threshold: 0.5
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            if (entry.target === statsSection) {
+              animateCountUp(document.getElementById('interactions'), 8500, 2000);
+              animateCountUp(document.getElementById('participants'), 800, 2000);
+            }
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      if (statsSection) observer.observe(statsSection);
+      if (surveySection) observer.observe(surveySection);
+
+      // Carousel Functionality
+      function initializeCarousel(carouselId, prevBtnId, nextBtnId) {
+        const carousel = document.getElementById(carouselId);
+        const prevBtn = document.getElementById(prevBtnId);
+        const nextBtn = document.getElementById(nextBtnId);
+
+        if (!carousel || !prevBtn || !nextBtn) return;
+
+        const updateButtons = () => {
+          const scrollLeft = carousel.scrollLeft;
+          const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+          prevBtn.style.display = scrollLeft <= 0 ? 'none' : 'block';
+          nextBtn.style.display = scrollLeft >= maxScroll - 1 ? 'none' : 'block';
+        };
+
+        const scrollToItem = (direction) => {
+          const items = carousel.querySelectorAll('.carousel-item');
+          if (items.length === 0) return;
+
+          const itemWidth = items[0].offsetWidth + 16;
+          const visibleItems = window.innerWidth > 1024 ? 3 : window.innerWidth > 768 ? 2 : 1;
+          const scrollAmount = itemWidth * visibleItems * direction;
+
+          carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        };
+
+        prevBtn.addEventListener('click', () => scrollToItem(-1));
+        nextBtn.addEventListener('click', () => scrollToItem(1));
+
+        carousel.addEventListener('scroll', updateButtons);
+        window.addEventListener('resize', updateButtons);
+
+        updateButtons();
+      }
+
+      initializeCarousel('carousel-events', 'prev-btn-events', 'next-btn-events');
+      initializeCarousel('carousel-trainings', 'prev-btn-trainings', 'next-btn-trainings');
+
+      // Populate trainings carousel
+      const trainingsCarousel = document.getElementById('carousel-trainings');
+      if (trainingsCarousel && typeof EVENTS !== 'undefined') {
+          let trainingCardsHTML = '';
+          
+          for (const [key, event] of Object.entries(EVENTS)) {
+              if (event.speakers && event.speakers.length === 0 && event.photo) {
+                  const encodedKey = encodeURIComponent(key);
+                  
+                  trainingCardsHTML += `
+                      <a href="event-detail.html?id=${encodedKey}" class="carousel-item bg-white-pure rounded-lg shadow-xl animate-fade-in-up card-hover-animation overflow-hidden transform hover:scale-105 transition duration-300 flex flex-col">
+                          <img src="${event.photo}" alt="${event.title}" class="w-full h-48 object-cover">
+                          <div class="p-6 text-center flex-grow flex items-center justify-center">
+                              <h3 class="text-xl font-semibold text-gold-accent">${event.title}</h3>
+                          </div>
+                      </a>
+                  `;
+              }
+          }
+          
+          trainingsCarousel.innerHTML = trainingCardsHTML;
+      }
+
+      // Hamburger Menu Toggle
+      const hamburger = document.getElementById('hamburger');
+      const navMenu = document.getElementById('nav-menu');
+      if (hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+          hamburger.classList.toggle('open');
+          navMenu.classList.toggle('open');
+        });
+
+        navMenu.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            hamburger.classList.remove('open');
+            navMenu.classList.remove('open');
+          });
+        });
+      }
+    });
+  </script>
 </body>
 </html>
