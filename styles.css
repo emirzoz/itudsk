@@ -159,6 +159,76 @@
   opacity: 1;
 }
 
+/* ============================
+   Hamburger Menu (Mobile)
+   ============================ */
+.nav-menu {
+  display: none;
+}
+
+.nav-menu.open {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 75%; /* adjust width as needed */
+  height: 100%;
+  background-color: #ffffff;
+  z-index: 50;
+  padding: 2rem 1.5rem;
+  gap: 1.5rem;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.nav-menu.open {
+  transform: translateX(0);
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  cursor: pointer;
+  z-index: 60; /* ensure it stays above menu */
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  background-color: #1a1a1a;
+  transition: all 0.3s ease;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+@media (min-width: 768px) {
+  .nav-menu {
+    display: flex !important;
+    position: static;
+    width: auto;
+    height: auto;
+    background: none;
+    padding: 0;
+    flex-direction: row;
+    transform: none !important;
+  }
+  .hamburger {
+    display: none;
+  }
+}
+
 /* Placeholder for event flyers */
 .event-flyer-beedigital-2025::after {
   background-image: url('https://placehold.co/600x400/FFD700/000000?text=BeeDigital+2025+Afişi');
