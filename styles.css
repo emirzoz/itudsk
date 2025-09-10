@@ -56,20 +56,19 @@
   flex-wrap: nowrap !important;
   position: fixed;
   top: 0;
-  right: 0; /* Position menu on the right */
+  right: 0;
   width: 75%;
   height: 100%;
   background-color: #ffffff;
   z-index: 50;
-  padding: 5rem 1.5rem; /* Adjusted vertical padding */
-  gap: 1.25rem; /* Adjusted gap to fit all items */
-  overflow-y: hidden; /* Disable scroll as it's not needed */
+  padding: 4rem 1.5rem; /* Using consistent padding */
+  gap: 2rem;             /* Using consistent gap */
+  overflow-y: auto;      /* Allows scrolling ONLY if needed */
   align-items: center;
   justify-content: flex-start;
   text-align: center;
   transform: translateX(0);
   transition: transform 0.3s ease-in-out;
-  box-sizing: border-box;
 }
 .nav-menu {
   transform: translateX(100%); /* Hide menu to the right */
