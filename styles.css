@@ -45,33 +45,35 @@
   100% {
     background-position: 0% 50%;
   }
+}
+
 /* ============================
    Hamburger Menu (Mobile)
    ============================ */
 .nav-menu.open {
-      display: flex;
-      flex-direction: column !important;
-      flex-wrap: nowrap !important;
-      position: fixed;
-      top: 0;
-      left: 0; /* Changed from right */
-      width: 75%;
-      height: 100%;
-      background-color: #ffffff;
-      z-index: 50;
-      padding: 6rem 1.5rem; /* Adjusted padding */
-      gap: 1.5rem; /* Reduced gap */
-      overflow-y: auto;
-      align-items: center;
-      justify-content: flex-start;
-      text-align: center;
-      transform: translateX(0);
-      transition: transform 0.3s ease-in-out;
-      box-sizing: border-box;
-    }
+  display: flex;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  position: fixed;
+  top: 0;
+  right: 0; /* Position menu on the right */
+  width: 75%;
+  height: 100%;
+  background-color: #ffffff;
+  z-index: 50;
+  padding: 5rem 1.5rem; /* Adjusted vertical padding */
+  gap: 1.25rem; /* Adjusted gap to fit all items */
+  overflow-y: hidden; /* Disable scroll as it's not needed */
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out;
+  box-sizing: border-box;
+}
 .nav-menu {
-      transform: translateX(-100%); /* Changed from 100% */
-    }
+  transform: translateX(100%); /* Hide menu to the right */
+}
 
 .hamburger {
   display: flex;
@@ -98,9 +100,6 @@
 }
 .hamburger.open span:nth-child(3) {
   transform: rotate(-45deg) translate(7px, -7px);
-}
-
-
 }
 
 .animate-fade-in-up {
