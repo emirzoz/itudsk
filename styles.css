@@ -52,6 +52,9 @@
 /* ============================
    Sliding Band / Marquee
    ============================ */
+/* ============================
+   Sliding Band / Marquee
+   ============================ */
 .event-band {
   position: relative;
   overflow: hidden;
@@ -59,19 +62,20 @@
 }
 
 .event-band-track {
-  display: inline-flex;     /* force everything on ONE line */
-  flex-wrap: nowrap;        /* prevent wrapping */
-  white-space: nowrap;      /* prevent text wrap */
-  animation: slideBand 25s linear infinite;
+  display: inline-flex;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  animation: slideBand 30s linear infinite; /* adjust 30s for speed */
 }
 
 .event-band-content {
-  display: inline-flex;     /* also force single line inside */
+  display: inline-flex;
   align-items: center;
   flex-wrap: nowrap;
-  gap: 3rem; /* spacing between items */
+  gap: 3rem;
 }
 
+/* Seamless scroll keyframes */
 @keyframes slideBand {
   from {
     transform: translateX(0);
