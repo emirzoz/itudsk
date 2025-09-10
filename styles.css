@@ -73,6 +73,14 @@
 .event-band-track::after {
   content: attr(data-content);
 }
+.event-band-content {
+  display: flex;
+  align-items: center;
+  gap: 3rem; /* horizontal spacing */
+  flex-wrap: nowrap; /* prevent wrapping to top-bottom */
+  white-space: nowrap; /* force text to stay inline */
+}
+
 
 
 /* ============================
