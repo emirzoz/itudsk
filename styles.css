@@ -83,7 +83,6 @@
   }
 }
 
-
 /* ============================
    Hamburger Icon Styles
    ============================ */
@@ -125,7 +124,7 @@
 }
 
 /* ============================
-   Mobile Nav Menu Open State (Add this if missing)
+   Mobile Nav Menu Open State
    ============================ */
 #nav-menu.open {
   display: flex !important; /* Overrides Tailwind's hidden (display: none) */
@@ -139,6 +138,12 @@
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional depth */
   z-index: 50; /* Below hamburger but above content */
+  border: 1px solid #eee; /* Subtle border to ensure visibility if background blends */
+}
+
+/* Ensure the nav container is positioned to anchor the absolute menu */
+nav {
+  position: relative; /* Critical fix: Anchors the absolute #nav-menu.open */
 }
 
 #nav-menu.open a {
@@ -151,7 +156,6 @@
 #nav-menu.open a:last-child {
   border-bottom: none;
 }
-
 .animate-fade-in-up {
   animation: fadeInUp 1s ease-out forwards;
 }
