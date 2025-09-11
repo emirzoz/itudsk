@@ -123,6 +123,35 @@
     display: none;
   }
 }
+
+/* ============================
+   Mobile Nav Menu Open State (Add this if missing)
+   ============================ */
+#nav-menu.open {
+  display: flex !important; /* Overrides Tailwind's hidden (display: none) */
+  flex-direction: column; /* Stack links vertically */
+  align-items: center;
+  position: absolute; /* Dropdown below the nav/header */
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white; /* Match your theme, e.g., #fff or bg-white */
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional depth */
+  z-index: 50; /* Below hamburger but above content */
+}
+
+#nav-menu.open a {
+  padding: 0.75rem 1rem; /* Better spacing on mobile */
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #eee; /* Optional separator */
+}
+
+#nav-menu.open a:last-child {
+  border-bottom: none;
+}
+
 .animate-fade-in-up {
   animation: fadeInUp 1s ease-out forwards;
 }
