@@ -304,30 +304,3 @@ nav {
 }
 
 
-/* Placeholder for training flyers */
-.training-flyer-social-media::after {
-  background-image: url('https://placehold.co/600x400/FFD700/000000?text=Sosyal+Medya+Eğitimi');
-}
-.training-flyer-e-commerce::after {
-  background-image: url('https://placehold.co/600x400/FFD700/000000?text=E-Ticaret+Eğitimi');
-}
-.training-flyer-influencer::after {
-  background-image: url('https://placehold.co/600x400/FFD700/000000?text=Influencer+Eğitimi');
-}
-
-/* Placeholder for blog post flyers */
-.blog-post-digital-marketing-trends-2025::after {
-  background-image: url('https://placehold.co/600x400/FFD700/000000?text=Dijital+Pazarlama+Trendleri+2025');
-}
-.blog-post-influencer-marketing-strategies::after {
-  background-image: url('https://placehold.co/600x400/FFD700/000000?text=Influencer+Marketing+Stratejileri');
-}
-.blog-post-seo-tips-2025::after {
-  background-image: url('https://placehold.co/600x400/FFD700/000000?text=SEO+İpuçları+2025');
-}
-.blog-post-social-media-analytics::after {
-  background-image: url('https://placehold.co/600x400/FFD700/000000?text=Sosyal+Medya+Analitiği');
-}
-.blog-post-content-marketing-guide::after {
-  background-image: url('https://placehold.co/600x400/FFD700/000000?text=İçerik+Pazarlama+Rehberi+2025');
-}
