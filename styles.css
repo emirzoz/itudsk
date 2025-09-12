@@ -253,7 +253,10 @@ nav {
   overflow: hidden;
   z-index: 10;
 }
-
+/* Team carousel specific styles */
+#carousel-team .carousel-item {
+  width: 25%; /* Show 4 team members on desktop */
+}
 .carousel-btn {
   position: absolute;
   top: 50%;
@@ -286,6 +289,31 @@ nav {
   display: none; /* Temporarily disable flyer background to avoid placeholder text */
 }
 
+/* Round image styling for team carousel */
+#carousel-team .carousel-item img {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 96px;
+  height: 96px;
+}
+/* Responsive adjustments for team carousel */
+@media (max-width: 1024px) {
+  #carousel-team .carousel-item {
+    width: 33.33%; /* Show 3 team members on tablet */
+  }
+}
+
+@media (max-width: 768px) {
+  #carousel-team .carousel-item {
+    width: 50%; /* Show 2 team members on smaller tablets */
+  }
+}
+
+@media (max-width: 640px) {
+  #carousel-team .carousel-item {
+    width: 100%; /* Show 1 team member on mobile */
+  }
+}
 /* Event flyer backgrounds (commented out until actual images are available) */
 /*
 .event-flyer-beedigital-2025::after {
