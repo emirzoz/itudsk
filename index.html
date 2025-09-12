@@ -558,7 +558,13 @@
           <div>
             <textarea name="message" placeholder="Mesajınız (Sponsorluk veya Katılım için yazın)" rows="5" class="w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required></textarea>
           </div>
-          <button type="submit" class="w-full btn-gold-accent">Gönder</button>
+          <form action="/contact" method="POST" class="space-y-6">
+  <input type="text" name="name" placeholder="Adınız Soyadınız" required>
+  <input type="email" name="email" placeholder="E-Posta Adresiniz" required>
+  <textarea name="message" placeholder="Mesajınız" rows="5" required></textarea>
+  <button type="submit">Gönder</button>
+</form>
+
         </form>
       </div>
 
