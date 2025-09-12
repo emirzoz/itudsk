@@ -63,7 +63,7 @@
 .event-band-track {
   display: flex;
   flex-wrap: nowrap;
-  animation: slideBand 30s linear infinite;
+  animation: slideBand 30s linear infinite !important;
 }
 
 .event-band-content {
@@ -79,7 +79,7 @@
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translateX(-70%);
   }
 }
 
