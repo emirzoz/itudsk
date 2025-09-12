@@ -46,15 +46,17 @@
     background-position: 0% 50%;
   }
 }
-/* ============================
-   Sliding Band / Marquee
-   ============================ */
-/* ============================
-   Sliding Band / Marquee
-   ============================ */
-/* ============================
-   Sliding Band / Marquee
-   ============================ */
+
+@keyframes slideBand {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Sliding Band / Marquee */
 .event-band {
   overflow: hidden;
   white-space: nowrap;
@@ -70,22 +72,10 @@
   display: flex;
   align-items: center;
   gap: 3rem;
-  flex-shrink: 0;   /* keep width intact */
+  flex-shrink: 0;
 }
 
-/* Animation shifts the width of ONE content block (50% of track) */
-@keyframes slideBand {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-}
-
-/* ============================
-   Hamburger Icon Styles
-   ============================ */
+/* Hamburger Icon Styles */
 .hamburger {
   display: flex;
   flex-direction: column;
@@ -93,17 +83,16 @@
   width: 24px;
   height: 18px;
   cursor: pointer;
-  z-index: 60; /* Ensure it's above other content */
+  z-index: 60;
 }
 
 .hamburger span {
   display: block;
   height: 3px;
-  background-color: #1a1a1a; /* Color of the hamburger lines */
+  background-color: #1a1a1a;
   transition: all 0.3s ease;
 }
 
-/* Styles for the "X" close icon state */
 .hamburger.open span:nth-child(1) {
   transform: rotate(45deg) translate(5px, 5px);
 }
@@ -116,46 +105,43 @@
   transform: rotate(-45deg) translate(7px, -7px);
 }
 
-/* Hide the hamburger icon on desktop screens */
 @media (min-width: 768px) {
   .hamburger {
     display: none;
   }
 }
 
-/* ============================
-   Mobile Nav Menu Open State
-   ============================ */
+/* Mobile Nav Menu Open State */
 #nav-menu.open {
-  display: flex !important; /* Overrides Tailwind's hidden (display: none) */
-  flex-direction: column; /* Stack links vertically */
+  display: flex !important;
+  flex-direction: column;
   align-items: center;
-  position: absolute; /* Dropdown below the nav/header */
+  position: absolute;
   top: 100%;
   left: 0;
   right: 0;
-  background-color: white; /* Match your theme, e.g., #fff or bg-white */
+  background-color: white;
   padding: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional depth */
-  z-index: 50; /* Below hamburger but above content */
-  border: 1px solid #eee; /* Subtle border to ensure visibility if background blends */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  border: 1px solid #eee;
 }
 
-/* Ensure the nav container is positioned to anchor the absolute menu */
 nav {
-  position: relative; /* Critical fix: Anchors the absolute #nav-menu.open */
+  position: relative;
 }
 
 #nav-menu.open a {
-  padding: 0.75rem 1rem; /* Better spacing on mobile */
+  padding: 0.75rem 1rem;
   width: 100%;
   text-align: center;
-  border-bottom: 1px solid #eee; /* Optional separator */
+  border-bottom: 1px solid #eee;
 }
 
 #nav-menu.open a:last-child {
   border-bottom: none;
 }
+
 .animate-fade-in-up {
   animation: fadeInUp 1s ease-out forwards;
 }
@@ -214,7 +200,7 @@ nav {
   box-shadow: 0 10px 15px rgba(255, 182, 0, 0.1);
 }
 
-/* New: Styles for the detail page */
+/* Styles for the detail page */
 .back-button {
   display: inline-flex;
   align-items: center;
@@ -243,7 +229,56 @@ nav {
   box-shadow: 0 10px 15px rgba(255, 182, 0, 0.1);
 }
 
-/* New: Flyer background on hover */
+/* Carousel styles */
+.carousel-container {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  display: flex;
+  width: 100%;
+  gap: 16px;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.carousel-item {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  width: 33.33%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.carousel-btn.left-0 {
+  left: 0;
+}
+
+.carousel-btn.right-0 {
+  right: 0;
+}
+
+.carousel-item:hover {
+  border: 4px solid var(--gold-accent); /* Yellow frame on hover */
+}
+
+.carousel-item p {
+  transition: none; /* Prevent text changes on hover */
+}
+
+/* Flyer background on hover */
 .carousel-item {
   position: relative;
   overflow: hidden;
@@ -266,10 +301,6 @@ nav {
 
 .carousel-item:hover::after {
   opacity: 1;
-}
-
-
-
 }
 
 /* Placeholder for event flyers */
@@ -298,4 +329,21 @@ nav {
 }
 .training-flyer-influencer::after {
   background-image: url('https://placehold.co/600x400/FFD700/000000?text=Influencer+Eğitimi');
+}
+
+/* Placeholder for blog post flyers */
+.blog-post-digital-marketing-trends-2025::after {
+  background-image: url('https://placehold.co/600x400/FFD700/000000?text=Dijital+Pazarlama+Trendleri+2025');
+}
+.blog-post-influencer-marketing-strategies::after {
+  background-image: url('https://placehold.co/600x400/FFD700/000000?text=Influencer+Marketing+Stratejileri');
+}
+.blog-post-seo-tips-2025::after {
+  background-image: url('https://placehold.co/600x400/FFD700/000000?text=SEO+İpuçları+2025');
+}
+.blog-post-social-media-analytics::after {
+  background-image: url('https://placehold.co/600x400/FFD700/000000?text=Sosyal+Medya+Analitiği');
+}
+.blog-post-content-marketing-guide::after {
+  background-image: url('https://placehold.co/600x400/FFD700/000000?text=İçerik+Pazarlama+Rehberi+2025');
 }
