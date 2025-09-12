@@ -4,31 +4,42 @@ const bodyParser = require("body-parser");
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-app.post("/contact", (req, res) => {
+// Serve static files (your HTML/CSS/JS)
+app.use(express.static("public")); // put your index.html in "public" folder
+
+// Contact form endpoint
+app.post("/contact", async (req, res) => {
   const { name, email, message } = req.body;
 
-  let transporter = nodemailer.createTransport({
-    service: "gmail", // or your SMTP server
-    auth: {
-      user: "yourgmail@gmail.com",
-      pass: "yourpassword"
-    }
-  });
+  try {
+    // Configure transporter (use Gmail SMTP here)
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "emirmctr22@gmail.com", // sender email
+        pass: "YOUR_APP_PASSWORD"     // ⚠️ not Gmail password, use App Password
+      }
+    });
 
-  let mailOptions = {
-    from: email,
-    to: "itudsk@itu.edu.tr",
-    subject: "Yeni İletişim Mesajı",
-    text: `Ad: ${name}\nEmail: ${email}\n\nMesaj:\n${message}`
-  };
+    // Mail content
+    let mailOptions = {
+      from: email,
+      to: "emirmctr22@gmail.com",
+      subject: "Yeni İletişim Mesajı - Bize Yazın",
+      text: `Ad Soyad: ${name}\nEmail: ${email}\n\nMesaj:\n${message}`
+    };
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      return res.send("Hata oluştu.");
-    }
-    res.send("Mesaj gönderildi!");
-  });
+    await transporter.sendMail(mailOptions);
+    res.send("Mesaj başarıyla gönderildi ✅");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Mesaj gönderilemedi ❌");
+  }
 });
 
-app.listen(3000, () => console.log("Server running on port 3000"));
+// Start server
+app.listen(3000, () => {
+  console.log("Server running on http://localhost:3000");
+});
