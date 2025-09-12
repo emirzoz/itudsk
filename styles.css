@@ -109,7 +109,15 @@
   .hamburger {
     display: none;
   }
-}
+  header .flex.items-center img {
+    height: 40px; /* Increase logo size to 48px on mobile */
+  }
+  header .flex.items-center {
+    flex-grow: 1;
+  }
+  .nav-menu.open {
+    top: 60px; /* Increased to account for larger logo on mobile */
+  }
 
 /* Mobile Nav Menu Open State */
 #nav-menu.open {
