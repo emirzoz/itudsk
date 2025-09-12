@@ -236,8 +236,3 @@ const BLOGS = {
     content: "İçerik pazarlama, dijital dünyada markaların hikayelerini anlatmasının temel yollarından biridir. Bu rehberde, 2025 için etkili içerik stratejileri oluşturmanın adımlarını açıklıyoruz: hedef kitle analizi, içerik türleri (blog, video, infografik), dağıtım kanalları ve performans ölçümü. Kullanıcı odaklı içerik nasıl oluşturulur? Hikaye anlatımı (storytelling) neden önemlidir? Türkiye’den bir startup’ın içerik pazarlama ile nasıl büyüdüğünü örnek bir vaka ile inceliyoruz. Ayrıca, video içeriklerin yükselişi ve TikTok’un pazarlamadaki rolünü tartışıyoruz."
   }
 };
-
-// Existing EVENTS object remains unchanged
-const EVENTS = {
-  // ... your existing EVENTS object ...
-};
