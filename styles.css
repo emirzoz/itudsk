@@ -303,22 +303,6 @@ nav {
   opacity: 1;
 }
 
-/* Placeholder for event flyers */
-.event-flyer-beedigital-2025::after {
-  background-image: url('https://placehold.co/600x400/FFD700/000000?text=BeeDigital+2025+Afişi');
-}
-.event-flyer-beedigital-2024::after {
-  background-image: url('https://placehold.co/600x400/FFD700/000000?text=BeeDigital+2024+Afişi');
-}
-.event-flyer-beedigital-2023::after {
-  background-image: url('https://placehold.co/600x400/FFD700/000000?text=BeeDigital+2023+Afişi');
-}
-.event-flyer-beedigital-2022::after {
-  background-image: url('https://placehold.co/600x400/FFD700/000000?text=BeeDigital+2022+Afişi');
-}
-.event-flyer-bee-influencer::after {
-  background-image: url('https://placehold.co/600x400/FFD700/000000?text=BeeInfluencer+Afişi');
-}
 
 /* Placeholder for training flyers */
 .training-flyer-social-media::after {
