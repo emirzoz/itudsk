@@ -681,7 +681,30 @@ Mustafa Kemal Atatürk
           if(countdownEl) countdownEl.innerHTML = "ETKİNLİK BAŞLADI!";
         }
       }, 1000);
+document.addEventListener("DOMContentLoaded", function() {
+  // Existing code for events and trainings carousels...
 
+  // Populate blog carousel
+  const blogCarousel = document.getElementById('carousel-blog');
+  if (blogCarousel && typeof BLOGS !== 'undefined') {
+    let blogCardsHTML = '';
+    for (const [key, blog] of Object.entries(BLOGS)) {
+      const encodedKey = encodeURIComponent(key);
+      blogCardsHTML += `
+        <a href="blog-detail.html?id=${encodedKey}" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation blog-post-${encodedKey} flex flex-col">
+          <img src="${blog.photo}" alt="${blog.title}" class="w-full h-48 object-cover rounded-t-lg mb-4">
+          <h3 class="text-2xl font-semibold mb-2 text-gold-accent">${blog.title}</h3>
+          <p class="text-gray-600 flex-grow">${blog.description}</p>
+          <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
+        </a>
+      `;
+    }
+    blogCarousel.innerHTML = blogCardsHTML;
+  }
+
+  // Initialize blog carousel
+  initializeCarousel('carousel-blog', 'prev-btn-blog', 'next-btn-blog');
+});
       // Count-up Animation for Statistics
       function animateCountUp(element, target, duration) {
         let start = 0;
