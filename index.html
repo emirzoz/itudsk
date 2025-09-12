@@ -765,29 +765,27 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeCarousel('carousel-trainings', 'prev-btn-trainings', 'next-btn-trainings');
   initializeCarousel('carousel-blog', 'prev-btn-blog', 'next-btn-blog');
 
+  // Populate events carousel
+
   // Populate trainings carousel
   const trainingsCarousel = document.getElementById('carousel-trainings');
   if (trainingsCarousel && typeof EVENTS !== 'undefined') {
-      let trainingCardsHTML = '';
-      
-      for (const [key, event] of Object.entries(EVENTS)) {
-          if (event.speakers && event.speakers.length === 0 && event.photo) {
-              const encodedKey = encodeURIComponent(key);
-              
-              trainingCardsHTML += `
-                  <a href="event-detail.html?id=${encodedKey}" class="carousel-item bg-white-pure rounded-lg shadow-xl animate-fade-in-up card-hover-animation overflow-hidden transform hover:scale-105 transition duration-300 flex flex-col">
-                      <img src="${event.photo}" alt="${event.title}" class="w-full h-48 object-cover">
-                      <div class="p-6 text-center flex-grow flex items-center justify-center">
-                          <h3 class="text-xl font-semibold text-gold-accent">${event.title}</h3>
-                      </div>
-                  </a>
-              `;
-          }
+    let trainingCardsHTML = '';
+    for (const [key, event] of Object.entries(EVENTS)) {
+      if (event.speakers && event.speakers.length === 0 && event.photo) {
+        const encodedKey = encodeURIComponent(key);
+        trainingCardsHTML += `
+          <a href="event-detail.html?id=${encodedKey}" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl animate-fade-in-up card-hover-animation overflow-hidden transform hover:scale-105 transition duration-300 flex flex-col">
+            <img src="${event.photo}" alt="${event.title}" class="w-full h-48 object-cover">
+            <div class="p-6 text-center flex-grow flex items-center justify-center">
+              <h3 class="text-xl font-semibold text-gold-accent">${event.title}</h3>
+            </div>
+          </a>
+        `;
       }
-      
-      trainingsCarousel.innerHTML = trainingCardsHTML;
+    }
+    trainingsCarousel.innerHTML = trainingCardsHTML;
   }
-
 
   // Populate blog carousel
   const blogCarousel = document.getElementById('carousel-blog');
