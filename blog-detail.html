@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="page-title">İTÜ DSK - Blog Detayı</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', sans-serif; }
@@ -14,6 +16,8 @@
     .btn-gold-accent { background-color: #ffb600; color: #1a1a1a; padding: 1rem 2.5rem; border-radius: 9999px; font-weight: 600; transition: transform 0.3s, background-color 0.3s; }
     .btn-gold-accent:hover { transform: scale(1.05); background-color: #ff9900; }
     .shadow-apple { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08); }
+    .prose { line-height: 1.75; }
+    .prose p { margin-bottom: 1rem; }
   </style>
 </head>
 <body class="bg-soft-white text-black-soft">
@@ -33,7 +37,7 @@
         <p id="blog-description" class="text-lg text-gray-600"></p>
       </div>
       <div class="prose max-w-none text-gray-600">
-        <p id="blog-content">Blog içeriği burada yer alacak.</p>
+        <p id="blog-content"></p>
       </div>
       <div class="text-center mt-12">
         <a href="index.html" class="btn-gold-accent">Geri Dön</a>
@@ -43,28 +47,10 @@
   <footer class="bg-white text-black-soft py-8 text-center border-t-4 border-gold-accent">
     <p class="text-sm">&copy; 2025 İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü. Tüm hakları saklıdır.</p>
   </footer>
+  <script src="events.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      const blogData = {
-        "digital-marketing-trends-2025": {
-          title: "Dijital Pazarlama Trendleri 2025",
-          description: "2025'te dijital pazarlama dünyasını şekillendirecek yenilikler: yapay zeka, kişiselleştirme ve yeni sosyal medya platformları. Geleceği keşfedin!",
-          photo: "images/digital-marketing-2025.jpg",
-          content: "Bu blog yazısında, 2025'te dijital pazarlamada öne çıkacak trendleri detaylı bir şekilde ele alıyoruz. Yapay zeka destekli reklamlar, kişiselleştirilmiş müşteri deneyimleri ve yeni sosyal medya platformlarının yükselişi hakkında bilgi edinin."
-        },
-        "influencer-marketing-strategies": {
-          title: "Influencer Marketing Stratejileri",
-          description: "Etkili influencer kampanyaları nasıl oluşturulur? Başarılı örnekler ve pratik ipuçları bu yazıda.",
-          photo: "images/influencer-marketing.jpg",
-          content: "Influencer marketing, markaların hedef kitleleriyle bağ kurmasında güçlü bir araçtır. Bu yazıda, etkili kampanyalar oluşturmak için stratejiler ve gerçek dünyadan örnekler sunuyoruz."
-        },
-        "seo-tips-2025": {
-          title: "SEO İpuçları 2025",
-          description: "Arama motoru optimizasyonunda en yeni teknikler: sesli arama, AI destekli anahtar kelimeler ve daha fazlası.",
-          photo: "images/seo-tips-2025.jpg",
-          content: "SEO dünyası hızla değişiyor. 2025'te sesli arama optimizasyonu, yapay zeka destekli anahtar kelime stratejileri ve teknik SEO'nun inceliklerini keşfedin."
-        }
-      };
+      const blogData = BLOGS;
       const urlParams = new URLSearchParams(window.location.search);
       const blogId = urlParams.get('id');
       const blog = blogData[blogId];
@@ -81,6 +67,7 @@
       } else {
         document.getElementById('blog-title').textContent = 'Blog Bulunamadı';
         document.getElementById('blog-description').textContent = 'Aradığınız blog yazısı bulunamadı. Lütfen anasayfaya geri dönün.';
+        document.getElementById('blog-content').textContent = '';
       }
     });
   </script>
