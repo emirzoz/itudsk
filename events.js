@@ -203,3 +203,30 @@ const EVENTS = {
     "speakers": []
   }
 };
+
+// events.js
+const BLOGS = {
+  "digital-marketing-trends-2025": {
+    title: "Dijital Pazarlama Trendleri 2025",
+    description: "2025'te dijital pazarlama dünyasını şekillendirecek yenilikler: yapay zeka, kişiselleştirme ve yeni sosyal medya platformları. Geleceği keşfedin!",
+    photo: "images/digital-marketing-2025.jpg",
+    content: "Bu blog yazısında, 2025'te dijital pazarlamada öne çıkacak trendleri detaylı bir şekilde ele alıyoruz. Yapay zeka destekli reklamlar, kişiselleştirilmiş müşteri deneyimleri ve yeni sosyal medya platformlarının yükselişi hakkında bilgi edinin. AI tabanlı analiz araçları, hedef kitle segmentasyonunu nasıl dönüştürüyor? Sesli arama optimizasyonu neden önemli? Bu soruların yanıtlarını ve daha fazlasını keşfedin."
+  },
+  "influencer-marketing-strategies": {
+    title: "Influencer Marketing Stratejileri",
+    description: "Etkili influencer kampanyaları nasıl oluşturulur? Başarılı örnekler ve pratik ipuçları bu yazıda.",
+    photo: "images/influencer-marketing.jpg",
+    content: "Influencer marketing, markaların hedef kitleleriyle bağ kurmasında güçlü bir araçtır. Bu yazıda, etkili kampanyalar oluşturmak için stratejiler ve gerçek dünyadan örnekler sunuyoruz. Doğru influencer seçimi, kampanya planlama ve performans ölçüm teknikleri gibi konuları ele alıyoruz. Başarılı bir influencer kampanyası için nelere dikkat etmelisiniz? Öğrenmek için okumaya devam edin!"
+  },
+  "seo-tips-2025": {
+    title: "SEO İpuçları 2025",
+    description: "Arama motoru optimizasyonunda en yeni teknikler: sesli arama, AI destekli anahtar kelimeler ve daha fazlası.",
+    photo: "images/seo-tips-2025.jpg",
+    content: "SEO dünyası hızla değişiyor. 2025'te sesli arama optimizasyonu, yapay zeka destekli anahtar kelime stratejileri ve teknik SEO'nun inceliklerini keşfedin. Google’ın algoritma güncellemeleri, mobil öncelikli indeksleme ve kullanıcı odaklı içerik oluşturma gibi konulara derinlemesine bakıyoruz. Web sitenizin sıralamasını nasıl yükseltebilirsiniz? Bu yazıda tüm ipuçlarını bulacaksınız."
+  }
+};
+
+// Existing EVENTS object remains unchanged
+const EVENTS = {
+  // ... your existing EVENTS object ...
+};
