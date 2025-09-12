@@ -655,34 +655,137 @@ Mustafa Kemal Atatürk
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="events.js"></script>
   <script src="suggestions.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Countdown Timer
-      const countdownDate = new Date("Dec 25, 2025 00:00:00").getTime();
-      const countdownInterval = setInterval(function() {
-        const now = new Date().getTime();
-        const distance = countdownDate - now;
+document.addEventListener('DOMContentLoaded', function() {
+  // Countdown Timer
+  const countdownDate = new Date("Dec 25, 2025 00:00:00").getTime();
+  const countdownInterval = setInterval(function() {
+    const now = new Date().getTime();
+    const distance = countdownDate - now;
 
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        const daysEl = document.getElementById("days");
-        if (daysEl) {
-            daysEl.innerHTML = String(days).padStart(2, '0');
-            document.getElementById("hours").innerHTML = String(hours).padStart(2, '0');
-            document.getElementById("minutes").innerHTML = String(minutes).padStart(2, '0');
-            document.getElementById("seconds").innerHTML = String(seconds).padStart(2, '0');
+    const daysEl = document.getElementById("days");
+    if (daysEl) {
+        daysEl.innerHTML = String(days).padStart(2, '0');
+        document.getElementById("hours").innerHTML = String(hours).padStart(2, '0');
+        document.getElementById("minutes").innerHTML = String(minutes).padStart(2, '0');
+        document.getElementById("seconds").innerHTML = String(seconds).padStart(2, '0');
+    }
+
+    if (distance < 0) {
+      clearInterval(countdownInterval);
+      const countdownEl = document.getElementById("countdown");
+      if(countdownEl) countdownEl.innerHTML = "ETKİNLİK BAŞLADI!";
+    }
+  }, 1000);
+
+  // Count-up Animation for Statistics
+  function animateCountUp(element, target, duration) {
+    let start = 0;
+    const increment = target / (duration / 16);
+    const startTime = performance.now();
+
+    function update() {
+      const currentTime = performance.now();
+      const elapsed = currentTime - startTime;
+      start += increment;
+      element.textContent = Math.floor(start) + '+';
+      if (elapsed < duration) {
+        requestAnimationFrame(update);
+      } else {
+        element.textContent = target + '+';
+      }
+    }
+    requestAnimationFrame(update);
+  }
+
+  // Intersection Observer for Statistics and Survey
+  const statsSection = document.getElementById('stats-section');
+  const surveySection = document.getElementById('survey-section');
+  const observerOptions = {
+    threshold: 0.5
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        if (entry.target === statsSection) {
+          animateCountUp(document.getElementById('interactions'), 8500, 2000);
+          animateCountUp(document.getElementById('participants'), 800, 2000);
         }
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
 
-        if (distance < 0) {
-          clearInterval(countdownInterval);
-          const countdownEl = document.getElementById("countdown");
-          if(countdownEl) countdownEl.innerHTML = "ETKİNLİK BAŞLADI!";
-        }
-      }, 1000);
-document.addEventListener("DOMContentLoaded", function() {
-  // Existing code for events and trainings carousels...
+  if (statsSection) observer.observe(statsSection);
+  if (surveySection) observer.observe(surveySection);
+
+  // Carousel Functionality
+  function initializeCarousel(carouselId, prevBtnId, nextBtnId) {
+    const carousel = document.getElementById(carouselId);
+    const prevBtn = document.getElementById(prevBtnId);
+    const nextBtn = document.getElementById(nextBtnId);
+
+    if (!carousel || !prevBtn || !nextBtn) return;
+
+    const updateButtons = () => {
+      const scrollLeft = carousel.scrollLeft;
+      const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+      prevBtn.style.display = scrollLeft <= 0 ? 'none' : 'block';
+      nextBtn.style.display = scrollLeft >= maxScroll - 1 ? 'none' : 'block';
+    };
+
+    const scrollToItem = (direction) => {
+      const items = carousel.querySelectorAll('.carousel-item');
+      if (items.length === 0) return;
+
+      const itemWidth = items[0].offsetWidth + 16;
+      const visibleItems = window.innerWidth > 1024 ? 3 : window.innerWidth > 768 ? 2 : 1;
+      const scrollAmount = itemWidth * visibleItems * direction;
+
+      carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    };
+
+    prevBtn.addEventListener('click', () => scrollToItem(-1));
+    nextBtn.addEventListener('click', () => scrollToItem(1));
+
+    carousel.addEventListener('scroll', updateButtons);
+    window.addEventListener('resize', updateButtons);
+
+    updateButtons();
+  }
+
+  initializeCarousel('carousel-events', 'prev-btn-events', 'next-btn-events');
+  initializeCarousel('carousel-trainings', 'prev-btn-trainings', 'next-btn-trainings');
+  initializeCarousel('carousel-blog', 'prev-btn-blog', 'next-btn-blog');
+
+  // Populate trainings carousel
+  const trainingsCarousel = document.getElementById('carousel-trainings');
+  if (trainingsCarousel && typeof EVENTS !== 'undefined') {
+      let trainingCardsHTML = '';
+      
+      for (const [key, event] of Object.entries(EVENTS)) {
+          if (event.speakers && event.speakers.length === 0 && event.photo) {
+              const encodedKey = encodeURIComponent(key);
+              
+              trainingCardsHTML += `
+                  <a href="event-detail.html?id=${encodedKey}" class="carousel-item bg-white-pure rounded-lg shadow-xl animate-fade-in-up card-hover-animation overflow-hidden transform hover:scale-105 transition duration-300 flex flex-col">
+                      <img src="${event.photo}" alt="${event.title}" class="w-full h-48 object-cover">
+                      <div class="p-6 text-center flex-grow flex items-center justify-center">
+                          <h3 class="text-xl font-semibold text-gold-accent">${event.title}</h3>
+                      </div>
+                  </a>
+              `;
+          }
+      }
+      
+      trainingsCarousel.innerHTML = trainingCardsHTML;
+  }
 
   // Populate blog carousel
   const blogCarousel = document.getElementById('carousel-blog');
@@ -702,130 +805,23 @@ document.addEventListener("DOMContentLoaded", function() {
     blogCarousel.innerHTML = blogCardsHTML;
   }
 
-  // Initialize blog carousel
-  initializeCarousel('carousel-blog', 'prev-btn-blog', 'next-btn-blog');
-});
-      // Count-up Animation for Statistics
-      function animateCountUp(element, target, duration) {
-        let start = 0;
-        const increment = target / (duration / 16);
-        const startTime = performance.now();
-
-        function update() {
-          const currentTime = performance.now();
-          const elapsed = currentTime - startTime;
-          start += increment;
-          element.textContent = Math.floor(start) + '+';
-          if (elapsed < duration) {
-            requestAnimationFrame(update);
-          } else {
-            element.textContent = target + '+';
-          }
-        }
-        requestAnimationFrame(update);
-      }
-
-      // Intersection Observer for Statistics and Survey
-      const statsSection = document.getElementById('stats-section');
-      const surveySection = document.getElementById('survey-section');
-      const observerOptions = {
-        threshold: 0.5
-      };
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            if (entry.target === statsSection) {
-              animateCountUp(document.getElementById('interactions'), 8500, 2000);
-              animateCountUp(document.getElementById('participants'), 800, 2000);
-            }
-            observer.unobserve(entry.target);
-          }
-        });
-      }, observerOptions);
-
-      if (statsSection) observer.observe(statsSection);
-      if (surveySection) observer.observe(surveySection);
-
-      // Carousel Functionality
-      function initializeCarousel(carouselId, prevBtnId, nextBtnId) {
-        const carousel = document.getElementById(carouselId);
-        const prevBtn = document.getElementById(prevBtnId);
-        const nextBtn = document.getElementById(nextBtnId);
-
-        if (!carousel || !prevBtn || !nextBtn) return;
-
-        const updateButtons = () => {
-          const scrollLeft = carousel.scrollLeft;
-          const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-          prevBtn.style.display = scrollLeft <= 0 ? 'none' : 'block';
-          nextBtn.style.display = scrollLeft >= maxScroll - 1 ? 'none' : 'block';
-        };
-
-        const scrollToItem = (direction) => {
-          const items = carousel.querySelectorAll('.carousel-item');
-          if (items.length === 0) return;
-
-          const itemWidth = items[0].offsetWidth + 16;
-          const visibleItems = window.innerWidth > 1024 ? 3 : window.innerWidth > 768 ? 2 : 1;
-          const scrollAmount = itemWidth * visibleItems * direction;
-
-          carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        };
-
-        prevBtn.addEventListener('click', () => scrollToItem(-1));
-        nextBtn.addEventListener('click', () => scrollToItem(1));
-
-        carousel.addEventListener('scroll', updateButtons);
-        window.addEventListener('resize', updateButtons);
-
-        updateButtons();
-      }
-
-      initializeCarousel('carousel-events', 'prev-btn-events', 'next-btn-events');
-      initializeCarousel('carousel-trainings', 'prev-btn-trainings', 'next-btn-trainings');
-
-      // Populate trainings carousel
-      const trainingsCarousel = document.getElementById('carousel-trainings');
-      if (trainingsCarousel && typeof EVENTS !== 'undefined') {
-          let trainingCardsHTML = '';
-          
-          for (const [key, event] of Object.entries(EVENTS)) {
-              if (event.speakers && event.speakers.length === 0 && event.photo) {
-                  const encodedKey = encodeURIComponent(key);
-                  
-                  trainingCardsHTML += `
-                      <a href="event-detail.html?id=${encodedKey}" class="carousel-item bg-white-pure rounded-lg shadow-xl animate-fade-in-up card-hover-animation overflow-hidden transform hover:scale-105 transition duration-300 flex flex-col">
-                          <img src="${event.photo}" alt="${event.title}" class="w-full h-48 object-cover">
-                          <div class="p-6 text-center flex-grow flex items-center justify-center">
-                              <h3 class="text-xl font-semibold text-gold-accent">${event.title}</h3>
-                          </div>
-                      </a>
-                  `;
-              }
-          }
-          
-          trainingsCarousel.innerHTML = trainingCardsHTML;
-      }
-
-      // Hamburger Menu Toggle
-      const hamburger = document.getElementById('hamburger');
-      const navMenu = document.getElementById('nav-menu');
-      if (hamburger && navMenu) {
-        hamburger.addEventListener('click', () => {
-          hamburger.classList.toggle('open');
-          navMenu.classList.toggle('open');
-        });
-
-        navMenu.querySelectorAll('a').forEach(link => {
-          link.addEventListener('click', () => {
-            hamburger.classList.remove('open');
-            navMenu.classList.remove('open');
-          });
-        });
-      }
+  // Hamburger Menu Toggle
+  const hamburger = document.getElementById('hamburger');
+  const navMenu = document.getElementById('nav-menu');
+  if (hamburger && navMenu) {
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      navMenu.classList.toggle('open');
     });
-  </script>
+
+    navMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        navMenu.classList.remove('open');
+      });
+    });
+  }
+});
+</script>
 </body>
 </html>
