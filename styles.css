@@ -249,6 +249,9 @@ nav {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
 }
 
 .carousel-btn {
@@ -278,29 +281,50 @@ nav {
   transition: none; /* Prevent text changes on hover */
 }
 
-/* Flyer background on hover */
-.carousel-item {
-  position: relative;
-  overflow: hidden;
-  z-index: 10;
-}
-
+/* Disable flyer background for all carousel items to prevent text overlays */
 .carousel-item::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  z-index: -1;
+  display: none; /* Temporarily disable flyer background to avoid placeholder text */
 }
 
-.carousel-item:hover::after {
-  opacity: 1;
+/* Event flyer backgrounds (commented out until actual images are available) */
+/*
+.event-flyer-beedigital-2025::after {
+  background-image: url('images/beedigital-2025-flyer.jpg');
 }
-
-
+.event-flyer-beedigital-2024::after {
+  background-image: url('images/beedigital-2024-flyer.jpg');
+}
+.event-flyer-beedigital-2023::after {
+  background-image: url('images/beedigital-2023-flyer.jpg');
+}
+.event-flyer-beedigital-2022::after {
+  background-image: url('images/beedigital-2022-flyer.jpg');
+}
+.event-flyer-bee-influencer::after {
+  background-image: url('images/bee-influencer-flyer.jpg');
+}
+.training-flyer-social-media::after {
+  background-image: url('images/social-media-flyer.jpg');
+}
+.training-flyer-e-commerce::after {
+  background-image: url('images/e-commerce-flyer.jpg');
+}
+.training-flyer-influencer::after {
+  background-image: url('images/influencer-flyer.jpg');
+}
+.blog-post-digital-marketing-trends-2025::after {
+  background-image: url('images/digital-marketing-2025-flyer.jpg');
+}
+.blog-post-influencer-marketing-strategies::after {
+  background-image: url('images/influencer-marketing-flyer.jpg');
+}
+.blog-post-seo-tips-2025::after {
+  background-image: url('images/seo-tips-2025-flyer.jpg');
+}
+.blog-post-social-media-analytics::after {
+  background-image: url('images/social-media-analytics-flyer.jpg');
+}
+.blog-post-content-marketing-guide::after {
+  background-image: url('images/content-marketing-guide-flyer.jpg');
+}
+*/
