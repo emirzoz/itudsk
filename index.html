@@ -1,872 +1,506 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>İTÜ DSK - Dijital Pazarlama Kulübü</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="images/dsk.webp">
-  <link rel="icon" type="image/png" sizes="16x16" href="images/dsk.webp">
-  <link rel="apple-touch-icon" sizes="180x180" href="images/dsk.png">
-  <meta name="description" content="İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü (İTÜ DSK) resmi web sitesi. BeeDigital gibi etkinliklerimiz, eğitimlerimiz ve kulüp faaliyetlerimiz hakkında bilgi alın.">
+  <link rel="icon" type="image/png" href="images/dsk.webp">
+  <meta name="description" content="İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü resmi web sitesi.">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="styles.css">
-  
-  
-  <style type="text/css">@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}</style>
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
+    :root {
+      --gold: #ffb600;
+      --soft-white: #f5f5f5;
+      --pure-white: #ffffff;
+      --black-soft: #1a1a1a;
     }
-    .text-gold-accent {
-      color: #ffb600;
-    }
-    .bg-soft-white {
-      background-color: #f5f5f5;
-    }
-    .bg-white-pure {
-      background-color: #ffffff;
-    }
-    .text-black-soft {
-      color: #1a1a1a;
-    }
-    .carousel-container {
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      display: flex;
-      width: 100%;
-      gap: 16px;
-      padding: 0 16px;
-      box-sizing: border-box;
-    }
-    .carousel-container::-webkit-scrollbar {
-      display: none;
-    }
-    .carousel-container {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    .carousel-item {
-      scroll-snap-align: start;
-      flex-shrink: 0;
-      width: 33.33%;
-      box-sizing: border-box;
-    }
-    @media (max-width: 1024px) {
-      .carousel-item {
-        width: 50%;
-      }
-    }
-    @media (max-width: 768px) {
-      .carousel-item {
-        width: 100%;
-      }
-    }
-    .carousel-btn {
-      display: none;
-    }
-    @media (min-width: 768px) {
-      .carousel-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 10;
-        width: 40px;
-        height: 40px;
-        background-color: rgba(255, 255, 255, 0.8);
-        border-radius: 50%;
-        transition: background-color 0.3s;
-      }
-      .carousel-btn:hover {
-        background-color: #ffffff;
-      }
-    }
+
+    body { font-family: 'Inter', sans-serif; }
+    
+    /* Animations */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse-fast { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    @keyframes slideBand { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    .animate-fade-in-up { animation: fadeInUp 1s ease-out; }
+    .animate-fade-in-down { animation: fadeInDown 1s ease-out; }
+    .animate-pulse-fast { animation: pulse-fast 1s infinite ease-in-out; }
+
+    /* Hero Section */
     .parallax-hero {
-      background-image: url('images/IMG_5182.webp');
-      background-attachment: fixed;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
+      background: url('images/IMG_5182.webp') center/cover fixed;
       position: relative;
     }
     .parallax-overlay {
       background: rgba(0, 0, 0, 0.5);
       position: absolute;
-      top: 0;
+      inset: 0;
+    }
+    @media (max-width: 1366px) {
+      .parallax-hero { background-attachment: scroll; }
+    }
+
+    /* Carousel */
+    .carousel {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .carousel::-webkit-scrollbar { display: none; }
+    .carousel-item {
+      scroll-snap-align: start;
+      flex: 0 0 calc(33.333% - 0.667rem);
+      min-width: 280px;
+    }
+    @media (max-width: 1024px) { .carousel-item { flex: 0 0 calc(50% - 0.5rem); } }
+    @media (max-width: 768px) { .carousel-item { flex: 0 0 100%; } }
+
+    /* Team Carousel */
+    .team-carousel .carousel-item { flex: 0 0 calc(25% - 0.75rem); }
+    @media (max-width: 1024px) { .team-carousel .carousel-item { flex: 0 0 calc(33.333% - 0.667rem); } }
+    @media (max-width: 768px) { .team-carousel .carousel-item { flex: 0 0 calc(50% - 0.5rem); } }
+
+    /* Sliding Band */
+    .event-band-track {
+      display: flex;
+      animation: slideBand 30s linear infinite;
+      gap: 3rem;
+    }
+    .event-band-content {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      white-space: nowrap;
+    }
+
+    /* Hamburger Menu */
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .hamburger span {
+      width: 24px;
+      height: 3px;
+      background: var(--black-soft);
+      transition: 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+    
+    .nav-menu { transition: 0.3s; }
+    .nav-menu.open {
+      display: flex !important;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
       left: 0;
-      width: 100%;
-      height: 100%;
+      right: 0;
+      background: white;
+      padding: 1rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    @media only screen and (max-device-width: 1366px) {
-      .parallax-hero {
-        background-attachment: scroll;
-      }
+
+    /* Buttons */
+    .btn-gold {
+      background: var(--gold);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      transition: 0.3s;
+      display: inline-block;
     }
-    .count-up {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    .btn-gold:hover { transform: scale(1.05); background: #e6a500; }
+    .btn-outline-gold {
+      background: transparent;
+      color: var(--gold);
+      border: 2px solid var(--gold);
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      transition: 0.3s;
+      display: inline-block;
     }
-    .count-up.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .survey-input {
-      color: #1a1a1a !important;
-    }
-    .survey-input::placeholder {
-      color: #6b7280 !important;
-    }
-    .btn-gold-accent {
-      color: #ffffff !important;
-    }
-    /* Hamburger Menu Styles */
+    .btn-outline-gold:hover { background: var(--gold); color: white; }
+
+    /* Utilities */
+    .text-gold { color: var(--gold); }
+    .bg-soft { background: var(--soft-white); }
+    .card-hover { transition: 0.3s; }
+    .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(255,182,0,0.1); }
+    .count-up { opacity: 0; transform: translateY(20px); transition: 0.5s; }
+    .count-up.visible { opacity: 1; transform: translateY(0); }
+
+    @media (min-width: 768px) {
+      .hamburger { display: none; }
+      .nav-menu { display: flex !important; }
     }
   </style>
 </head>
-<body class="bg-soft-white text-black-soft">
+<body class="bg-soft">
 
- <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-lg animate-fade-in-down">
-  <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
-    
+  <!-- Header -->
+  <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-lg">
+    <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="text-2xl font-bold text-gold">İTÜ DSK</div>
+      <div class="nav-menu hidden md:flex md:space-x-6 font-medium" id="nav-menu">
+        <a href="#hero" class="hover:text-gold transition">Anasayfa</a>
+        <a href="#about" class="hover:text-gold transition">Hakkımızda</a>
+        <a href="#events" class="hover:text-gold transition">Etkinliklerimiz</a>
+        <a href="#trainings" class="hover:text-gold transition">Eğitimlerimiz</a>
+        <a href="#sponsorship" class="hover:text-gold transition">İş Birliği</a>
+        <a href="#team" class="hover:text-gold transition">Ekibimiz</a>
+        <a href="#contact" class="hover:text-gold transition">İletişim</a>
+      </div>
+      <div class="hamburger md:hidden" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+  </header>
 
-    
-    <div class="text-2xl font-bold text-gold-accent">İTÜ DSK</div>
-    <div class="nav-menu hidden md:flex md:justify-center md:space-x-6 text-base font-medium" id="nav-menu">
-      <a href="#hero" class="hover:text-gold-accent transition duration-300">Anasayfa</a>
-      <a href="#about" class="hover:text-gold-accent transition duration-300">Hakkımızda</a>
-      <a href="#events" class="hover:text-gold-accent transition duration-300">Etkinliklerimiz</a>
-      <a href="#trainings" class="hover:text-gold-accent transition duration-300">Eğitimlerimiz</a>
-      <a href="#sponsorship" class="hover:text-gold-accent transition duration-300">İş Birliği</a>
-      <a href="#team" class="hover:text-gold-accent transition duration-300">Ekibimiz</a>
-      <a href="#contact" class="hover:text-gold-accent transition duration-300">İletişime Geçin</a>
-    </div>
-    <div class="hamburger md:hidden" id="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </nav>
-</header>
+  <!-- Hero Section -->
+  <section id="hero" class="min-h-screen flex items-center justify-center p-8 text-center text-white parallax-hero">
+    <div class="parallax-overlay"></div>
+    <div class="max-w-4xl space-y-8 relative z-10">
+      <h1 class="text-5xl sm:text-6xl font-extrabold leading-tight animate-fade-in-up">
+        Dijital Gelecek Başlıyor!
+      </h1>
+      <p class="text-xl sm:text-2xl font-light max-w-2xl mx-auto animate-fade-in-up">
+        İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü olarak, BeeDigital 2025 ile dijital dünyanın dinamiklerini keşfedin.
+      </p>
 
-  <main>
-    <section id="hero" class="min-h-screen flex items-center justify-center p-8 text-center text-white parallax-hero relative">
-      <div class="parallax-overlay"></div>
-      <div class="max-w-4xl space-y-8 animate-fade-in-up relative z-10">
-        <h1 class="text-5xl sm:text-6xl font-extrabold leading-tight">
-          Dijital Gelecek Başlıyor!
-        </h1>
-        <p class="text-xl sm:text-2xl font-light max-w-2xl mx-auto">
-          İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü olarak, BeeDigital 2025 ile dijital dünyanın dinamiklerini keşfedin.
-        </p>
-
-        <div class="mt-8 space-y-4 count-up" id="stats-section">
-          <div class="flex justify-center space-x-8 text-3xl font-bold">
-            <div class="flex flex-col items-center">
-              <span id="interactions" data-target="8500">0</span>
-              <span class="text-sm font-light text-gray-300">Etkileşim</span>
-            </div>
-            <div class="flex flex-col items-center">
-              <span id="participants" data-target="800">0</span>
-              <span class="text-sm font-light text-gray-300">Katılımcı</span>
-            </div>
+      <!-- Stats -->
+      <div class="mt-8 count-up" id="stats">
+        <div class="flex justify-center gap-8 text-3xl font-bold">
+          <div class="flex flex-col">
+            <span id="interactions">0</span>
+            <span class="text-sm font-light text-gray-300">Etkileşim</span>
+          </div>
+          <div class="flex flex-col">
+            <span id="participants">0</span>
+            <span class="text-sm font-light text-gray-300">Katılımcı</span>
           </div>
         </div>
+      </div>
 
-        <div class="mt-8 space-y-4">
-          <h3 class="text-2xl font-semibold text-gold-accent">BeeDigital 2025'e Kalan Süre</h3>
-          <div id="countdown" class="flex justify-center items-center space-x-4 text-3xl sm:text-4xl font-bold">
-            <div class="flex flex-col items-center animate-pulse-fast">
-              <span id="days">00</span>
-              <span class="text-sm font-light text-gray-300">Gün</span>
-            </div>
-            <span>:</span>
-            <div class="flex flex-col items-center animate-pulse-fast" style="animation-delay: 0.2s;">
-              <span id="hours">00</span>
-              <span class="text-sm font-light text-gray-300">Saat</span>
-            </div>
-            <span>:</span>
-            <div class="flex flex-col items-center animate-pulse-fast" style="animation-delay: 0.4s;">
-              <span id="minutes">00</span>
-              <span class="text-sm font-light text-gray-300">Dakika</span>
-            </div>
-            <span>:</span>
-            <div class="flex flex-col items-center animate-pulse-fast" style="animation-delay: 0.6s;">
-              <span id="seconds">00</span>
-              <span class="text-sm font-light text-gray-300">Saniye</span>
-            </div>
+      <!-- Countdown -->
+      <div class="mt-8">
+        <h3 class="text-2xl font-semibold text-gold mb-4">BeeDigital 2025'e Kalan Süre</h3>
+        <div id="countdown" class="flex justify-center gap-4 text-3xl sm:text-4xl font-bold">
+          <div class="flex flex-col animate-pulse-fast">
+            <span id="days">00</span>
+            <span class="text-sm font-light text-gray-300">Gün</span>
+          </div>
+          <span>:</span>
+          <div class="flex flex-col animate-pulse-fast" style="animation-delay: 0.2s">
+            <span id="hours">00</span>
+            <span class="text-sm font-light text-gray-300">Saat</span>
+          </div>
+          <span>:</span>
+          <div class="flex flex-col animate-pulse-fast" style="animation-delay: 0.4s">
+            <span id="minutes">00</span>
+            <span class="text-sm font-light text-gray-300">Dakika</span>
+          </div>
+          <span>:</span>
+          <div class="flex flex-col animate-pulse-fast" style="animation-delay: 0.6s">
+            <span id="seconds">00</span>
+            <span class="text-sm font-light text-gray-300">Saniye</span>
           </div>
         </div>
-
-        <div class="mt-8 bg-white/90 p-8 rounded-lg shadow-xl max-w-lg mx-auto count-up" id="survey-section">
-          <h3 class="text-2xl font-semibold mb-6 text-gold-accent">Bir Sonraki Etkinlikte Kimleri Görmek İstersiniz?</h3>
-          <form id="speaker-suggestion-form" class="space-y-6">
-            <div>
-              <input type="text" name="speaker_suggestion" placeholder="Konuşmacı öneriniz" class="survey-input w-full p-4 border-2 border-gold-accent/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-accent focus:border-gold-accent transition duration-300" required>
-            </div>
-            <button type="submit" class="w-full btn-gold-accent">Gönder</button>
-          </form>
-        </div>
-
-        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLScZXpShnGCO1ZvQCJc1ILEnjSchk0w0fEKyUAPc_ktXFKSvlg/viewform?usp=header" class="btn-gold-accent animate-fade-in-up">Teknik Geziye Kayıt Ol</a>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSe0TUs3_SplktKXd-vJVFrIf2dnqKJO0jEcirzQYzPbtZSvXA/viewform?usp=header" class="btn-outline-gold animate-fade-in-up">Kulübe Katıl</a>
-
-        </div>
       </div>
-    </section>
 
-        <!-- Sliding Event Band -->
-        <!-- Sliding Event Band -->
-<!-- Sliding Event Band -->
-<!-- Sliding Event Band -->
-<section class="event-band bg-white-pure border-y-4 border-gold-accent py-3 overflow-hidden">
-  <div class="event-band-track">
-    <div class="event-band-content">
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">NEW EVENT</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">SAHNE ARKASI</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">NEW EVENT</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">TEKNİK GEZİ</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">NEW EVENT</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">BEEFLUENCER</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">NEW EVENT</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">DİJİTAL PAZARLAMA EĞİTİMİ</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">NEW EVENT</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">SAHNE ARKASI</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">NEW EVENT</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">TEKNİK GEZİ</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">NEW EVENT</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">BEEFLUENCER</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">NEW EVENT</span>
-      <img src="images/dsk.webp" alt="Logo" class="h-10">
-      <span class="text-xl font-semibold text-gold-accent">DİJİTAL PAZARLAMA EĞİTİMİ</span>
+      <!-- Survey -->
+      <div class="mt-8 bg-white/90 p-8 rounded-lg shadow-xl max-w-lg mx-auto count-up" id="survey">
+        <h3 class="text-2xl font-semibold mb-6 text-gold">Bir Sonraki Etkinlikte Kimleri Görmek İstersiniz?</h3>
+        <form id="speaker-form" class="space-y-4">
+          <input type="text" name="speaker" placeholder="Konuşmacı öneriniz" 
+                 class="w-full p-4 border-2 border-yellow-400/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+          <button type="submit" class="w-full btn-gold">Gönder</button>
+        </form>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScZXpShnGCO1ZvQCJc1ILEnjSchk0w0fEKyUAPc_ktXFKSvlg/viewform" class="btn-gold">Teknik Geziye Kayıt Ol</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSe0TUs3_SplktKXd-vJVFrIf2dnqKJO0jEcirzQYzPbtZSvXA/viewform" class="btn-outline-gold">Kulübe Katıl</a>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-
-
-
-
-          
-    <section id="about" class="py-24 px-8 bg-soft-white border-t-4 border-gold-accent">
-      <div class="container mx-auto max-w-5xl">
-        <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Hakkımızda</h2>
-        <div class="space-y-8 text-lg text-gray-600 animate-fade-in-up">
-          <p>
-            İstanbul Teknik Üniversitesi Dijital Pazarlama ve Sosyal Medya Kulübü, dijital dünyanın dinamiklerini keşfetmek ve bu alanda derinlemesine bilgi sahibi olmak isteyen öğrencilere yönelik kurulmuş yenilikçi bir öğrenci topluluğudur. Kulübümüz; dijital pazarlama, sosyal medya yönetimi, e-ticaret stratejileri, içerik üretimi, influencer marketing ve dijital girişimcilik gibi günümüzün en güncel ve en hızlı gelişen konularına odaklanmaktadır.
-          </p>
-          
-          <h3 class="text-2xl font-semibold text-gold-accent">Misyonumuz</h3>
-          <p>
-            Öğrencilerin dijital pazarlama, sosyal medya, e-ticaret ve içerik üretimi alanlarında güncel bilgi ve yetkinlikler kazanmasını sağlamak; sektörel standartlarla uyumlu, uygulamalı öğrenme deneyimleri sunmak; üniversite-sanayi iş birlikleriyle kariyer fırsatlarına erişimi artırmak ve etik, veri odaklı, ölçülebilir pazarlama yaklaşımını yaygınlaştırmaktır.
-          </p>
-          
-          <h3 class="text-2xl font-semibold text-gold-accent">Vizyonumuz</h3>
-          <p>
-            Türkiye'de üniversite düzeyinde dijital pazarlama alanında referans alınan, yenilikçi projeleri ve nitelikli mezunlarıyla öne çıkan; ekosisteme değer katan araştırma, eğitim ve etkinlikleriyle bölgesel etki yaratan; sürdürülebilirlik ve kapsayıcılığı temel alan bir öğrenci kulübü olmaktır.
-          </p>
-          <p class="mt-8 text-center text-lg font-semibold">
-            Dijital dönüşümün kalbinde, geleceğin trendlerini bugün öğrenin!
-          </p>
-        </div>
-      </div>
-    </section>
-
- <section id="events" class="py-24 px-8 bg-white-pure">
-  <div class="container mx-auto max-w-6xl">
-    <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Etkinliklerimiz</h2>
-    <div class="relative">
-      <div id="carousel-events" class="carousel-container">
-        <a href="event-detail.html?id=beedigital-2025" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2025 flex flex-col">
-          <img src="images/soru" alt="BeeDigital 2025 Flyer" class="w-full h-48 object-cover rounded-t-lg mb-4">
-          <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2025</h3>
-          <p class="text-gray-600 flex-grow">Yakında! Dijital pazarlama zirvesi ile sektör liderlerini ağırlayacağız. Önceki zirvelerimizde elde ettiğimiz başarıyı devam ettiriyoruz.</p>
-          <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
-        </a>
-        <a href="event-detail.html?id=beedigital-2024" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2024 flex flex-col">
-          <img src="images/469101975_18009794426663270_3688376715102648656_n (1).webp" class="w-full h-48 object-cover rounded-t-lg mb-4">
-          <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2024</h3>
-          <p class="text-gray-600 flex-grow"></p>
-          <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
-        </a>
-        <a href="event-detail.html?id=beedigital-2023" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2023 flex flex-col">
-          <img src="images/470186441_18011931131663270_1469167924423139270_n.webp" class="w-full h-48 object-cover rounded-t-lg mb-4">
-          <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2023</h3>
-          <p class="text-gray-600 flex-grow"></p>
-          <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
-        </a>
-        <a href="event-detail.html?id=beedigital-2022" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-beedigital-2022 flex flex-col">
-          <img src="images/get.webp" class="w-full h-48 object-cover rounded-t-lg mb-4">
-          <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeDigital 2022</h3>
-          <p class="text-gray-600 flex-grow">Kulübümüzün ilk zirvesi: 1800+ ön kayıt, 800+ katılımcı, 8500+ etkileşim, 13 konuşmacı. </p>
-          <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
-        </a>
-        <a href="event-detail.html?id=bee-influencer" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation event-flyer-bee-influencer flex flex-col">
-          <img src="images/soru" class="w-full h-48 object-cover rounded-t-lg mb-4">
-          <h3 class="text-2xl font-semibold mb-2 text-gold-accent">BeeInfluencer</h3>
-          <p class="text-gray-600 flex-grow">Influencer marketing atölyeleri ve stratejileri. Kulübümüzün odak alanlarından biri olarak, dijital girişimcilik ve içerik üretimi eğitimleri sunuyoruz.</p>
-          <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
-        </a>
-      </div>
-      <button id="prev-btn-events" class="carousel-btn left-0" aria-label="Önceki">
-        <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-      </button>
-      <button id="next-btn-events" class="carousel-btn right-0" aria-label="Sonraki">
-        <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-      </button>
+  <!-- Event Band -->
+  <section class="bg-white border-y-4 border-yellow-400 py-3 overflow-hidden">
+    <div class="event-band-track">
+      <div class="event-band-content" id="event-band"></div>
     </div>
-  </div>
-</section>
-          
-    <section id="trainings" class="py-24 px-8 bg-soft-white border-t-4 border-gold-accent">
-      <div class="container mx-auto max-w-6xl">
-        <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Eğitimlerimiz</h2>
-        <div class="relative">
-          <div id="carousel-trainings" class="carousel-container">
-            <!-- Trainings will be populated dynamically -->
-          </div>
-          <button id="prev-btn-trainings" class="carousel-btn left-0" aria-label="Önceki">
-            <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-          </button>
-          <button id="next-btn-trainings" class="carousel-btn right-0" aria-label="Sonraki">
-            <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-          </button>
-        </div>
-      </div>
-    </section>
+  </section>
 
-    <section id="sponsorship" class="py-24 px-8 bg-white-pure border-t-4 border-gold-accent">
-      <div class="container mx-auto max-w-5xl">
-        <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">İş Birliği</h2>
-        <div class="grid md:grid-cols-3 gap-8">
-          <div class="bg-soft-white p-6 rounded-lg shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation">
-            <h3 class="text-2xl font-semibold text-center mb-2 text-gold-accent">Ana Sponsorluk</h3>
-            <p class="text-center text-4xl font-bold text-gold-accent">Teklif Alın</p>
-            <ul class="list-disc list-inside mt-4 text-gray-600 space-y-2">
-            </ul>
-          </div>
-          <div class="bg-soft-white p-6 rounded-lg shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation">
-            <h3 class="text-2xl font-semibold text-center mb-2 text-gold-accent">Altın Sponsorluk</h3>
-            <p class="text-center text-4xl font-bold text-gold-accent">Teklif Alın</p>
-            <ul class="list-disc list-inside mt-4 text-gray-600 space-y-2">
-            </ul>
-          </div>
-          <div class="bg-soft-white p-6 rounded-lg shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation">
-            <h3 class="text-2xl font-semibold text-center mb-2 text-gold-accent">Gümüş Sponsorluk</h3>
-            <p class="text-center text-4xl font-bold text-gold-accent">Teklif Alın</p>
-            <ul class="list-disc list-inside mt-4 text-gray-600 space-y-2">
-            </ul>
-          </div>
-        </div>
-        <div class="mt-8 text-center">
-          <a href="#contact" class="btn-gold-accent animate-fade-in-up">Sponsor Olun</a>
-        </div>
+  <!-- About Section -->
+  <section id="about" class="py-24 px-8 bg-soft border-t-4 border-yellow-400">
+    <div class="container mx-auto max-w-5xl">
+      <h2 class="text-4xl font-bold text-center mb-12">Hakkımızda</h2>
+      <div class="space-y-6 text-lg text-gray-600">
+        <p>İstanbul Teknik Üniversitesi Dijital Pazarlama ve Sosyal Medya Kulübü, dijital dünyanın dinamiklerini keşfetmek ve bu alanda derinlemesine bilgi sahibi olmak isteyen öğrencilere yönelik kurulmuş yenilikçi bir öğrenci topluluğudur.</p>
+        <h3 class="text-2xl font-semibold text-gold">Misyonumuz</h3>
+        <p>Öğrencilerin dijital pazarlama, sosyal medya, e-ticaret ve içerik üretimi alanlarında güncel bilgi ve yetkinlikler kazanmasını sağlamak; sektörel standartlarla uyumlu, uygulamalı öğrenme deneyimleri sunmak.</p>
+        <h3 class="text-2xl font-semibold text-gold">Vizyonumuz</h3>
+        <p>Türkiye'de üniversite düzeyinde dijital pazarlama alanında referans alınan, yenilikçi projeleri ve nitelikli mezunlarıyla öne çıkan bir öğrenci kulübü olmaktır.</p>
       </div>
-    </section>
-          <section class="event-band bg-white-pure border-y-4 border-gold-accent py-3 overflow-hidden">
-  <div class="event-band-track">
-    <div class="event-band-content">
-      <img src="images/image (1).webp" alt="Logo" class="h-10">
-      <img src="images/width_550 (1).png" alt="Logo" class="h-10">
-      <img src="images/image.webp" alt="Logo" class="h-10">
-      <img src="images/image (2).png" alt="Logo" class="h-10">
-      <img src="images/image (3).webp" alt="Logo" class="h-10">
-      <img src="images/image (5).png" alt="Logo" class="h-10">
-      <img src="images/image (6).webp" alt="Logo" class="h-10">
-      <img src="images/image (7).png" alt="Logo" class="h-10">
-      <img src="images/image (8).png" alt="Logo" class="h-10">
-      <img src="images/image (9).png" alt="Logo" class="h-10">
-      <img src="images/image (10).png" alt="Logo" class="h-10">
-      <img src="images/image (11).png" alt="Logo" class="h-10">
-      <img src="images/image (12).png" alt="Logo" class="h-10">
-      <img src="images/image (13).png" alt="Logo" class="h-10">
-      <img src="images/image (14).png" alt="Logo" class="h-10">
-      <img src="images/image (15).png" alt="Logo" class="h-10">
-      <img src="images/image (16).webp" alt="Logo" class="h-10">
-      <img src="images/image (1).webp" alt="Logo" class="h-10">
-      <img src="images/width_550 (1).png" alt="Logo" class="h-10">
-      <img src="images/image.webp" alt="Logo" class="h-10">
-      <img src="images/image (2).png" alt="Logo" class="h-10">
-      <img src="images/image (3).webp" alt="Logo" class="h-10">
-      <img src="images/image (5).png" alt="Logo" class="h-10">
-      <img src="images/image (6).webp" alt="Logo" class="h-10">
-      <img src="images/image (7).png" alt="Logo" class="h-10">
-      <img src="images/image (8).png" alt="Logo" class="h-10">
-      <img src="images/image (9).png" alt="Logo" class="h-10">
-      <img src="images/image (10).png" alt="Logo" class="h-10">
-      <img src="images/image (11).png" alt="Logo" class="h-10">
-      <img src="images/image (12).png" alt="Logo" class="h-10">
-      <img src="images/image (13).png" alt="Logo" class="h-10">
-      <img src="images/image (14).png" alt="Logo" class="h-10">
-      <img src="images/image (15).png" alt="Logo" class="h-10">
-      <img src="images/image (16).webp" alt="Logo" class="h-10">
-      <img src="images/image (1).webp" alt="Logo" class="h-10">
-      <img src="images/width_550 (1).png" alt="Logo" class="h-10">
-      <img src="images/image.webp" alt="Logo" class="h-10">
-      <img src="images/image (2).png" alt="Logo" class="h-10">
-      <img src="images/image (3).webp" alt="Logo" class="h-10">
-      <img src="images/image (5).png" alt="Logo" class="h-10">
-      <img src="images/image (6).webp" alt="Logo" class="h-10">
-      <img src="images/image (7).png" alt="Logo" class="h-10">
-      <img src="images/image (8).png" alt="Logo" class="h-10">
-      <img src="images/image (9).png" alt="Logo" class="h-10">
-      <img src="images/image (10).png" alt="Logo" class="h-10">
-      <img src="images/image (11).png" alt="Logo" class="h-10">
-      <img src="images/image (12).png" alt="Logo" class="h-10">
-      <img src="images/image (13).png" alt="Logo" class="h-10">
-      <img src="images/image (14).png" alt="Logo" class="h-10">
-      <img src="images/image (15).png" alt="Logo" class="h-10">
-      <img src="images/image (16).webp" alt="Logo" class="h-10">
     </div>
-  </div>
-</section>
-    
-    <section id="team" class="py-24 px-8 bg-soft-white border-t-4 border-gold-accent">
-  <div class="container mx-auto max-w-5xl">
-    <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Ekibimiz</h2>
-    <div class="relative">
-      <div id="carousel-team" class="carousel-container">
-        <div class="carousel-item bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation text-center flex flex-col items-center">
-          <img src="images/team/eylul.jpg" alt="Eylül Şimşek" class="w-24 h-24 rounded-full object-cover mb-4">
-          <h3 class="text-xl font-semibold text-gold-accent">Eylül Şimşek</h3>
-          <p class="text-gray-600">Kulüp Başkanı</p>
+  </section>
+
+  <!-- Events Section -->
+  <section id="events" class="py-24 px-8 bg-white">
+    <div class="container mx-auto max-w-6xl">
+      <h2 class="text-4xl font-bold text-center mb-12">Etkinliklerimiz</h2>
+      <div class="carousel" id="events-carousel"></div>
+    </div>
+  </section>
+
+  <!-- Trainings Section -->
+  <section id="trainings" class="py-24 px-8 bg-soft border-t-4 border-yellow-400">
+    <div class="container mx-auto max-w-6xl">
+      <h2 class="text-4xl font-bold text-center mb-12">Eğitimlerimiz</h2>
+      <div class="carousel" id="trainings-carousel"></div>
+    </div>
+  </section>
+
+  <!-- Sponsorship Section -->
+  <section id="sponsorship" class="py-24 px-8 bg-white border-t-4 border-yellow-400">
+    <div class="container mx-auto max-w-5xl">
+      <h2 class="text-4xl font-bold text-center mb-12">İş Birliği</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-soft p-6 rounded-lg shadow-xl card-hover">
+          <h3 class="text-2xl font-semibold text-center mb-2 text-gold">Ana Sponsorluk</h3>
+          <p class="text-center text-4xl font-bold text-gold">Teklif Alın</p>
         </div>
-        <div class="carousel-item bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation text-center flex flex-col items-center">
-          <img src="images/team/selin.jpg" alt="Ahmet Demir" class="w-24 h-24 rounded-full object-cover mb-4">
-          <h3 class="text-xl font-semibold text-gold-accent">Selin Tekeli</h3>
-          <p class="text-gray-600">Halkla İlişkiler</p>
+        <div class="bg-soft p-6 rounded-lg shadow-xl card-hover">
+          <h3 class="text-2xl font-semibold text-center mb-2 text-gold">Altın Sponsorluk</h3>
+          <p class="text-center text-4xl font-bold text-gold">Teklif Alın</p>
         </div>
-        <div class="carousel-item bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation text-center flex flex-col items-center">
-          <img src="images/team/ilgin.jpg" alt="Selin Yılmaz" class="w-24 h-24 rounded-full object-cover mb-4">
-          <h3 class="text-xl font-semibold text-gold-accent">Ilgın Sancakdar</h3>
-          <p class="text-gray-600">Kurumsal İlişkiler</p>
-        </div>
-        <div class="carousel-item bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation text-center flex flex-col items-center">
-          <img src="images/team/emre.jpg" alt="Mert Aydın" class="w-24 h-24 rounded-full object-cover mb-4">
-          <h3 class="text-xl font-semibold text-gold-accent">Emre Gökay Tunçanoğlu</h3>
-          <p class="text-gray-600">İnsan Kaynakları</p>
-        </div>
-        <div class="carousel-item bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation text-center flex flex-col items-center">
-          <img src="images/team/ece.jpg" alt="Elif Kaya" class="w-24 h-24 rounded-full object-cover mb-4">
-          <h3 class="text-xl font-semibold text-gold-accent">Ece Erenler</h3>
-          <p class="text-gray-600">Kurumsal İlişkiler</p>
-        </div>
-        <div class="carousel-item bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation text-center flex flex-col items-center">
-          <img src="images/team/serif.jpg" alt="Can Öztürk" class="w-24 h-24 rounded-full object-cover mb-4">
-          <h3 class="text-xl font-semibold text-gold-accent">Şerif Emre 
-Gümüş</h3>
-          <p class="text-gray-600"></p>
-        </div>
-        <div class="carousel-item bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation text-center flex flex-col items-center">
-          <img src="images/team/emir.jpg" alt="Buse Özcan" class="w-24 h-24 rounded-full object-cover mb-4">
-          <h3 class="text-xl font-semibold text-gold-accent">Emir Yusuf Uytun</h3>
-          <p class="text-gray-600"></p>
-        </div>
-        <div class="carousel-item bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation text-center flex flex-col items-center">
-          <img src="images/team/merve.jpg" alt="Emre Şahin" class="w-24 h-24 rounded-full object-cover mb-4">
-          <h3 class="text-xl font-semibold text-gold-accent">Merve İntizamoğlu</h3>
-          <p class="text-gray-600"></p>
-        </div>
-        <div class="carousel-item bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation text-center flex flex-col items-center">
-          <img src="images/team/simal.jpg" alt="Ayşe Çelik" class="w-24 h-24 rounded-full object-cover mb-4">
-          <h3 class="text-xl font-semibold text-gold-accent">Şimal Karaköse</h3>
-          <p class="text-gray-600"></p>
-        </div>
-        <div class="carousel-item bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation text-center flex flex-col items-center">
-          <img src="images/team/ibo.jpg" alt="Ozan Kılıç" class="w-24 h-24 rounded-full object-cover mb-4">
-          <h3 class="text-xl font-semibold text-gold-accent">İbrahim Kaya</h3>
-          <p class="text-gray-600"></p>
-        </div>
-        <div class="carousel-item bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation text-center flex flex-col items-center">
-          <img src="images/team/duru.jpg" alt="Ozan Kılıç" class="w-24 h-24 rounded-full object-cover mb-4">
-          <h3 class="text-xl font-semibold text-gold-accent">Duru Süzer</h3>
-          <p class="text-gray-600"></p>
-        </div>
-        <div class="carousel-item bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation text-center flex flex-col items-center">
-          <img src="images/team/bengi.jpg" alt="Ozan Kılıç" class="w-24 h-24 rounded-full object-cover mb-4">
-          <h3 class="text-xl font-semibold text-gold-accent">Bengilal Araç</h3>
-          <p class="text-gray-600"></p>
-        </div>
-        <div class="carousel-item bg-white-pure p-6 rounded-lg shadow-xl animate-fade-in-up card-hover-animation text-center flex flex-col items-center">
-          <img src="images/team/serra-min.jpg" alt="Ozan Kılıç" class="w-24 h-24 rounded-full object-cover mb-4">
-          <h3 class="text-xl font-semibold text-gold-accent">Serra Aydoğmuş</h3>
-          <p class="text-gray-600"></p>
+        <div class="bg-soft p-6 rounded-lg shadow-xl card-hover">
+          <h3 class="text-2xl font-semibold text-center mb-2 text-gold">Gümüş Sponsorluk</h3>
+          <p class="text-center text-4xl font-bold text-gold">Teklif Alın</p>
         </div>
       </div>
-      <button id="prev-btn-team" class="carousel-btn left-0"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
-      <button id="next-btn-team" class="carousel-btn right-0"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
+      <div class="mt-8 text-center">
+        <a href="#contact" class="btn-gold">Sponsor Olun</a>
+      </div>
     </div>
-  </div>
-</section>
-<!-- 
-    <section id="instafeed" class="py-24 px-8 bg-soft-white border-t-4 border-gold-accent">
-        <div class="container mx-auto max-w-5xl">
-          <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Son Instagram Gönderileri</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <a href="https://www.instagram.com/p/DN-VIlIDb8d/" target="_blank" class="instagram-post bg-white-800 rounded-lg shadow-xl border-t-4 border-gold-accent animate-fade-in-up transform hover:scale-105 transition duration-300">
-              <img src="images/“Zafer, ‘Zafer benimdir.’ diyebilenindir. Başarı ise ‘Başaracağım.’ diye başlayarak sonunda ‘Ba.webp" alt="" class="w-full h-auto rounded-t-lg">
-              <div class="p-6">
-                <p class="text-black">“Zafer, ‘Zafer benimdir.’ diyebilenindir. Başarı ise ‘Başaracağım.’ diye başlayarak sonunda ‘Başardım.’ diyenindir.”
-Mustafa Kemal Atatürk
+  </section>
 
-30 Ağustos Zafer Bayramımız Kutlu Olsun 🇹🇷🇹🇷
+  <!-- Partner Band -->
+  <section class="bg-white border-y-4 border-yellow-400 py-3 overflow-hidden">
+    <div class="event-band-track">
+      <div class="event-band-content" id="partner-band"></div>
+    </div>
+  </section>
 
-#itudsk #itu1773
-</p>
-                <div class="flex items-center mt-4 text-sm text-black-400">
-                  <span class="mr-2">❤️</span>
-                  <span>12 Beğeni</span>
-                </div>
-              </div>
-            </a>
-            <a href="https://www.instagram.com/p/DNxfj-b2kge/" target="_blank" class="instagram-post bg-white-800 rounded-lg shadow-xl border-t-4 border-gold-accent animate-fade-in-up transform hover:scale-105 transition duration-300" style="animation-delay: 0.2s;">
-              <img src="images/Hoş geldin yeni İTÜ’lü! 🧡✨İTÜ’de yeni hayatına başlarken yanında biz de varız! 🎉İTÜ Dijital Pa.webp" alt="" class="w-full h-auto rounded-t-lg">
-              <div class="p-6">
-                <p class="text-black">Hoş geldin yeni İTÜ’lü! 🧡✨
+  <!-- Team Section -->
+  <section id="team" class="py-24 px-8 bg-soft border-t-4 border-yellow-400">
+    <div class="container mx-auto max-w-5xl">
+      <h2 class="text-4xl font-bold text-center mb-12">Ekibimiz</h2>
+      <div class="carousel team-carousel" id="team-carousel"></div>
+    </div>
+  </section>
 
-İTÜ’de yeni hayatına başlarken yanında biz de varız! 🎉
-
-İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü olarak düzenlediğimiz etkinlikleri, duyuruları ve fırsatları kaçırmamak için seni de WhatsApp grubumuza bekliyoruz!💖
-👉🏻Aramıza katılmak için bio’daki linki doldurup grubumuza gelmeyi unutma✨
-</p>
-                <div class="flex items-center mt-4 text-sm text-black-400">
-                  <span class="mr-2">❤️</span>
-                  <span>27 Beğeni</span>
-                </div>
-              </div>
-            </a>
-            <a href="https://www.instagram.com/p/DEccjNxNKkG/" target="_blank" class="instagram-post bg-white-800 rounded-lg shadow-xl border-t-4 border-gold-accent animate-fade-in-up transform hover:scale-105 transition duration-300" style="animation-delay: 0.4s;">
-              <img src="images/Beril Güngör’ün dijital pazarlama sektöründeki deneyimini bizlerle paylaşacağı , Google’da şu an.webp" alt="Instagram Post 3" class="w-full h-auto rounded-t-lg">
-              <div class="p-6">
-                <p class="text-black">Beril Güngör’ün dijital pazarlama sektöründeki deneyimini bizlerle paylaşacağı , Google’da şu anki iş deneyiminden bahsettiği ve dijital pazarlama analitiği, SEO, reklam ve yapay zeka çözümleri, Gemini gibi konular hakkında bilgilendireceği digipanelimize hepinizi bekliyoruz.🐝🤩
-
-📅 6 Ocak Pazartesi 2025
-📍MED A14
-⏰18.00
-</p>
-                <div class="flex items-center mt-4 text-sm text-black-400">
-                  <span class="mr-2">❤️</span>
-                  <span>25 Beğeni</span>
-                </div>
-              </div>
-            </a>
+  <!-- Contact Section -->
+  <section id="contact" class="py-24 px-8 bg-white border-t-4 border-yellow-400">
+    <div class="container mx-auto max-w-5xl">
+      <h2 class="text-4xl font-bold mb-12 text-center">İletişime Geçin</h2>
+      <div class="grid md:grid-cols-2 gap-12">
+        <div class="space-y-6">
+          <div class="flex items-center gap-4">
+            <img src="images/placeholder.png" alt="Location" class="w-7 h-7">
+            <a href="https://maps.google.com/?q=İTÜ+Ayazağa+Kampüsü" target="_blank" class="hover:underline">İTÜ Ayazağa Kampüsü, Sarıyer, İstanbul</a>
           </div>
-          <div class="mt-8 text-center">
-              <a href="https://www.instagram.com/itudsk/" class="btn-gold-accent animate-fade-in-up">Daha Fazlasını Gör</a>
+          <div class="flex items-center gap-4">
+            <img src="images/send.png" alt="Email" class="w-7 h-7">
+            <a href="mailto:itudijitalpazarlama@gmail.com" class="hover:underline">itudijitalpazarlama@gmail.com</a>
+          </div>
+          <div class="flex items-center gap-4">
+            <img src="images/insta.png" alt="Instagram" class="w-7 h-7">
+            <a href="https://instagram.com/itudsk" target="_blank" class="hover:underline">@itudsk</a>
+          </div>
+          <div class="flex items-center gap-4">
+            <img src="images/tiktok.png" alt="TikTok" class="w-7 h-7">
+            <a href="https://www.tiktok.com/@itu.dsk" target="_blank" class="hover:underline">@itu.dsk</a>
           </div>
         </div>
-      </section>
-
-
-<section id="blog" class="py-24 px-8 bg-white-pure">
-  <div class="container mx-auto max-w-6xl">
-    <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-down">Blog</h2>
-    <div class="relative">
-      <div id="carousel-blog" class="carousel-container"></div>
-      <button id="prev-btn-blog" class="carousel-btn left-0" aria-label="Önceki">
-        <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-      </button>
-      <button id="next-btn-blog" class="carousel-btn right-0" aria-label="Sonraki">
-        <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-      </button>
-    </div>
-  </div>
-</section>
- -->         
-<section id="contact" class="py-24 px-8 bg-white-pure border-t-4 border-gold-accent">
-  <div class="container mx-auto max-w-5xl">
-    <h2 class="text-4xl font-bold mb-12 text-center animate-fade-in-down">İletişime Geçin</h2>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-      
-      <div class="flex flex-col items-center md:items-start space-y-6">
-        
-        <div class="flex items-center space-x-4">
-          <img src="images/placeholder.png" alt="Map Icon" class="w-7 h-7">
-          <p class="text-lg text-gray-800">
-            <a href="https://maps.google.com/?q=İTÜ+Ayazağa+Kampüsü+Maslak+İstanbul" target="_blank" class="hover:underline">
-              İTÜ Ayazağa Kampüsü, Sarıyer, İstanbul
-            </a>
-          </p>
+        <div class="bg-soft p-8 rounded-lg shadow-xl text-center">
+          <h3 class="text-2xl font-semibold mb-6 text-gold">Bize Ulaşın</h3>
+          <p class="mb-6">Kulübümüzle ilgili sorularınız, önerileriniz veya iş birliği talepleriniz için bize e-posta gönderebilirsiniz.</p>
+          <a href="mailto:itudijitalpazarlama@gmail.com" class="btn-gold">E-Posta Gönder</a>
         </div>
-
-        <div class="flex items-center space-x-4">
-          <img src="images/send.png" alt="Email Icon" class="w-7 h-7">
-          <p class="text-lg text-gray-800">
-            <a href="mailto:itudijitalpazarlama@gmail.com" class="hover:underline">
-              itudijitalpazarlama@gmail.com
-            </a>
-          </p>
-        </div>
-
-        <div class="flex items-center space-x-4">
-          <img src="images/insta.png" alt="Instagram Icon" class="w-7 h-7">
-          <p class="text-lg text-gray-800">
-            <a href="https://instagram.com/itudsk" target="_blank" class="hover:underline">
-              @itudsk
-            </a>
-          </p>
-        </div>
-        
-        <div class="flex items-center space-x-4">
-          <img src="images/tiktok.png" alt="TikTok Icon" class="w-7 h-7">
-          <p class="text-lg text-gray-800">
-            <a href="https://www.tiktok.com/@itu.dsk" target="_blank" class="hover:underline">
-              @itu.dsk
-            </a>
-          </p>
-        </div>
-
       </div>
-
-      <div class="bg-soft-white p-8 rounded-lg shadow-xl animate-fade-in-up text-center">
-        <h3 class="text-2xl font-semibold mb-6 text-gold-accent">Bize Ulaşın</h3>
-        <p class="text-lg text-gray-800 mb-6">
-            Kulübümüzle ilgili sorularınız, önerileriniz veya iş birliği talepleriniz için bize e-posta gönderebilirsiniz.
-        </p>
-        <a href="mailto:itudijitalpazarlama@gmail.com" class="btn-gold-accent inline-block">E-Posta Gönder</a>
-      </div>
-
     </div>
-  </div>
-</section>
-  <footer class="bg-white-pure text-black-soft py-8 text-center border-t-4 border-gold-accent">
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white text-center py-8 border-t-4 border-yellow-400">
     <p class="text-sm">&copy; 2025 İTÜ Dijital Pazarlama ve Sosyal Medya Kulübü. Tüm hakları saklıdır.</p>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="events.js"></script>
-  <script src="suggestions.js"></script>
-  <script src="blogs.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Countdown Timer
-  const countdownDate = new Date("Dec 25, 2025 00:00:00").getTime();
-  const countdownInterval = setInterval(function() {
-    const now = new Date().getTime();
-    const distance = countdownDate - now;
+  <script>
+    // Data
+    const EVENTS = [
+      { id: 'beedigital-2025', title: 'BeeDigital 2025', image: 'images/soru', desc: 'Yakında! Dijital pazarlama zirvesi ile sektör liderlerini ağırlayacağız.' },
+      { id: 'beedigital-2024', title: 'BeeDigital 2024', image: 'images/469101975_18009794426663270_3688376715102648656_n (1).webp', desc: '' },
+      { id: 'beedigital-2023', title: 'BeeDigital 2023', image: 'images/470186441_18011931131663270_1469167924423139270_n.webp', desc: '' },
+      { id: 'beedigital-2022', title: 'BeeDigital 2022', image: 'images/get.webp', desc: 'Kulübümüzün ilk zirvesi: 1800+ ön kayıt, 800+ katılımcı, 8500+ etkileşim.' },
+      { id: 'bee-influencer', title: 'BeeInfluencer', image: 'images/soru', desc: 'Influencer marketing atölyeleri ve stratejileri.' }
+    ];
 
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    const TEAM = [
+      { name: 'Eylül Şimşek', role: 'Kulüp Başkanı', image: 'images/team/eylul.jpg' },
+      { name: 'Selin Tekeli', role: 'Halkla İlişkiler', image: 'images/team/selin.jpg' },
+      { name: 'Ilgın Sancakdar', role: 'Kurumsal İlişkiler', image: 'images/team/ilgin.jpg' },
+      { name: 'Emre Gökay Tunçanoğlu', role: 'İnsan Kaynakları', image: 'images/team/emre.jpg' },
+      { name: 'Ece Erenler', role: 'Kurumsal İlişkiler', image: 'images/team/ece.jpg' },
+      { name: 'Şerif Emre Gümüş', role: '', image: 'images/team/serif.jpg' },
+      { name: 'Emir Yusuf Uytun', role: '', image: 'images/team/emir.jpg' },
+      { name: 'Merve İntizamoğlu', role: '', image: 'images/team/merve.jpg' },
+      { name: 'Şimal Karaköse', role: '', image: 'images/team/simal.jpg' },
+      { name: 'İbrahim Kaya', role: '', image: 'images/team/ibo.jpg' },
+      { name: 'Duru Süzer', role: '', image: 'images/team/duru.jpg' },
+      { name: 'Bengilal Araç', role: '', image: 'images/team/bengi.jpg' },
+      { name: 'Serra Aydoğmuş', role: '', image: 'images/team/serra-min.jpg' }
+    ];
 
-    const daysEl = document.getElementById("days");
-    if (daysEl) {
-        daysEl.innerHTML = String(days).padStart(2, '0');
-        document.getElementById("hours").innerHTML = String(hours).padStart(2, '0');
-        document.getElementById("minutes").innerHTML = String(minutes).padStart(2, '0');
-        document.getElementById("seconds").innerHTML = String(seconds).padStart(2, '0');
-    }
+    const BAND_ITEMS = ['NEW EVENT', 'SAHNE ARKASI', 'TEKNİK GEZİ', 'BEEFLUENCER', 'DİJİTAL PAZARLAMA EĞİTİMİ'];
+    
+    const PARTNERS = [
+      'images/image (1).webp', 'images/width_550 (1).png', 'images/image.webp',
+      'images/image (2).png', 'images/image (3).webp', 'images/image (5).png',
+      'images/image (6).webp', 'images/image (7).png', 'images/image (8).png',
+      'images/image (9).png', 'images/image (10).png', 'images/image (11).png',
+      'images/image (12).png', 'images/image (13).png', 'images/image (14).png',
+      'images/image (15).png', 'images/image (16).webp'
+    ];
 
-    if (distance < 0) {
-      clearInterval(countdownInterval);
-      const countdownEl = document.getElementById("countdown");
-      if(countdownEl) countdownEl.innerHTML = "ETKİNLİK BAŞLADI!";
-    }
-  }, 1000);
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      initCountdown();
+      initStats();
+      initCarousels();
+      initBands();
+      initHamburger();
+      initForms();
+    });
 
-  // Count-up Animation for Statistics
-  function animateCountUp(element, target, duration) {
-    let start = 0;
-    const increment = target / (duration / 16);
-    const startTime = performance.now();
-
-    function update() {
-      const currentTime = performance.now();
-      const elapsed = currentTime - startTime;
-      start += increment;
-      element.textContent = Math.floor(start) + '+';
-      if (elapsed < duration) {
-        requestAnimationFrame(update);
-      } else {
-        element.textContent = target + '+';
-      }
-    }
-    requestAnimationFrame(update);
-  }
-
-  // Intersection Observer for Statistics and Survey
-  const statsSection = document.getElementById('stats-section');
-  const surveySection = document.getElementById('survey-section');
-  const observerOptions = {
-    threshold: 0.5
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        if (entry.target === statsSection) {
-          animateCountUp(document.getElementById('interactions'), 8500, 2000);
-          animateCountUp(document.getElementById('participants'), 800, 2000);
+    // Countdown
+    function initCountdown() {
+      const target = new Date("Dec 25, 2025 00:00:00").getTime();
+      setInterval(() => {
+        const now = new Date().getTime();
+        const diff = target - now;
+        if (diff < 0) {
+          document.getElementById('countdown').innerHTML = 'ETKİNLİK BAŞLADI!';
+          return;
         }
-        observer.unobserve(entry.target);
-      }
-    });
-  }, observerOptions);
-
-  if (statsSection) observer.observe(statsSection);
-  if (surveySection) observer.observe(surveySection);
-
-  // Carousel Functionality
-  function initializeCarousel(carouselId, prevBtnId, nextBtnId) {
-    const carousel = document.getElementById(carouselId);
-    const prevBtn = document.getElementById(prevBtnId);
-    const nextBtn = document.getElementById(nextBtnId);
-
-    if (!carousel || !prevBtn || !nextBtn) return;
-
-    const updateButtons = () => {
-      const scrollLeft = carousel.scrollLeft;
-      const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-      prevBtn.style.display = scrollLeft <= 0 ? 'none' : 'block';
-      nextBtn.style.display = scrollLeft >= maxScroll - 1 ? 'none' : 'block';
-    };
-
-    const scrollToItem = (direction) => {
-      const items = carousel.querySelectorAll('.carousel-item');
-      if (items.length === 0) return;
-
-      const itemWidth = items[0].offsetWidth + 16;
-      const visibleItems = carouselId === 'carousel-team' ? 
-        (window.innerWidth > 1024 ? 4 : window.innerWidth > 768 ? 3 : window.innerWidth > 640 ? 2 : 1) :
-        (window.innerWidth > 1024 ? 3 : window.innerWidth > 768 ? 2 : 1);
-      const scrollAmount = itemWidth * visibleItems * direction;
-
-      carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    };
-
-    prevBtn.addEventListener('click', () => scrollToItem(-1));
-    nextBtn.addEventListener('click', () => scrollToItem(1));
-
-    carousel.addEventListener('scroll', updateButtons);
-    window.addEventListener('resize', updateButtons);
-
-    updateButtons();
-  }
-
-  initializeCarousel('carousel-events', 'prev-btn-events', 'next-btn-events');
-  initializeCarousel('carousel-trainings', 'prev-btn-trainings', 'next-btn-trainings');
-  initializeCarousel('carousel-blog', 'prev-btn-blog', 'next-btn-blog');
-  initializeCarousel('carousel-team', 'prev-btn-team', 'next-btn-team');
-
-  // Populate events carousel (only events with speakers)
-
-
-  // Populate trainings carousel (events without speakers)
-  const trainingsCarousel = document.getElementById('carousel-trainings');
-  if (trainingsCarousel && typeof EVENTS !== 'undefined') {
-    let trainingCardsHTML = '';
-    for (const [key, event] of Object.entries(EVENTS)) {
-      if (event.speakers && event.speakers.length === 0 && event.photo) {
-        const encodedKey = encodeURIComponent(key);
-        trainingCardsHTML += `
-          <a href="event-detail.html?id=${encodedKey}" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl animate-fade-in-up card-hover-animation overflow-hidden transform hover:scale-105 transition duration-300 flex flex-col">
-            <img src="${event.photo}" alt="${event.title}" class="w-full h-48 object-cover">
-            <div class="p-6 text-center flex-grow flex items-center justify-center">
-              <h3 class="text-xl font-semibold text-gold-accent">${event.title}</h3>
-            </div>
-          </a>
-        `;
-      }
+        document.getElementById('days').textContent = String(Math.floor(diff / (1000*60*60*24))).padStart(2, '0');
+        document.getElementById('hours').textContent = String(Math.floor((diff % (1000*60*60*24)) / (1000*60*60))).padStart(2, '0');
+        document.getElementById('minutes').textContent = String(Math.floor((diff % (1000*60*60)) / (1000*60))).padStart(2, '0');
+        document.getElementById('seconds').textContent = String(Math.floor((diff % (1000*60)) / 1000)).padStart(2, '0');
+      }, 1000);
     }
-    trainingsCarousel.innerHTML = trainingCardsHTML;
-  }
 
-  // Populate blog carousel
-  const blogCarousel = document.getElementById('carousel-blog');
-  if (blogCarousel && typeof BLOGS !== 'undefined') {
-    let blogCardsHTML = '';
-    for (const [key, blog] of Object.entries(BLOGS)) {
-      const encodedKey = encodeURIComponent(key);
-      blogCardsHTML += `
-        <a href="blog-detail.html?id=${encodedKey}" class="carousel-item bg-soft-white rounded-lg p-6 shadow-xl transform hover:scale-105 transition duration-300 animate-fade-in-up card-hover-animation blog-post-${encodedKey} flex flex-col">
-          <img src="${blog.photo}" alt="${blog.title}" class="w-full h-48 object-cover rounded-t-lg mb-4">
-          <h3 class="text-2xl font-semibold mb-2 text-gold-accent">${blog.title}</h3>
-          <p class="text-gray-600 flex-grow">${blog.description}</p>
-          <div class="mt-4 inline-block text-gold-accent hover:underline">Detaylar için tıklayın</div>
+    // Stats Animation
+    function initStats() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            animateCount('interactions', 8500, 2000);
+            animateCount('participants', 800, 2000);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      
+      observer.observe(document.getElementById('stats'));
+      observer.observe(document.getElementById('survey'));
+    }
+
+    function animateCount(id, target, duration) {
+      const el = document.getElementById(id);
+      const increment = target / (duration / 16);
+      let current = 0;
+      const timer = setInterval(() => {
+        current += increment;
+        el.textContent = Math.floor(current) + '+';
+        if (current >= target) {
+          el.textContent = target + '+';
+          clearInterval(timer);
+        }
+      }, 16);
+    }
+
+    // Carousels
+    function initCarousels() {
+      renderCarousel('events-carousel', EVENTS.map(e => `
+        <a href="event-detail.html?id=${e.id}" class="carousel-item bg-soft rounded-lg shadow-xl card-hover">
+          <img src="${e.image}" alt="${e.title}" class="w-full h-48 object-cover rounded-t-lg">
+          <div class="p-6">
+            <h3 class="text-2xl font-semibold mb-2 text-gold">${e.title}</h3>
+            <p class="text-gray-600">${e.desc}</p>
+            <div class="mt-4 text-gold hover:underline">Detaylar için tıklayın</div>
+          </div>
         </a>
-      `;
+      `).join(''));
+
+      renderCarousel('team-carousel', TEAM.map(m => `
+        <div class="carousel-item bg-white p-6 rounded-lg shadow-xl card-hover text-center">
+          <img src="${m.image}" alt="${m.name}" class="w-24 h-24 rounded-full object-cover mx-auto mb-4">
+          <h3 class="text-xl font-semibold text-gold">${m.name}</h3>
+          <p class="text-gray-600">${m.role}</p>
+        </div>
+      `).join(''));
     }
-    blogCarousel.innerHTML = blogCardsHTML;
-  }
 
-  // Hamburger Menu Toggle
-  const hamburger = document.getElementById('hamburger');
-  const navMenu = document.getElementById('nav-menu');
-  if (hamburger && navMenu) {
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('open');
-      navMenu.classList.toggle('open');
-    });
+    function renderCarousel(id, html) {
+      document.getElementById(id).innerHTML = html;
+    }
 
-    navMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        hamburger.classList.remove('open');
-        navMenu.classList.remove('open');
+    // Bands
+    function initBands() {
+      const eventBand = BAND_ITEMS.map(item => `
+        <img src="images/dsk.webp" class="h-10">
+        <span class="text-xl font-semibold text-gold">${item}</span>
+      `).join('');
+      document.getElementById('event-band').innerHTML = eventBand + eventBand;
+
+      const partnerBand = PARTNERS.map(img => `<img src="${img}" class="h-10">`).join('');
+      document.getElementById('partner-band').innerHTML = partnerBand + partnerBand;
+    }
+
+    // Hamburger
+    function initHamburger() {
+      const hamburger = document.getElementById('hamburger');
+      const navMenu = document.getElementById('nav-menu');
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        navMenu.classList.toggle('open');
       });
-    });
-  }
-});
-</script>
-</body>
-</html>
+      navMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          hamburger.classList.remove('open');
+          navMenu.classList.remove('open');
+        });
+      });
+    }
+
+    // Forms
+    function initForms() {
+      document.getElementById('speaker-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Öneriniz için teşekkürler!');
