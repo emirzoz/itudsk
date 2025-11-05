@@ -21,7 +21,7 @@
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes pulse-fast { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-    @keyframes slideBand { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes slideBand { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
     .animate-fade-in-up { animation: fadeInUp 1s ease-out; }
     .animate-fade-in-down { animation: fadeInDown 1s ease-out; }
@@ -50,6 +50,7 @@
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
+      padding: 0 1rem;
     }
     .carousel::-webkit-scrollbar { display: none; }
     .carousel-item {
@@ -58,7 +59,7 @@
       min-width: 280px;
     }
     @media (max-width: 1024px) { .carousel-item { flex: 0 0 calc(50% - 0.5rem); } }
-    @media (max-width: 768px) { .carousel-item { flex: 0 0 100%; } }
+    @media (max-width: 768px) { .carousel-item { flex: 0 0 calc(100% - 1rem); } }
 
     /* Team Carousel */
     .team-carousel .carousel-item { flex: 0 0 calc(25% - 0.75rem); }
@@ -66,16 +67,18 @@
     @media (max-width: 768px) { .team-carousel .carousel-item { flex: 0 0 calc(50% - 0.5rem); } }
 
     /* Sliding Band */
+    .event-band {
+      overflow: hidden;
+      white-space: nowrap;
+    }
     .event-band-track {
-      display: flex;
+      display: inline-flex;
       animation: slideBand 30s linear infinite;
-      gap: 3rem;
     }
     .event-band-content {
       display: flex;
       align-items: center;
       gap: 3rem;
-      white-space: nowrap;
     }
 
     /* Hamburger Menu */
@@ -106,6 +109,11 @@
       background: white;
       padding: 1rem;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 50;
+    }
+    .nav-menu.open a {
+      padding: 0.75rem;
+      border-bottom: 1px solid #eee;
     }
 
     /* Buttons */
@@ -117,6 +125,8 @@
       font-weight: 600;
       transition: 0.3s;
       display: inline-block;
+      border: none;
+      cursor: pointer;
     }
     .btn-gold:hover { transform: scale(1.05); background: #e6a500; }
     .btn-outline-gold {
@@ -224,7 +234,7 @@
         <h3 class="text-2xl font-semibold mb-6 text-gold">Bir Sonraki Etkinlikte Kimleri Görmek İstersiniz?</h3>
         <form id="speaker-form" class="space-y-4">
           <input type="text" name="speaker" placeholder="Konuşmacı öneriniz" 
-                 class="w-full p-4 border-2 border-yellow-400/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+                 class="w-full p-4 border-2 border-yellow-400/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 text-gray-800" required>
           <button type="submit" class="w-full btn-gold">Gönder</button>
         </form>
       </div>
@@ -238,9 +248,10 @@
   </section>
 
   <!-- Event Band -->
-  <section class="bg-white border-y-4 border-yellow-400 py-3 overflow-hidden">
+  <section class="event-band bg-white border-y-4 border-yellow-400 py-3">
     <div class="event-band-track">
       <div class="event-band-content" id="event-band"></div>
+      <div class="event-band-content" id="event-band-2"></div>
     </div>
   </section>
 
@@ -299,9 +310,10 @@
   </section>
 
   <!-- Partner Band -->
-  <section class="bg-white border-y-4 border-yellow-400 py-3 overflow-hidden">
+  <section class="event-band bg-white border-y-4 border-yellow-400 py-3">
     <div class="event-band-track">
       <div class="event-band-content" id="partner-band"></div>
+      <div class="event-band-content" id="partner-band-2"></div>
     </div>
   </section>
 
@@ -360,6 +372,12 @@
       { id: 'bee-influencer', title: 'BeeInfluencer', image: 'images/soru', desc: 'Influencer marketing atölyeleri ve stratejileri.' }
     ];
 
+    const TRAININGS = [
+      { id: 'social-media', title: 'Sosyal Medya Yönetimi', image: 'images/soru', desc: 'Sosyal medya stratejileri ve içerik üretimi.' },
+      { id: 'digital-marketing', title: 'Dijital Pazarlama', image: 'images/soru', desc: 'Dijital pazarlama temelleri ve uygulamaları.' },
+      { id: 'seo', title: 'SEO Eğitimi', image: 'images/soru', desc: 'Arama motoru optimizasyonu teknikleri.' }
+    ];
+
     const TEAM = [
       { name: 'Eylül Şimşek', role: 'Kulüp Başkanı', image: 'images/team/eylul.jpg' },
       { name: 'Selin Tekeli', role: 'Halkla İlişkiler', image: 'images/team/selin.jpg' },
@@ -397,21 +415,32 @@
       initForms();
     });
 
-    // Countdown
+    // Countdown Timer
     function initCountdown() {
       const target = new Date("Dec 25, 2025 00:00:00").getTime();
-      setInterval(() => {
+      
+      function updateCountdown() {
         const now = new Date().getTime();
         const diff = target - now;
+        
         if (diff < 0) {
-          document.getElementById('countdown').innerHTML = 'ETKİNLİK BAŞLADI!';
+          document.getElementById('countdown').innerHTML = '<span class="text-2xl">ETKİNLİK BAŞLADI!</span>';
           return;
         }
-        document.getElementById('days').textContent = String(Math.floor(diff / (1000*60*60*24))).padStart(2, '0');
-        document.getElementById('hours').textContent = String(Math.floor((diff % (1000*60*60*24)) / (1000*60*60))).padStart(2, '0');
-        document.getElementById('minutes').textContent = String(Math.floor((diff % (1000*60*60)) / (1000*60))).padStart(2, '0');
-        document.getElementById('seconds').textContent = String(Math.floor((diff % (1000*60)) / 1000)).padStart(2, '0');
-      }, 1000);
+        
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        document.getElementById('days').textContent = String(days).padStart(2, '0');
+        document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+      }
+      
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
     }
 
     // Stats Animation
@@ -420,8 +449,10 @@
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            animateCount('interactions', 8500, 2000);
-            animateCount('participants', 800, 2000);
+            if (entry.target.id === 'stats') {
+              animateCount('interactions', 8500, 2000);
+              animateCount('participants', 800, 2000);
+            }
             observer.unobserve(entry.target);
           }
         });
@@ -435,6 +466,7 @@
       const el = document.getElementById(id);
       const increment = target / (duration / 16);
       let current = 0;
+      
       const timer = setInterval(() => {
         current += increment;
         el.textContent = Math.floor(current) + '+';
@@ -447,60 +479,27 @@
 
     // Carousels
     function initCarousels() {
-      renderCarousel('events-carousel', EVENTS.map(e => `
+      // Events carousel
+      const eventsHTML = EVENTS.map(e => `
         <a href="event-detail.html?id=${e.id}" class="carousel-item bg-soft rounded-lg shadow-xl card-hover">
           <img src="${e.image}" alt="${e.title}" class="w-full h-48 object-cover rounded-t-lg">
           <div class="p-6">
             <h3 class="text-2xl font-semibold mb-2 text-gold">${e.title}</h3>
-            <p class="text-gray-600">${e.desc}</p>
-            <div class="mt-4 text-gold hover:underline">Detaylar için tıklayın</div>
+            <p class="text-gray-600 mb-4">${e.desc}</p>
+            <div class="text-gold hover:underline">Detaylar için tıklayın</div>
           </div>
         </a>
-      `).join(''));
-
-      renderCarousel('team-carousel', TEAM.map(m => `
-        <div class="carousel-item bg-white p-6 rounded-lg shadow-xl card-hover text-center">
-          <img src="${m.image}" alt="${m.name}" class="w-24 h-24 rounded-full object-cover mx-auto mb-4">
-          <h3 class="text-xl font-semibold text-gold">${m.name}</h3>
-          <p class="text-gray-600">${m.role}</p>
-        </div>
-      `).join(''));
-    }
-
-    function renderCarousel(id, html) {
-      document.getElementById(id).innerHTML = html;
-    }
-
-    // Bands
-    function initBands() {
-      const eventBand = BAND_ITEMS.map(item => `
-        <img src="images/dsk.webp" class="h-10">
-        <span class="text-xl font-semibold text-gold">${item}</span>
       `).join('');
-      document.getElementById('event-band').innerHTML = eventBand + eventBand;
+      document.getElementById('events-carousel').innerHTML = eventsHTML;
 
-      const partnerBand = PARTNERS.map(img => `<img src="${img}" class="h-10">`).join('');
-      document.getElementById('partner-band').innerHTML = partnerBand + partnerBand;
-    }
-
-    // Hamburger
-    function initHamburger() {
-      const hamburger = document.getElementById('hamburger');
-      const navMenu = document.getElementById('nav-menu');
-      hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('open');
-        navMenu.classList.toggle('open');
-      });
-      navMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-          hamburger.classList.remove('open');
-          navMenu.classList.remove('open');
-        });
-      });
-    }
-
-    // Forms
-    function initForms() {
-      document.getElementById('speaker-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('Öneriniz için teşekkürler!');
+      // Trainings carousel
+      const trainingsHTML = TRAININGS.map(t => `
+        <a href="event-detail.html?id=${t.id}" class="carousel-item bg-soft rounded-lg shadow-xl card-hover">
+          <img src="${t.image}" alt="${t.title}" class="w-full h-48 object-cover rounded-t-lg">
+          <div class="p-6">
+            <h3 class="text-2xl font-semibold mb-2 text-gold">${t.title}</h3>
+            <p class="text-gray-600 mb-4">${t.desc}</p>
+            <div class="text-gold hover:underline">Detaylar için tıklayın</div>
+          </div>
+        </a>
+      `).join('
